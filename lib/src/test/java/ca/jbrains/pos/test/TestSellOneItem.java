@@ -9,7 +9,7 @@ public class TestSellOneItem {
     void priceNotFound() {
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.displaySellOneItem("99999", (ignored) -> null)
+                PointOfSale.displaySellOneItem((ignored) -> null, PointOfSale.Barcode.parse("99999"))
         );
     }
 
@@ -17,7 +17,7 @@ public class TestSellOneItem {
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.displaySellOneItem("1111", (ignored) -> null)
+                PointOfSale.displaySellOneItem((ignored) -> null, PointOfSale.Barcode.parse("1111"))
         );
     }
 
@@ -25,7 +25,7 @@ public class TestSellOneItem {
     void priceFound() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem("99999", (ignored) -> "CAD 1.00")
+                PointOfSale.displaySellOneItem((ignored) -> "CAD 1.00", PointOfSale.Barcode.parse("99999"))
         );
     }
 

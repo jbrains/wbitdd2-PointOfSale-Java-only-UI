@@ -1,7 +1,5 @@
 package ca.jbrains.pos;
 
-import io.vavr.Function1;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -28,7 +26,7 @@ public class PointOfSale {
             posMessage = emptyBarcode();
         } else {
             String notEmptyBarcode = barcodeInput;
-            posMessage = displaySellOneItem(notEmptyBarcode, (ignored) -> "::a hardcoded response for every barcode::");
+            posMessage = displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode));
         }
         return posMessage;
     }
@@ -45,8 +43,8 @@ public class PointOfSale {
         return new BufferedReader(simulateInputFromStdin).lines();
     }
 
-    public static String displaySellOneItem(String notTrustedBarcodeText, SaleController saleController) {
-        String notEmptyBarcode = Barcode.parse(notTrustedBarcodeText).getBarcode();
+    public static String displaySellOneItem(SaleController saleController, Barcode barcode) {
+        String notEmptyBarcode = barcode.getBarcode();
         String price = saleController.getPrice(notEmptyBarcode);
         if (price != null)
             return price;
@@ -54,7 +52,7 @@ public class PointOfSale {
             return String.format("Product not found: %s", notEmptyBarcode);
     }
 
-    private static class Barcode {
+    public static class Barcode {
         private String barcodeText;
 
         public Barcode(String notTrustedBarcodeText) {
