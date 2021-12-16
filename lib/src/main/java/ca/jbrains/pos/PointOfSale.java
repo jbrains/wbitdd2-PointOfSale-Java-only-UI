@@ -17,16 +17,20 @@ public class PointOfSale {
 
     private static Consumer<String> processBarcode() {
         return barcodeInput -> {
-            String posMessage;
-            if ("".equals(barcodeInput)) {
-                posMessage = emptyBarcode();
-            } else {
-                String notEmptyBarcode = barcodeInput;
-                posMessage = displaySellOneItem(notEmptyBarcode, (ignored) -> "::a hardcoded response for every barcode::");
-            }
-
+            String posMessage = sellItems(barcodeInput);
             displayToConsole(posMessage);
         };
+    }
+
+    private static String sellItems(String barcodeInput) {
+        String posMessage;
+        if ("".equals(barcodeInput)) {
+            posMessage = emptyBarcode();
+        } else {
+            String notEmptyBarcode = barcodeInput;
+            posMessage = displaySellOneItem(notEmptyBarcode, (ignored) -> "::a hardcoded response for every barcode::");
+        }
+        return posMessage;
     }
 
     private static String emptyBarcode() {
