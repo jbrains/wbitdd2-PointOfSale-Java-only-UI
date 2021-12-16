@@ -14,13 +14,14 @@ public class PointOfSale {
         streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
                 line -> {
                     String result = "Scanning error: empty barcode";
-                    if (!"".equals(line)) {
+                    Option<Barcode> maybeBarcode = Barcode.makeBarcode(line);
+                    if (!maybeBarcode.isEmpty()) {
                         result = handleSellOneItemRequest(new Catalog() {
                             @Override
                             public Option<Integer> findPrice(String barcode) {
                                 return Option.of(795);
                             }
-                        }, Barcode.makeBarcode(line).get());
+                        }, maybeBarcode.get());
                     }
                     displayToConsole(
                             result);
