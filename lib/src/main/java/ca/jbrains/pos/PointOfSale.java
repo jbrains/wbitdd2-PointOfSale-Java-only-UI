@@ -1,5 +1,7 @@
 package ca.jbrains.pos;
 
+import io.vavr.Function1;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -14,7 +16,10 @@ public class PointOfSale {
     }
 
     private static Consumer<String> processBarcode() {
-        return line -> displayToConsole(displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::"));
+        return line -> {
+            String productPrice = displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::");
+            displayToConsole(productPrice);
+        };
     }
 
     private static void displayToConsole(String message) {
