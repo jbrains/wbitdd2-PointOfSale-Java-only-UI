@@ -21,7 +21,8 @@ public class PointOfSale {
             if ("".equals(barcodeInput)) {
                 productPrice = emptyBarcode();
             } else {
-                productPrice = displaySellOneItem(barcodeInput, (ignored) -> "::a hardcoded response for every barcode::");
+                String notEmptyBarcode = barcodeInput;
+                productPrice = displaySellOneItem(notEmptyBarcode, (ignored) -> "::a hardcoded response for every barcode::");
             }
 
             displayToConsole(productPrice);
@@ -40,11 +41,11 @@ public class PointOfSale {
         return new BufferedReader(simulateInputFromStdin).lines();
     }
 
-    public static String displaySellOneItem(String barcode, SaleController saleController) {
-        String price = saleController.getPrice(barcode);
+    public static String displaySellOneItem(String notEmptyBarcode, SaleController saleController) {
+        String price = saleController.getPrice(notEmptyBarcode);
         if (price != null)
             return price;
         else
-            return String.format("Product not found: %s", barcode);
+            return String.format("Product not found: %s", notEmptyBarcode);
     }
 }
