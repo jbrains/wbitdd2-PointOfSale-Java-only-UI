@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class PointOfSale {
     public static void main(String[] args) {
-        parseInput(new InputStreamReader(System.in)).forEachOrdered(
+        streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
                 line -> displayToConsole(handleSellOneItemRequest(line, (ignored) -> "::a hardcoded response for every barcode::"))
         );
     }
@@ -18,8 +18,8 @@ public class PointOfSale {
         System.out.println(message);
     }
 
-    public static Stream<String> parseInput(Reader simulateInputFromStdin) {
-        return new BufferedReader(simulateInputFromStdin).lines();
+    public static Stream<String> streamLinesFrom(Reader reader) {
+        return new BufferedReader(reader).lines();
     }
 
     public static String handleSellOneItemRequest(String barcode, Catalog catalog) {

@@ -19,7 +19,7 @@ public class TestScanningAnItem {
 
     private Stream<String> makeBufferedReader(List<String> barcodes) {
         Reader simulateInputFromStdin = new StringReader(barcodes.stream().collect(Collectors.joining(System.lineSeparator())));
-        return PointOfSale.parseInput(simulateInputFromStdin);
+        return PointOfSale.streamLinesFrom(simulateInputFromStdin);
     }
 
     @Test
