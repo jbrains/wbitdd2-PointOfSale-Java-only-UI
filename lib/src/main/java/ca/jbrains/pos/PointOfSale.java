@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class PointOfSale {
     public static void main(String[] args) {
         readBarcodeFrom(new InputStreamReader(System.in)).forEachOrdered(
-                line -> displayToConsole(findProductPrice(line, (ignored) -> "::a hardcoded response for every barcode::"))
+                barcodeInput -> displayToConsole(findProductPrice(barcodeInput, (ignored) -> "::a hardcoded response for every barcode::"))
         );
     }
 
