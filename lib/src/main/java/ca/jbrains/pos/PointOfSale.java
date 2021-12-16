@@ -16,12 +16,12 @@ public class PointOfSale {
     }
 
     private static Consumer<String> processBarcode() {
-        return line -> {
+        return barcodeInput -> {
             String productPrice;
-            if ("".equals(line)) {
+            if ("".equals(barcodeInput)) {
                 productPrice = emptyBarcode();
             } else {
-                productPrice = displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::");
+                productPrice = displaySellOneItem(barcodeInput, (ignored) -> "::a hardcoded response for every barcode::");
             }
 
             displayToConsole(productPrice);
