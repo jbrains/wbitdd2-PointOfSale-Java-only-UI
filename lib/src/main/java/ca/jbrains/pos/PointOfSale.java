@@ -33,8 +33,12 @@ public class PointOfSale {
 
         String price = catalog.findPrice(barcode);
         if (price != null)
-            return price;
+            return formatPrice(price);
         else
             return String.format("Product not found: %s", barcode);
+    }
+
+    private static String formatPrice(String price) {
+        return price;
     }
 }
