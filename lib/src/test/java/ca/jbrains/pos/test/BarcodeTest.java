@@ -10,10 +10,18 @@ public class BarcodeTest {
         Assertions.assertEquals(Option.none(), makeBarcode(""));
     }
 
-    private Option<Barcode> makeBarcode(String text) {
-        return Option.none();
+    @Test
+    void validInput() {
+        Assertions.assertEquals(Option.some(new Barcode("a")), makeBarcode("a"));
     }
 
-    private static class Barcode {
+    private Option<Barcode> makeBarcode(String text) {
+        if ("".equals(text))
+            return Option.none();
+        else
+            return Option.some(new Barcode(text));
+    }
+
+    private record Barcode(String text) {
     }
 }
