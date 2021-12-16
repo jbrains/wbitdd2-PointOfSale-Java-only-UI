@@ -10,7 +10,10 @@ import java.util.stream.Stream;
 public class PointOfSale {
     public static void main(String[] args) {
         streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
-                line -> displayToConsole(handleSellOneItemRequest(line, (ignored) -> "::a hardcoded response for every barcode::"))
+                line -> displayToConsole(
+                                handleSellOneItemRequest(
+                                        line,
+                                        (ignored) -> "::a hardcoded response for every barcode::"))
         );
     }
 
