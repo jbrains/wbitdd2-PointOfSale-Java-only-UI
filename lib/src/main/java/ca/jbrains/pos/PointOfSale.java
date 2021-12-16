@@ -1,6 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Option;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,7 +15,12 @@ public class PointOfSale {
                 line -> displayToConsole(
                                 handleSellOneItemRequest(
                                         line,
-                                        (ignored) -> "::a hardcoded response for every barcode::"))
+                                        new Catalog() {
+                                            @Override
+                                            public Option<Integer> findPrice(String barcode) {
+                                                return Option.of(795);
+                                            }
+                                        }))
         );
     }
 
@@ -31,14 +37,14 @@ public class PointOfSale {
             return "Scanning error: empty barcode";
         }
 
-        String price = catalog.findPrice(barcode);
-        if (price != null)
-            return formatPrice(price);
+        Option<Integer> unformattedPrice = catalog.findPrice(barcode);
+        if (!unformattedPrice.isEmpty())
+            return formatPrice(unformattedPrice.get());
         else
             return String.format("Product not found: %s", barcode);
     }
 
-    private static String formatPrice(String price) {
-        return price;
+    public static String formatPrice(int priceInCanadianCents) {
+        return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
 }
