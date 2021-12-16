@@ -16,8 +16,8 @@ public class PointOfSale {
         System.out.println(message);
     }
 
-    public static Stream<String> readBarcodeFrom(Reader simulateInputFromStdin) {
-        return new BufferedReader(simulateInputFromStdin).lines();
+    public static Stream<String> readBarcodeFrom(Reader inputReader) {
+        return new BufferedReader(inputReader).lines();
     }
 
     public static String findProductPrice(String barcode, SaleController saleController) {
