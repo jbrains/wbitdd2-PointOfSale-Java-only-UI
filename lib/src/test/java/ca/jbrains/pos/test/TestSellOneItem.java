@@ -9,58 +9,45 @@ import org.junit.jupiter.api.Test;
 public class TestSellOneItem {
     @Test
     void priceNotFound() {
+        String result = PointOfSale.handleSellOneItemRequest("99999", new Catalog() {
+            @Override
+            public Option<Integer> findPrice(String barcode) {
+                return Option.none();
+            }
+        });
+
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.handleSellOneItemRequest("99999", new Catalog() {
-
-                    @Override
-                    public Option<Integer> findPrice(String barcode) {
-                        return Option.none();
-                    }
-                })
+                result
         );
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
+        String result = PointOfSale.handleSellOneItemRequest("1111", new Catalog() {
+            @Override
+            public Option<Integer> findPrice(String barcode) {
+                return Option.none();
+            }
+        });
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.handleSellOneItemRequest("1111", new Catalog() {
-
-                    @Override
-                    public Option<Integer> findPrice(String barcode) {
-                        return Option.none();
-                    }
-                })
+                result
         );
     }
 
     @Test
     void priceFound() {
+        String result = PointOfSale.handleSellOneItemRequest("99999", new Catalog() {
+            @Override
+            public Option<Integer> findPrice(String barcode) {
+                return Option.of(100);
+            }
+        });
+
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.handleSellOneItemRequest("99999", new Catalog() {
-
-                    @Override
-                    public Option<Integer> findPrice(String barcode) {
-                        return Option.of(100);
-                    }
-                })
+                result
         );
     }
-
-    @Test
-    void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
-        Assertions.assertEquals(
-                "Scanning error: empty barcode",
-                PointOfSale.handleSellOneItemRequest("", new Catalog() {
-
-                    @Override
-                    public Option<Integer> findPrice(String barcode) {
-                        return Option.none();
-                    }
-                })
-        );
-    }
-
 }
