@@ -17,7 +17,13 @@ public class PointOfSale {
 
     private static Consumer<String> processBarcode() {
         return line -> {
-            String productPrice = displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::");
+            String productPrice;
+            if ("".equals(line)) {
+                productPrice = "Scanning error: empty barcode";
+            } else {
+                productPrice = displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::");
+            }
+
             displayToConsole(productPrice);
         };
     }
@@ -31,10 +37,6 @@ public class PointOfSale {
     }
 
     public static String displaySellOneItem(String barcode, SaleController saleController) {
-        if ("".equals(barcode)) {
-            return "Scanning error: empty barcode";
-        }
-
         String price = saleController.getPrice(barcode);
         if (price != null)
             return price;
