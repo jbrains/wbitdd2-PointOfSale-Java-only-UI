@@ -17,15 +17,15 @@ public class PointOfSale {
 
     private static Consumer<String> processBarcode() {
         return barcodeInput -> {
-            String productPrice;
+            String posMessage;
             if ("".equals(barcodeInput)) {
-                productPrice = emptyBarcode();
+                posMessage = emptyBarcode();
             } else {
                 String notEmptyBarcode = barcodeInput;
-                productPrice = displaySellOneItem(notEmptyBarcode, (ignored) -> "::a hardcoded response for every barcode::");
+                posMessage = displaySellOneItem(notEmptyBarcode, (ignored) -> "::a hardcoded response for every barcode::");
             }
 
-            displayToConsole(productPrice);
+            displayToConsole(posMessage);
         };
     }
 
