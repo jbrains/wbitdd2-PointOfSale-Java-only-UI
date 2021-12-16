@@ -22,7 +22,7 @@ public class PointOfSale {
         };
     }
 
-    private static String sellItems(String barcodeInput) {
+    public static String sellItems(String barcodeInput) {
         String posMessage;
         if ("".equals(barcodeInput)) {
             posMessage = emptyBarcode();

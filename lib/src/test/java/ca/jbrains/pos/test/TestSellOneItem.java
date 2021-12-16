@@ -33,7 +33,7 @@ public class TestSellOneItem {
     void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
         Assertions.assertEquals(
                 "Scanning error: empty barcode",
-                PointOfSale.displaySellOneItem("", (ignored) -> null)
+                PointOfSale.sellItems("")
         );
     }
 
