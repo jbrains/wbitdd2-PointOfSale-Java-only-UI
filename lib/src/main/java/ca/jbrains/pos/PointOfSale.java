@@ -45,28 +45,11 @@ public class PointOfSale {
         return new BufferedReader(simulateInputFromStdin).lines();
     }
 
-    public static String displaySellOneItem(String untrustedBarcodeText, SaleController saleController) {
-        String notEmptyBarcode = Barcode.parse(untrustedBarcodeText).getBarcode();
+    public static String displaySellOneItem(String notEmptyBarcode, SaleController saleController) {
         String price = saleController.getPrice(notEmptyBarcode);
         if (price != null)
             return price;
         else
             return String.format("Product not found: %s", notEmptyBarcode);
-    }
-
-    private static class Barcode {
-        private String barcodeText;
-
-        public Barcode(String untrustedBarcodeText) {
-            barcodeText = untrustedBarcodeText;
-        }
-
-        public static Barcode parse(String untrustedBarcodeText) {
-            return new Barcode(untrustedBarcodeText);
-        }
-
-        public String getBarcode() {
-            return barcodeText;
-        }
     }
 }
