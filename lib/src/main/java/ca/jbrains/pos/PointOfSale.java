@@ -13,8 +13,8 @@ public class PointOfSale {
         // REFACTOR Replace forEach(line -> a(b(line))) with forEach(b).forEach(a)
         streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
                 line -> {
-                    String result = "Scanning error: empty barcode";
                     Option<Barcode> maybeBarcode = Barcode.makeBarcode(line);
+                    String result;
                     if (!maybeBarcode.isEmpty()) {
                         result = handleSellOneItemRequest(new Catalog() {
                             @Override
@@ -22,7 +22,10 @@ public class PointOfSale {
                                 return Option.of(795);
                             }
                         }, maybeBarcode.get());
+                    } else {
+                        result = "Scanning error: empty barcode";
                     }
+
                     displayToConsole(
                             result);
                 }
