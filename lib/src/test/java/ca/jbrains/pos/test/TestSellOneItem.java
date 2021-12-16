@@ -10,31 +10,31 @@ import org.junit.jupiter.api.Test;
 public class TestSellOneItem {
     @Test
     void priceNotFound() {
-        String result = PointOfSale.handleSellOneItemRequest(barcode -> Option.none(), new Barcode("99999"));
+        String response = PointOfSale.handleSellOneItemRequest(barcode -> Option.none(), new Barcode("99999"));
 
         Assertions.assertEquals(
                 "Product not found: 99999",
-                result
+                response
         );
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String result = PointOfSale.handleSellOneItemRequest(barcode -> Option.none(), Barcode.makeBarcode("1111").get());
+        String response = PointOfSale.handleSellOneItemRequest(barcode -> Option.none(), Barcode.makeBarcode("1111").get());
 
         Assertions.assertEquals(
                 "Product not found: 1111",
-                result
+                response
         );
     }
 
     @Test
     void priceFound() {
-        String result = PointOfSale.handleSellOneItemRequest(barcode -> Option.of(100), Barcode.makeBarcode("99999").get());
+        String response = PointOfSale.handleSellOneItemRequest(barcode -> Option.of(100), Barcode.makeBarcode("99999").get());
 
         Assertions.assertEquals(
                 "CAD 1.00",
-                result
+                response
         );
     }
 }
