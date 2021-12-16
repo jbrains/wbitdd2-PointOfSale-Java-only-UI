@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Barcode;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,21 +8,12 @@ import org.junit.jupiter.api.Test;
 public class BarcodeTest {
     @Test
     void invalidInput() {
-        Assertions.assertEquals(Option.none(), makeBarcode(""));
+        Assertions.assertEquals(Option.none(), Barcode.makeBarcode(""));
     }
 
     @Test
     void validInput() {
-        Assertions.assertEquals(Option.some(new Barcode("a")), makeBarcode("a"));
+        Assertions.assertEquals(Option.some(new Barcode("a")), Barcode.makeBarcode("a"));
     }
 
-    private Option<Barcode> makeBarcode(String text) {
-        if ("".equals(text))
-            return Option.none();
-        else
-            return Option.some(new Barcode(text));
-    }
-
-    private record Barcode(String text) {
-    }
 }

@@ -15,12 +15,12 @@ public class PointOfSale {
                 line -> {
                     String result = "Scanning error: empty barcode";
                     if (!"".equals(line)) {
-                        result = handleSellOneItemRequest(line, new Catalog() {
+                        result = handleSellOneItemRequest(new Catalog() {
                             @Override
                             public Option<Integer> findPrice(String barcode) {
                                 return Option.of(795);
                             }
-                        });
+                        }, Barcode.makeBarcode(line).get());
                     }
                     displayToConsole(
                             result);
@@ -36,15 +36,17 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(String barcode, Catalog catalog) {
-        Option<Integer> unformattedPrice = catalog.findPrice(barcode);
+    public static String handleSellOneItemRequest(Catalog catalog, Barcode barcode) {
+        String trustedBarcodeString = barcode.text();
+        Option<Integer> unformattedPrice = catalog.findPrice(trustedBarcodeString);
         if (!unformattedPrice.isEmpty())
             return formatPrice(unformattedPrice.get());
         else
-            return String.format("Product not found: %s", barcode);
+            return String.format("Product not found: %s", trustedBarcodeString);
     }
 
     public static String formatPrice(int priceInCanadianCents) {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
+
 }

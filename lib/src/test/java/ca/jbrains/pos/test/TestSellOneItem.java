@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Option;
@@ -9,12 +10,12 @@ import org.junit.jupiter.api.Test;
 public class TestSellOneItem {
     @Test
     void priceNotFound() {
-        String result = PointOfSale.handleSellOneItemRequest("99999", new Catalog() {
+        String result = PointOfSale.handleSellOneItemRequest(new Catalog() {
             @Override
             public Option<Integer> findPrice(String barcode) {
                 return Option.none();
             }
-        });
+        }, new Barcode("99999"));
 
         Assertions.assertEquals(
                 "Product not found: 99999",
@@ -24,12 +25,12 @@ public class TestSellOneItem {
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String result = PointOfSale.handleSellOneItemRequest("1111", new Catalog() {
+        String result = PointOfSale.handleSellOneItemRequest(new Catalog() {
             @Override
             public Option<Integer> findPrice(String barcode) {
                 return Option.none();
             }
-        });
+        }, Barcode.makeBarcode("1111").get());
         Assertions.assertEquals(
                 "Product not found: 1111",
                 result
@@ -38,12 +39,12 @@ public class TestSellOneItem {
 
     @Test
     void priceFound() {
-        String result = PointOfSale.handleSellOneItemRequest("99999", new Catalog() {
+        String result = PointOfSale.handleSellOneItemRequest(new Catalog() {
             @Override
             public Option<Integer> findPrice(String barcode) {
                 return Option.of(100);
             }
-        });
+        }, Barcode.makeBarcode("99999").get());
 
         Assertions.assertEquals(
                 "CAD 1.00",
