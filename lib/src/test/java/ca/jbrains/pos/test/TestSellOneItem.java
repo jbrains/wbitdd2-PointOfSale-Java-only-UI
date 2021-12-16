@@ -9,7 +9,7 @@ public class TestSellOneItem {
     void priceNotFound() {
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.displaySellOneItem("99999", (ignored) -> null)
+                PointOfSale.handleSellOneItemRequest("99999", (ignored) -> null)
         );
     }
 
@@ -17,7 +17,7 @@ public class TestSellOneItem {
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.displaySellOneItem("1111", (ignored) -> null)
+                PointOfSale.handleSellOneItemRequest("1111", (ignored) -> null)
         );
     }
 
@@ -25,7 +25,7 @@ public class TestSellOneItem {
     void priceFound() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem("99999", (ignored) -> "CAD 1.00")
+                PointOfSale.handleSellOneItemRequest("99999", (ignored) -> "CAD 1.00")
         );
     }
 
@@ -33,7 +33,7 @@ public class TestSellOneItem {
     void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
         Assertions.assertEquals(
                 "Scanning error: empty barcode",
-                PointOfSale.displaySellOneItem("", (ignored) -> null)
+                PointOfSale.handleSellOneItemRequest("", (ignored) -> null)
         );
     }
 

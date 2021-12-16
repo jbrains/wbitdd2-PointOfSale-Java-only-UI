@@ -1,5 +1,5 @@
 package ca.jbrains.pos;
 
-public interface SaleController {
+public interface Catalog {
     String getPrice(String barcode);
 }
