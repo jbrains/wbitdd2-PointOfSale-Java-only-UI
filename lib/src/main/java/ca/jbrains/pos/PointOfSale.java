@@ -27,7 +27,7 @@ public class PointOfSale {
             return "Scanning error: empty barcode";
         }
 
-        String price = catalog.getPrice(barcode);
+        String price = catalog.findPrice(barcode);
         if (price != null)
             return price;
         else
