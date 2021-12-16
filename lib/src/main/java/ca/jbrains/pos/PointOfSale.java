@@ -19,13 +19,17 @@ public class PointOfSale {
         return line -> {
             String productPrice;
             if ("".equals(line)) {
-                productPrice = "Scanning error: empty barcode";
+                productPrice = emptyBarcode();
             } else {
                 productPrice = displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::");
             }
 
             displayToConsole(productPrice);
         };
+    }
+
+    private static String emptyBarcode() {
+        return "Scanning error: empty barcode";
     }
 
     private static void displayToConsole(String message) {
