@@ -14,22 +14,35 @@ public class PointOfSale {
         streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
                 line -> {
                     Option<Barcode> maybeBarcode = Barcode.makeBarcode(line);
+
                     String result;
-                    if (!maybeBarcode.isEmpty()) {
-                        result = handleSellOneItemRequest(new Catalog() {
-                            @Override
-                            public Option<Integer> findPrice(String barcode) {
-                                return Option.of(795);
-                            }
-                        }, maybeBarcode.get());
+                    if (maybeBarcode.isEmpty()) {
+                        result = handleNoBarcode();
                     } else {
-                        result = "Scanning error: empty barcode";
+                        Barcode barcode = maybeBarcode.get();
+                        result = handleBarcode(barcode);
                     }
 
-                    displayToConsole(
-                            result);
+                    displayToConsole(result);
                 }
         );
+    }
+
+    private static String handleNoBarcode() {
+        String result;
+        result = "Scanning error: empty barcode";
+        return result;
+    }
+
+    private static String handleBarcode(Barcode barcode) {
+        String result;
+        result = handleSellOneItemRequest(new Catalog() {
+            @Override
+            public Option<Integer> findPrice(String barcode) {
+                return Option.of(795);
+            }
+        }, barcode);
+        return result;
     }
 
     private static void displayToConsole(String message) {
