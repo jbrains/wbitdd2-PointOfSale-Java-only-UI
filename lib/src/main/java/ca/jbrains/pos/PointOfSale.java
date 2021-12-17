@@ -7,12 +7,9 @@ import java.util.stream.Stream;
 
 public class PointOfSale {
     public static void main(String[] args) {
-        parseInput(new InputStreamReader(System.in)).forEachOrdered(
-                barcodeInput -> {
-                    PosCommand command = parseCommand(barcodeInput);
-                    command.execute();
-                }
-        );
+        parseInput(new InputStreamReader(System.in))
+                .map(PointOfSale::parseCommand)
+                .forEachOrdered(PosCommand::execute);
     }
 
     private static PosCommand parseCommand(String barcodeInput) {
