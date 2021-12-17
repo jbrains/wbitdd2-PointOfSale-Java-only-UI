@@ -38,7 +38,7 @@ public class PointOfSale {
         return new BufferedReader(simulateInputFromStdin).lines();
     }
 
-    public static String displaySellOneItem(SaleController saleController, Barcode barcode) {
+    public static String displaySellOneItem(Catalog saleController, Barcode barcode) {
         String notEmptyBarcode = barcode.getBarcode();
         String price = saleController.getPrice(notEmptyBarcode);
         if (price != null)
