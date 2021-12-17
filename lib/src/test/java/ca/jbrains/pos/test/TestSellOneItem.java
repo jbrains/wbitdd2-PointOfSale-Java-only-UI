@@ -15,7 +15,7 @@ public class TestSellOneItem {
                 PointOfSale.displaySellOneItem(new Catalog() {
 
                     @Override
-                    public Price getUnformattedPrice(Barcode barcode) {
+                    public Price getPrice(Barcode barcode) {
                         return null;
                     }
                 }, Barcode.parse("99999"))
@@ -29,7 +29,7 @@ public class TestSellOneItem {
                 PointOfSale.displaySellOneItem(new Catalog() {
 
                     @Override
-                    public Price getUnformattedPrice(Barcode barcode) {
+                    public Price getPrice(Barcode barcode) {
                         return null;
                     }
                 }, Barcode.parse("1111"))

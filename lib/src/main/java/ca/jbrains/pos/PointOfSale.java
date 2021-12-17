@@ -43,7 +43,7 @@ public class PointOfSale {
     }
 
     public static String displaySellOneItem(Catalog catalog, Barcode barcode) {
-        Price unformattedPrice = catalog.getUnformattedPrice(barcode);
+        Price unformattedPrice = catalog.getPrice(barcode);
         if (unformattedPrice != null)
             return formatPrice(unformattedPrice);
         else
