@@ -6,4 +6,8 @@ public class Price {
     public Price(int moneyInCents) {
         this.moneyInCents = moneyInCents;
     }
+
+    public int getAmount() {
+        return moneyInCents;
+    }
 }

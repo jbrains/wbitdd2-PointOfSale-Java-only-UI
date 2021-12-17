@@ -2,6 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Barcode;
+import ca.jbrains.pos.domain.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,5 +29,20 @@ public class TestSellOneItem {
                 "CAD 1.00",
                 PointOfSale.displaySellOneItem((ignored) -> "CAD 1.00", Barcode.parse("99999"))
         );
+    }
+
+    @Test
+    void shouldFormat101Correctly() {
+        Assertions.assertEquals("CAD 1.01", PointOfSale.formatPrice("kjaskj", new Price(101)));
+    }
+
+    @Test
+    void shouldFormat110Correctly() {
+        Assertions.assertEquals("CAD 1.10", PointOfSale.formatPrice("kjaskj", new Price(110)));
+    }
+
+    @Test
+    void shouldFormat100Correctly() {
+        Assertions.assertEquals("CAD 1.00", PointOfSale.formatPrice("kjaskj", new Price(100)));
     }
 }

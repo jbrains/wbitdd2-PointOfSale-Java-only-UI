@@ -51,8 +51,8 @@ public class PointOfSale {
             return String.format("Product not found: %s", barcode.getBarcode());
     }
 
-    private static String formatPrice(String price, Price unformattedPrice) {
-        return price;
+    public static String formatPrice(String price, Price unformattedPrice) {
+        return String.format("CAD %.2f", unformattedPrice.getAmount()/100d);
     }
 
 }
