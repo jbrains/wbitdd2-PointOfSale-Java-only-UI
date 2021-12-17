@@ -40,11 +40,7 @@ public class TestSellOneItem {
     void priceFound() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem(new Catalog() {
-                    public String getPrice(Barcode ignored) {
-                        return "CAD 1.00";
-                    }
-                }, Barcode.parse("99999"))
+                PointOfSale.displaySellOneItem(ignored -> new Price(100), Barcode.parse("99999"))
         );
     }
 
