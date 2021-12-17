@@ -40,9 +40,9 @@ public class PointOfSale {
         return new BufferedReader(simulateInputFromStdin).lines();
     }
 
-    public static String displaySellOneItem(Catalog saleController, Barcode barcode) {
+    public static String displaySellOneItem(Catalog catalog, Barcode barcode) {
         String notEmptyBarcode = barcode.getBarcode();
-        String price = saleController.getPrice(notEmptyBarcode);
+        String price = catalog.getPrice(notEmptyBarcode);
         if (price != null)
             return price;
         else
