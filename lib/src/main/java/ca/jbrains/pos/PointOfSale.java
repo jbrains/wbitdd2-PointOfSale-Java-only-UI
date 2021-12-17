@@ -1,5 +1,7 @@
 package ca.jbrains.pos;
 
+import ca.jbrains.pos.domain.Catalog;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
