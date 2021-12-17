@@ -29,20 +29,4 @@ public class TestSellOneItem {
                 PointOfSale.displaySellOneItem((ignored) -> "CAD 1.00", Barcode.parse("99999"))
         );
     }
-
-    @Test
-    void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
-        String posMessage;
-        if ("".equals("")) {
-            posMessage = PointOfSale.emptyBarcode();
-        } else {
-            String notEmptyBarcode = "";
-            posMessage = PointOfSale.displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode));
-        }
-        Assertions.assertEquals(
-                "Scanning error: empty barcode",
-                posMessage
-        );
-    }
-
 }
