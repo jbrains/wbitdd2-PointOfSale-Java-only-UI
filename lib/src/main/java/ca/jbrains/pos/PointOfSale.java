@@ -1,8 +1,8 @@
 package ca.jbrains.pos;
 
-import ca.jbrains.pos.domain.Barcode;
-import ca.jbrains.pos.domain.BarcodeScannedHandler;
-import ca.jbrains.pos.domain.Price;
+import ca.jbrains.pos.domain.*;
+import ca.jbrains.pos.stub.StubProductFound;
+import io.vavr.control.Either;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,7 +22,7 @@ public class PointOfSale {
         }
         return () -> {
             String notEmptyBarcode = barcodeInput;
-            displayToConsole(displaySellOneItem(barcode -> new Price(100), Barcode.parse(notEmptyBarcode)));
+            displayToConsole(displaySellOneItem(barcode -> Either.right(new StubProductFound()), Barcode.parse(notEmptyBarcode)));
         };
     }
 
@@ -43,11 +43,11 @@ public class PointOfSale {
     }
 
     public static String displaySellOneItem(BarcodeScannedHandler barcodeScannedHandler, Barcode barcode) {
-        Price unformattedPrice = barcodeScannedHandler.handleScannedBarcode(barcode);
-        if (unformattedPrice != null)
-            return formatPrice(unformattedPrice);
+        Either<ProductNotFound, ProductFound> returnProduct = barcodeScannedHandler.handleScannedBarcode(barcode);
+        if (returnProduct.isRight())
+            return formatPrice(returnProduct.get().getPrice());
         else
-            return String.format("Product not found: %s", barcode.getBarcode());
+            return String.format("Product not found: %s", returnProduct.getLeft().getBarcode());
     }
 
     public static String formatPrice(Price unformattedPrice) {
