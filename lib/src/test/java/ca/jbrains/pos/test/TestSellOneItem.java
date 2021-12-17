@@ -2,7 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Barcode;
-import ca.jbrains.pos.domain.Catalog;
+import ca.jbrains.pos.domain.BarcodeScannedHandler;
 import ca.jbrains.pos.domain.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,10 @@ public class TestSellOneItem {
     void priceNotFound() {
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.displaySellOneItem(new Catalog() {
+                PointOfSale.displaySellOneItem(new BarcodeScannedHandler() {
 
                     @Override
-                    public Price getPrice(Barcode barcode) {
+                    public Price handleScannedBarcode(Barcode barcode) {
                         return null;
                     }
                 }, Barcode.parse("99999"))
@@ -26,13 +26,7 @@ public class TestSellOneItem {
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.displaySellOneItem(new Catalog() {
-
-                    @Override
-                    public Price getPrice(Barcode barcode) {
-                        return null;
-                    }
-                }, Barcode.parse("1111"))
+                PointOfSale.displaySellOneItem(barcode -> null, Barcode.parse("1111"))
         );
     }
 

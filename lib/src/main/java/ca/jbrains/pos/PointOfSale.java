@@ -1,7 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Barcode;
-import ca.jbrains.pos.domain.Catalog;
+import ca.jbrains.pos.domain.BarcodeScannedHandler;
 import ca.jbrains.pos.domain.Price;
 
 import java.io.BufferedReader;
@@ -42,8 +42,8 @@ public class PointOfSale {
         return new BufferedReader(simulateInputFromStdin).lines();
     }
 
-    public static String displaySellOneItem(Catalog catalog, Barcode barcode) {
-        Price unformattedPrice = catalog.getPrice(barcode);
+    public static String displaySellOneItem(BarcodeScannedHandler barcodeScannedHandler, Barcode barcode) {
+        Price unformattedPrice = barcodeScannedHandler.handleScannedBarcode(barcode);
         if (unformattedPrice != null)
             return formatPrice(unformattedPrice);
         else
