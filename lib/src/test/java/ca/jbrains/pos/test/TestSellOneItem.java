@@ -13,10 +13,6 @@ public class TestSellOneItem {
         Assertions.assertEquals(
                 "Product not found: 99999",
                 PointOfSale.displaySellOneItem(new Catalog() {
-                    @Override
-                    public String getPrice(Barcode ignored) {
-                        return null;
-                    }
 
                     @Override
                     public Price getUnformattedPrice(Barcode barcode) {
@@ -31,10 +27,6 @@ public class TestSellOneItem {
         Assertions.assertEquals(
                 "Product not found: 1111",
                 PointOfSale.displaySellOneItem(new Catalog() {
-                    @Override
-                    public String getPrice(Barcode ignored) {
-                        return null;
-                    }
 
                     @Override
                     public Price getUnformattedPrice(Barcode barcode) {
@@ -48,7 +40,11 @@ public class TestSellOneItem {
     void priceFound() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem((ignored) -> "CAD 1.00", Barcode.parse("99999"))
+                PointOfSale.displaySellOneItem(new Catalog() {
+                    public String getPrice(Barcode ignored) {
+                        return "CAD 1.00";
+                    }
+                }, Barcode.parse("99999"))
         );
     }
 

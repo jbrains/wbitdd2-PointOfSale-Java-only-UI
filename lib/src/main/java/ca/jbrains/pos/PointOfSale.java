@@ -22,7 +22,8 @@ public class PointOfSale {
         }
         return () -> {
             String notEmptyBarcode = barcodeInput;
-            displayToConsole(displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode)));
+            displayToConsole(displaySellOneItem(new Catalog() {
+            }, Barcode.parse(notEmptyBarcode)));
         };
     }
 
