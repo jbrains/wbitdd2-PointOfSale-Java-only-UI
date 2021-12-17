@@ -10,13 +10,19 @@ public class PointOfSale {
         parseInput(new InputStreamReader(System.in)).forEachOrdered(
                 barcodeInput -> {
                     if ("".equals(barcodeInput)) {
-                        displayToConsole(emptyBarcode());
+                        ((PosCommand) input -> displayToConsole(emptyBarcode())).execute(barcodeInput);
                     } else {
-                        String notEmptyBarcode = barcodeInput;
-                        displayToConsole(displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode)));
+                        ((PosCommand) input -> {
+                            String notEmptyBarcode = barcodeInput;
+                            displayToConsole(displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode)));
+                        }).execute(barcodeInput);
                     }
                 }
         );
+    }
+
+    public interface PosCommand {
+        void execute(String input);
     }
 
     public static String emptyBarcode() {
