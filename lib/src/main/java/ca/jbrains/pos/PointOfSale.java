@@ -43,15 +43,14 @@ public class PointOfSale {
     }
 
     public static String displaySellOneItem(Catalog catalog, Barcode barcode) {
-        String price = catalog.getPrice(barcode);
         Price unformattedPrice = catalog.getUnformattedPrice(barcode);
-        if (price != null && unformattedPrice != null)
-            return formatPrice(price, unformattedPrice);
+        if (unformattedPrice != null)
+            return formatPrice(unformattedPrice);
         else
             return String.format("Product not found: %s", barcode.getBarcode());
     }
 
-    public static String formatPrice(String price, Price unformattedPrice) {
+    public static String formatPrice(Price unformattedPrice) {
         return String.format("CAD %.2f", unformattedPrice.getAmount()/100d);
     }
 

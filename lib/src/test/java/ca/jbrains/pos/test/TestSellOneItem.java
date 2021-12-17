@@ -2,6 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Barcode;
+import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,17 @@ public class TestSellOneItem {
     void priceNotFound() {
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.displaySellOneItem((ignored) -> null, Barcode.parse("99999"))
+                PointOfSale.displaySellOneItem(new Catalog() {
+                    @Override
+                    public String getPrice(Barcode ignored) {
+                        return null;
+                    }
+
+                    @Override
+                    public Price getUnformattedPrice(Barcode barcode) {
+                        return null;
+                    }
+                }, Barcode.parse("99999"))
         );
     }
 
@@ -19,7 +30,17 @@ public class TestSellOneItem {
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.displaySellOneItem((ignored) -> null, Barcode.parse("1111"))
+                PointOfSale.displaySellOneItem(new Catalog() {
+                    @Override
+                    public String getPrice(Barcode ignored) {
+                        return null;
+                    }
+
+                    @Override
+                    public Price getUnformattedPrice(Barcode barcode) {
+                        return null;
+                    }
+                }, Barcode.parse("1111"))
         );
     }
 
@@ -33,16 +54,16 @@ public class TestSellOneItem {
 
     @Test
     void shouldFormat101Correctly() {
-        Assertions.assertEquals("CAD 1.01", PointOfSale.formatPrice("kjaskj", new Price(101)));
+        Assertions.assertEquals("CAD 1.01", PointOfSale.formatPrice(new Price(101)));
     }
 
     @Test
     void shouldFormat110Correctly() {
-        Assertions.assertEquals("CAD 1.10", PointOfSale.formatPrice("kjaskj", new Price(110)));
+        Assertions.assertEquals("CAD 1.10", PointOfSale.formatPrice(new Price(110)));
     }
 
     @Test
     void shouldFormat100Correctly() {
-        Assertions.assertEquals("CAD 1.00", PointOfSale.formatPrice("kjaskj", new Price(100)));
+        Assertions.assertEquals("CAD 1.00", PointOfSale.formatPrice(new Price(100)));
     }
 }
