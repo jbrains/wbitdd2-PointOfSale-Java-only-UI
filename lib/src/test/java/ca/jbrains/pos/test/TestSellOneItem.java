@@ -31,9 +31,16 @@ public class TestSellOneItem {
 
     @Test
     void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
+        String posMessage;
+        if ("".equals("")) {
+            posMessage = PointOfSale.emptyBarcode();
+        } else {
+            String notEmptyBarcode = "";
+            posMessage = PointOfSale.displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", PointOfSale.Barcode.parse(notEmptyBarcode));
+        }
         Assertions.assertEquals(
                 "Scanning error: empty barcode",
-                PointOfSale.sellItems("")
+                posMessage
         );
     }
 

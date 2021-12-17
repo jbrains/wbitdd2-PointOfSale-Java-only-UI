@@ -3,35 +3,23 @@ package ca.jbrains.pos;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class PointOfSale {
     public static void main(String[] args) {
         parseInput(new InputStreamReader(System.in)).forEachOrdered(
-                processBarcode()
+                barcodeInput -> {
+                    if ("".equals(barcodeInput)) {
+                        displayToConsole(emptyBarcode());
+                    } else {
+                        String notEmptyBarcode = barcodeInput;
+                        displayToConsole(displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode)));
+                    }
+                }
         );
     }
 
-    private static Consumer<String> processBarcode() {
-        return barcodeInput -> {
-            String posMessage = sellItems(barcodeInput);
-            displayToConsole(posMessage);
-        };
-    }
-
-    public static String sellItems(String barcodeInput) {
-        String posMessage;
-        if ("".equals(barcodeInput)) {
-            posMessage = emptyBarcode();
-        } else {
-            String notEmptyBarcode = barcodeInput;
-            posMessage = displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode));
-        }
-        return posMessage;
-    }
-
-    private static String emptyBarcode() {
+    public static String emptyBarcode() {
         return "Scanning error: empty barcode";
     }
 
