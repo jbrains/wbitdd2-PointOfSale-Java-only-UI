@@ -1,6 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.domain.Barcode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ public class TestSellOneItem {
     void priceNotFound() {
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.displaySellOneItem((ignored) -> null, PointOfSale.Barcode.parse("99999"))
+                PointOfSale.displaySellOneItem((ignored) -> null, Barcode.parse("99999"))
         );
     }
 
@@ -17,7 +18,7 @@ public class TestSellOneItem {
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.displaySellOneItem((ignored) -> null, PointOfSale.Barcode.parse("1111"))
+                PointOfSale.displaySellOneItem((ignored) -> null, Barcode.parse("1111"))
         );
     }
 
@@ -25,7 +26,7 @@ public class TestSellOneItem {
     void priceFound() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem((ignored) -> "CAD 1.00", PointOfSale.Barcode.parse("99999"))
+                PointOfSale.displaySellOneItem((ignored) -> "CAD 1.00", Barcode.parse("99999"))
         );
     }
 
@@ -36,7 +37,7 @@ public class TestSellOneItem {
             posMessage = PointOfSale.emptyBarcode();
         } else {
             String notEmptyBarcode = "";
-            posMessage = PointOfSale.displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", PointOfSale.Barcode.parse(notEmptyBarcode));
+            posMessage = PointOfSale.displaySellOneItem((ignored) -> "::a hardcoded response for every barcode::", Barcode.parse(notEmptyBarcode));
         }
         Assertions.assertEquals(
                 "Scanning error: empty barcode",
