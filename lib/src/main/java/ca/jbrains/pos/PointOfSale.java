@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Barcode;
 import ca.jbrains.pos.domain.Catalog;
+import ca.jbrains.pos.domain.Price;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -43,13 +44,14 @@ public class PointOfSale {
 
     public static String displaySellOneItem(Catalog catalog, Barcode barcode) {
         String price = catalog.getPrice(barcode);
-        if (price != null)
-            return formatPrice(price);
+        Price unformattedPrice = catalog.getUnformattedPrice(barcode);
+        if (price != null && unformattedPrice != null)
+            return formatPrice(price, unformattedPrice);
         else
             return String.format("Product not found: %s", barcode.getBarcode());
     }
 
-    private static String formatPrice(String price) {
+    private static String formatPrice(String price, Price unformattedPrice) {
         return price;
     }
 
