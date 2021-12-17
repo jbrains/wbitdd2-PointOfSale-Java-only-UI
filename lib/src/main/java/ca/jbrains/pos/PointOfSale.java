@@ -42,12 +42,11 @@ public class PointOfSale {
     }
 
     public static String displaySellOneItem(Catalog catalog, Barcode barcode) {
-        String notEmptyBarcode = barcode.getBarcode();
-        String price = catalog.getPrice(notEmptyBarcode);
+        String price = catalog.getPrice(barcode);
         if (price != null)
             return price;
         else
-            return String.format("Product not found: %s", notEmptyBarcode);
+            return String.format("Product not found: %s", barcode.getBarcode());
     }
 
 }
