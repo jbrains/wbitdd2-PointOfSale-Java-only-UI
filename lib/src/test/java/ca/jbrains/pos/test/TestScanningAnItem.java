@@ -1,6 +1,5 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.PointOfSale;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,22 +10,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TestScanningAnItem {
-    @Test
-    void scanOneItem() {
-        Stream<String> lines = makeBufferedReader(List.of("12345"));
-        Assertions.assertEquals(List.of("12345"), lines.collect(Collectors.toList()));
-    }
 
-    private Stream<String> makeBufferedReader(List<String> barcodes) {
-        Reader simulateInputFromStdin = new StringReader(barcodes.stream().collect(Collectors.joining(System.lineSeparator())));
-        return PointOfSale.parseInput(simulateInputFromStdin);
-    }
+    public static final String BARCODE = "12345";
 
     @Test
-    void scanMultipleItems() {
-        Stream<String> lines = makeBufferedReader(List.of("12345", "678910"));
+    void oneBarcode() {
+        Stream<String> barcodes = createStreamOfBarcodes(List.of(BARCODE));
+        Assertions.assertEquals(List.of(BARCODE), barcodes.collect(Collectors.toList()));
+    }
+
+    private Stream<String> createStreamOfBarcodes(List<String> barcodes) {
+        Reader barcodesFromStdin = new StringReader(barcodes.stream().collect(Collectors.joining(System.lineSeparator())));
+        return PointOfSale.readBarcodesPerLine(barcodesFromStdin);
+    }
+
+    @Test
+    void multipleBarcodes() {
+        String OTHER_BARCODE = "678910";
+        Stream<String> lines = createStreamOfBarcodes(List.of(BARCODE, OTHER_BARCODE));
         List<String> collect = lines.collect(Collectors.toList());
 
-        Assertions.assertEquals(List.of("12345", "678910"), collect);
+        Assertions.assertEquals(List.of(BARCODE, OTHER_BARCODE), collect);
     }
 }

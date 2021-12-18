@@ -1,39 +1,40 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.PointOfSale;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSellOneItem {
     @Test
-    void priceNotFound() {
+    void notKnownProductShouldReturnProductNotFound() {
         Assertions.assertEquals(
                 "Product not found: 99999",
-                PointOfSale.displaySellOneItem("99999", (ignored) -> null)
+                PointOfSale.scanAndFetchPrice("99999", (saleController) -> null)
         );
     }
 
     @Test
-    void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
+    void forOtherNotKnownProductShouldReturnProductNotFound() {
         Assertions.assertEquals(
                 "Product not found: 1111",
-                PointOfSale.displaySellOneItem("1111", (ignored) -> null)
+                PointOfSale.scanAndFetchPrice("1111", (saleController) -> null)
         );
     }
 
     @Test
-    void priceFound() {
+    void forKnownProductShouldReturnPrice() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem("99999", (ignored) -> "CAD 1.00")
+                PointOfSale.scanAndFetchPrice("99999", (saleController) -> "CAD 1.00")
         );
     }
 
     @Test
-    void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
+    void forEmptyBarcodeShouldReturnScanningError() {
+        String emptyBarcode = "";
+
         Assertions.assertEquals(
                 "Scanning error: empty barcode",
-                PointOfSale.displaySellOneItem("", (ignored) -> null)
+                PointOfSale.scanAndFetchPrice(emptyBarcode, (saleController) -> null)
         );
     }
 
