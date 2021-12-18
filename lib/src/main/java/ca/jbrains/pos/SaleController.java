@@ -1,5 +1,5 @@
 package ca.jbrains.pos;
 
 public interface SaleController {
-    String getPrice(String barcode);
+    String fetchPrice(String barcode);
 }
