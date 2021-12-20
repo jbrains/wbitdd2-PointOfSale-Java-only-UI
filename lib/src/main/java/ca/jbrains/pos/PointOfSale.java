@@ -11,13 +11,13 @@ public class PointOfSale {
     }
 
     private static void processCommand(String line) {
+        String response;
         if ("".equals(line)) {
-            String response = "Scanning error: empty barcode";
-            displayToConsole(response);
+            response = "Scanning error: empty barcode";
         } else {
-            String response = handleBarcodeScanned(line, (ignored) -> "::a hardcoded response for every barcode::");
-            displayToConsole(response);
+            response = handleBarcodeScanned(line, (ignored) -> "::a hardcoded response for every barcode::");
         }
+        displayToConsole(response);
     }
 
     private static void displayToConsole(String message) {
