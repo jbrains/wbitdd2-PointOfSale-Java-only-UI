@@ -13,9 +13,7 @@ public class PointOfSale {
     public static void main(String[] args) {
         // REFACTOR Replace forEach(line -> a(b(line))) with forEach(b).forEach(a)
         streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
-                line -> {
-                    displayToConsole(handleLine(line));
-                }
+                line -> displayToConsole(handleLine(line))
         );
     }
 
