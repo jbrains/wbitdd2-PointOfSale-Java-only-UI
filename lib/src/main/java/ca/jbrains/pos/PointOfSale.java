@@ -15,9 +15,9 @@ public class PointOfSale {
         displayToConsole(response);
     }
 
-    private static String handleCommand(String commandText) {
+    public static String handleCommand(String commandText) {
         if ("".equals(commandText)) {
-            return "Scanning error: empty barcode";
+            return "Error: empty command";
         } else {
             return handleBarcodeScanned(commandText, (ignored) -> "::a hardcoded response for every barcode::");
         }

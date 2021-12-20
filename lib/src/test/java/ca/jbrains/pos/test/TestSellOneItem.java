@@ -32,8 +32,8 @@ public class TestSellOneItem {
     @Test
     void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
         Assertions.assertEquals(
-                "Scanning error: empty barcode",
-                PointOfSale.handleBarcodeScanned("", (ignored) -> null)
+                "Error: empty command",
+                PointOfSale.handleCommand("")
         );
     }
 
