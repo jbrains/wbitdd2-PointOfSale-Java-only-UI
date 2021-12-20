@@ -3,6 +3,8 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.Catalog;
 import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.Price;
+import io.vavr.control.Either;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +17,11 @@ public class TestSellOneItem {
                     @Override
                     public String findFormattedPrice(String ignored) {
                         return null;
+                    }
+
+                    @Override
+                    public Either<Barcode, Price> findPrice(Barcode barcode) {
+                        return Either.left(barcode);
                     }
                 })
         );
@@ -29,6 +36,11 @@ public class TestSellOneItem {
                     public String findFormattedPrice(String ignored) {
                         return null;
                     }
+
+                    @Override
+                    public Either<Barcode, Price> findPrice(Barcode barcode) {
+                        return Either.left(barcode);
+                    }
                 })
         );
     }
@@ -41,6 +53,11 @@ public class TestSellOneItem {
                     @Override
                     public String findFormattedPrice(String ignored) {
                         return "CAD 1.00";
+                    }
+
+                    @Override
+                    public Either<Barcode, Price> findPrice(Barcode barcode) {
+                        return Either.right(new Price(100));
                     }
                 })
         );
