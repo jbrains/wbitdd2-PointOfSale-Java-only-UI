@@ -2,7 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.*;
-import ca.jbrains.pos.stub.StubProductFound;
+import ca.jbrains.pos.stub.AnyProductWithPriceOf1;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class TestSellOneItem {
     void priceFound() {
         Assertions.assertEquals(
                 "CAD 1.00",
-                PointOfSale.displaySellOneItem(ignored -> Either.right(new StubProductFound()), Barcode.parse("99999"))
+                PointOfSale.displaySellOneItem(ignored -> Either.right(new AnyProductWithPriceOf1()), Barcode.parse("99999"))
         );
     }
 

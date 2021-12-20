@@ -1,7 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.*;
-import ca.jbrains.pos.stub.StubProductFound;
+import ca.jbrains.pos.stub.AnyProductWithPriceOf1;
 import io.vavr.control.Either;
 
 import java.io.BufferedReader;
@@ -22,7 +22,7 @@ public class PointOfSale {
         }
         return () -> {
             String notEmptyBarcode = barcodeInput;
-            return displaySellOneItem(barcode -> Either.right(new StubProductFound()), Barcode.parse(notEmptyBarcode));
+            return displaySellOneItem(barcode -> Either.right(new AnyProductWithPriceOf1()), Barcode.parse(notEmptyBarcode));
         };
     }
 
