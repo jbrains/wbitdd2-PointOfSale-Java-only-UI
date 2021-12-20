@@ -19,7 +19,7 @@ public class PointOfSale {
     public static String handleCommand(String commandText) {
         Option<Barcode> parseResult = Barcode.parse(commandText);
         if (parseResult.isEmpty()) {
-            return "Error: empty command";
+            return parseResult.map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).getOrElse("Error: empty command");
         } else {
             return parseResult.map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).get();
         }
