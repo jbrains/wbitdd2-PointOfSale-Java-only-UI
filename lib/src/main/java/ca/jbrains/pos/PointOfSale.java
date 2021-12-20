@@ -28,7 +28,6 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    // CONTRACT barcode must not be an empty string
     public static String handleBarcodeScanned(Barcode barcode, Catalog catalog) {
         String formattedPrice = catalog.findFormattedPrice(barcode.text());
         if (formattedPrice != null)
