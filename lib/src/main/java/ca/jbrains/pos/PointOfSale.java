@@ -7,6 +7,7 @@ import io.vavr.control.Either;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class PointOfSale {
@@ -44,10 +45,8 @@ public class PointOfSale {
 
     public static String displaySellOneItem(BarcodeScannedHandler barcodeScannedHandler, Barcode barcode) {
         Either<ProductNotFound, ProductFound> returnProduct = barcodeScannedHandler.handleScannedBarcode(barcode);
-        if (returnProduct.isRight())
-            return formatPrice(returnProduct.get().getPrice());
-        else
-            return String.format("Product not found: %s", returnProduct.getLeft().getBarcode());
+        return returnProduct.fold(productNotFound -> String.format("Product not found: %s", returnProduct.getLeft().getBarcode()),
+                productFound -> formatPrice(returnProduct.get().getPrice()));
     }
 
     public static String formatPrice(Price unformattedPrice) {
