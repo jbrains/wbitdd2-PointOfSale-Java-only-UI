@@ -18,7 +18,7 @@ public class PointOfSale {
         if ("".equals(commandText)) {
             return "Error: empty command";
         } else {
-            return handleBarcodeScanned(commandText, (ignored) -> "::a hardcoded response for every barcode::");
+            return handleBarcodeScanned(Barcode.parse(commandText), (ignored) -> "::a hardcoded response for every barcode::");
         }
     }
 
@@ -31,8 +31,8 @@ public class PointOfSale {
     }
 
     // CONTRACT barcode must not be an empty string
-    public static String handleBarcodeScanned(String barcode, Catalog catalog) {
-        return reallyHandleBarcodeScanned(Barcode.parse(barcode), catalog);
+    public static String handleBarcodeScanned(Barcode barcode, Catalog catalog) {
+        return reallyHandleBarcodeScanned(barcode, catalog);
     }
 
     private static String reallyHandleBarcodeScanned(Barcode barcode, Catalog catalog) {
