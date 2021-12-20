@@ -7,9 +7,11 @@ import java.util.stream.Stream;
 
 public class PointOfSale {
     public static void main(String[] args) {
-        streamLines(new InputStreamReader(System.in)).forEachOrdered(
-                line -> displayToConsole(handleBarcodeScanned(line, (ignored) -> "::a hardcoded response for every barcode::"))
-        );
+        streamLines(new InputStreamReader(System.in)).forEachOrdered(PointOfSale::processCommand);
+    }
+
+    private static void processCommand(String line) {
+        displayToConsole(handleBarcodeScanned(line, (ignored) -> "::a hardcoded response for every barcode::"));
     }
 
     private static void displayToConsole(String message) {
