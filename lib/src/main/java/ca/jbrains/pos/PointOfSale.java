@@ -14,12 +14,15 @@ public class PointOfSale {
         // REFACTOR Replace forEach(line -> a(b(line))) with forEach(b).forEach(a)
         streamLinesFrom(new InputStreamReader(System.in)).forEachOrdered(
                 line -> {
-                    displayToConsole(
-                            Barcode.makeBarcode(line)
-                                    .map(PointOfSale::handleBarcode)
-                                    .getOrElse("Scanning error: empty barcode"));
+                    displayToConsole(handleLine(line));
                 }
         );
+    }
+
+    private static String handleLine(String line) {
+        return Barcode.makeBarcode(line)
+                .map(PointOfSale::handleBarcode)
+                .getOrElse("Scanning error: empty barcode");
     }
 
     private static String handleBarcode(Barcode barcode) {
