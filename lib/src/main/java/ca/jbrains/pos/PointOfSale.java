@@ -38,10 +38,4 @@ public class PointOfSale {
         else
             return String.format("Product not found: %s", barcode.text());
     }
-
-    public record Barcode(String text) {
-        public static Barcode parse(String text) {
-            return new Barcode(text);
-        }
-    }
 }
