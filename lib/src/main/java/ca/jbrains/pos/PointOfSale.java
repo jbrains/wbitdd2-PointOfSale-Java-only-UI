@@ -10,8 +10,8 @@ public class PointOfSale {
         streamLines(new InputStreamReader(System.in)).forEachOrdered(PointOfSale::processCommand);
     }
 
-    private static void processCommand(String line) {
-        displayToConsole(handleCommand(line));
+    private static void processCommand(String commandText) {
+        displayToConsole(handleCommand(commandText));
     }
 
     public static String handleCommand(String commandText) {
