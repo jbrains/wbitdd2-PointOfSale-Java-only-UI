@@ -11,8 +11,7 @@ public class PointOfSale {
     }
 
     private static void processCommand(String line) {
-        String response = handleCommand(line);
-        displayToConsole(response);
+        displayToConsole(handleCommand(line));
     }
 
     public static String handleCommand(String commandText) {
