@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class PointOfSale {
     public static void main(String[] args) {
         streamLines(new InputStreamReader(System.in)).forEachOrdered(
-                line -> displayToConsole(displaySellOneItem(line, (ignored) -> "::a hardcoded response for every barcode::"))
+                line -> displayToConsole(handleBarcodeScanned(line, (ignored) -> "::a hardcoded response for every barcode::"))
         );
     }
 
@@ -20,7 +20,7 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    public static String displaySellOneItem(String barcode, SaleController saleController) {
+    public static String handleBarcodeScanned(String barcode, SaleController saleController) {
         if ("".equals(barcode)) {
             return "Scanning error: empty barcode";
         }
