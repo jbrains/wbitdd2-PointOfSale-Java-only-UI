@@ -36,12 +36,12 @@ public class PointOfSale {
         return reallyHandleBarcodeScanned(barcode, catalog);
     }
 
-    private static String reallyHandleBarcodeScanned(String barcode, Catalog catalog) {
-        String formattedPrice = catalog.findFormattedPrice(barcode);
+    private static String reallyHandleBarcodeScanned(String trustedBarcodeText, Catalog catalog) {
+        String formattedPrice = catalog.findFormattedPrice(trustedBarcodeText);
         if (formattedPrice != null)
             return formattedPrice;
         else
-            return String.format("Product not found: %s", barcode);
+            return String.format("Product not found: %s", trustedBarcodeText);
     }
 
     public record Barcode(String text) {
