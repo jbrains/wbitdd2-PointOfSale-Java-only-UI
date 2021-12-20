@@ -12,7 +12,8 @@ import java.util.stream.Stream;
 public class PointOfSale {
     public static void main(String[] args) {
         parseInput(new InputStreamReader(System.in))
-                .forEachOrdered(barcodeInput -> displayToConsole(parseCommand(barcodeInput).execute()));
+                .map(barcodeInput -> parseCommand(barcodeInput).execute())
+                .forEachOrdered(messageToDisplay -> displayToConsole(messageToDisplay));
     }
 
     private static PosCommand parseCommand(String barcodeInput) {
