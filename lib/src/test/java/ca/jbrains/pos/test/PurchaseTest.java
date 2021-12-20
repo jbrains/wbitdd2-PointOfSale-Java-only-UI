@@ -17,4 +17,13 @@ public class PurchaseTest {
                 List.of("CAD 7.95", "Total: CAD 7.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket)).collect(Collectors.toList()));
     }
+
+    @Test
+    void aDifferentItem() {
+        Basket basket = () -> 995;
+
+        Assertions.assertEquals(
+                List.of("CAD 9.95", "Total: CAD 9.95"),
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket)).collect(Collectors.toList()));
+    }
 }
