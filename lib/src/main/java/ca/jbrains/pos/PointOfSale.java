@@ -20,12 +20,12 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleBarcodeScanned(String barcode, SaleController saleController) {
+    public static String handleBarcodeScanned(String barcode, Catalog catalog) {
         if ("".equals(barcode)) {
             return "Scanning error: empty barcode";
         }
 
-        String price = saleController.getPrice(barcode);
+        String price = catalog.getPrice(barcode);
         if (price != null)
             return price;
         else
