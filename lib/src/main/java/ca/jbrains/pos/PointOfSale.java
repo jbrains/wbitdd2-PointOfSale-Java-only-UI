@@ -17,17 +17,13 @@ public class PointOfSale {
     }
 
     public static String handleCommand(String commandText) {
-        Option<Barcode> parseResult = parseBarcode(commandText);
+        Option<Barcode> parseResult = Barcode.parse(commandText);
 
         if (parseResult.isEmpty()) {
             return "Error: empty command";
         } else {
             return handleBarcodeScanned(parseResult.get(), (ignored) -> "::a hardcoded response for every barcode::");
         }
-    }
-
-    private static Option<Barcode> parseBarcode(String commandText) {
-        return "".equals(commandText) ? Option.none() : Option.some(new Barcode(commandText));
     }
 
     private static void displayToConsole(String message) {
