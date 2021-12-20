@@ -15,8 +15,6 @@ public class TestTotal {
 
     @Test
     void oneItem() {
-        int priceInCents = 102;
-        PointOfSale.handleSellOneItemRequest(ignored -> Option.some(priceInCents), new Barcode("11111"));
-        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(() -> priceInCents));
+        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(() -> 102));
     }
 }
