@@ -29,4 +29,11 @@ public class TestScanningAnItem {
 
         Assertions.assertEquals(List.of("12345", "678910"), collect);
     }
+
+    @Test
+    void scanSingleItemAndGetTotal() {
+        Assertions.assertEquals(
+                List.of("CAD 7.95", "Total: CAD 7.95"),
+                makeBufferedReader(List.of("12345", "total")).collect(Collectors.toList()));
+    }
 }
