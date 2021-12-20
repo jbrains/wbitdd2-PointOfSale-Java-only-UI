@@ -45,5 +45,4 @@ public class PointOfSale {
     public static String formatPrice(int priceInCanadianCents) {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
-
 }
