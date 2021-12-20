@@ -13,12 +13,17 @@ public class PointOfSale {
     public static void main(String[] args) {
         // REFACTOR Replace forEach(line -> a(b(line))) with forEach(b).forEach(a)
         streamLinesFrom(new InputStreamReader(System.in))
-                .map(PointOfSale::handleLine)
+                .map(line -> handleLine(line, new Basket() {
+                    @Override
+                    public int getTotal() {
+                        return 0;
+                    }
+                }))
                 .forEachOrdered(System.out::println);
     }
 
-    public static String handleLine(String line) {
-        if ("total".equals(line)) return "Total: CAD 7.95";
+    public static String handleLine(String line, Basket basket) {
+        if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
                 .map(PointOfSale::handleBarcode)
