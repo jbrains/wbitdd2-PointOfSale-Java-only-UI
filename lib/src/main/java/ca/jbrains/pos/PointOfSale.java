@@ -7,27 +7,26 @@ import io.vavr.control.Either;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class PointOfSale {
     public static void main(String[] args) {
         parseInput(new InputStreamReader(System.in))
-                .forEachOrdered(barcodeInput -> parseCommand(barcodeInput).execute());
+                .forEachOrdered(barcodeInput -> displayToConsole(parseCommand(barcodeInput).execute()));
     }
 
     private static PosCommand parseCommand(String barcodeInput) {
         if ("".equals(barcodeInput)) {
-            return () -> displayToConsole(emptyBarcode());
+            return () -> emptyBarcode();
         }
         return () -> {
             String notEmptyBarcode = barcodeInput;
-            displayToConsole(displaySellOneItem(barcode -> Either.right(new StubProductFound()), Barcode.parse(notEmptyBarcode)));
+            return displaySellOneItem(barcode -> Either.right(new StubProductFound()), Barcode.parse(notEmptyBarcode));
         };
     }
 
     public interface PosCommand {
-        void execute();
+        String execute();
     }
 
     public static String emptyBarcode() {
