@@ -21,7 +21,7 @@ public class PointOfSale {
         if (parseResult.isEmpty()) {
             return parseResult.map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).getOrElse("Error: empty command");
         } else {
-            return parseResult.map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).get();
+            return parseResult.map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).getOrElse("Error: empty command");
         }
     }
 
