@@ -33,17 +33,17 @@ public class TestSellOneItem {
     }
 
     @Test
-    void shouldFormat101Correctly() {
+    void givenLastDecimalPlaceIsNotZero_shouldDisplay2DecimalPlaces() {
         Assertions.assertEquals("CAD 1.01", PointOfSale.formatPrice(new Price(101)));
     }
 
     @Test
-    void shouldFormat110Correctly() {
+    void givenLastDecimalPlaceIsZero_shouldStillDisplayTheLastZeroDecimalPlace() {
         Assertions.assertEquals("CAD 1.10", PointOfSale.formatPrice(new Price(110)));
     }
 
     @Test
-    void shouldFormat100Correctly() {
+    void givenLast2DecimalPlacesAreZero_shouldStillDisplayTheLast2ZeroDecimalPlaces() {
         Assertions.assertEquals("CAD 1.00", PointOfSale.formatPrice(new Price(100)));
     }
 }
