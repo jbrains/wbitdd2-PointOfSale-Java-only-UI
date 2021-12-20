@@ -1,5 +1,6 @@
 package ca.jbrains.pos;
 
+import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Option;
 
@@ -44,5 +45,10 @@ public class PointOfSale {
 
     public static String formatPrice(int priceInCanadianCents) {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
+    }
+
+    public static String handleTotal(Basket basket) {
+        int total = basket.getTotal();
+        return String.format("Total: %s", formatPrice(total));
     }
 }
