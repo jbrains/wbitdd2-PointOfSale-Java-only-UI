@@ -14,7 +14,7 @@ public class PointOfSale {
         // REFACTOR Replace forEach(line -> a(b(line))) with forEach(b).forEach(a)
         streamLinesFrom(new InputStreamReader(System.in))
                 .map(PointOfSale::handleLine)
-                .forEachOrdered(message -> displayToConsole(message));
+                .forEachOrdered(System.out::println);
     }
 
     private static String handleLine(String line) {
@@ -25,10 +25,6 @@ public class PointOfSale {
 
     private static String handleBarcode(Barcode barcode) {
         return handleSellOneItemRequest(ignored -> Option.of(795), barcode);
-    }
-
-    private static void displayToConsole(String message) {
-        System.out.println(message);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
