@@ -32,11 +32,10 @@ public class PointOfSale {
 
     // CONTRACT barcode must not be an empty string
     public static String handleBarcodeScanned(String barcode, Catalog catalog) {
-        barcode = Barcode.parse(barcode).text();
-        return reallyHandleBarcodeScanned(barcode, Barcode.parse(barcode), catalog);
+        return reallyHandleBarcodeScanned(Barcode.parse(barcode), catalog);
     }
 
-    private static String reallyHandleBarcodeScanned(String trustedBarcodeText, Barcode barcode, Catalog catalog) {
+    private static String reallyHandleBarcodeScanned(Barcode barcode, Catalog catalog) {
         String formattedPrice = catalog.findFormattedPrice(barcode.text());
         if (formattedPrice != null)
             return formattedPrice;
