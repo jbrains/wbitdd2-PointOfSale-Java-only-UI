@@ -28,13 +28,4 @@ public class TestSellOneItem {
                 PointOfSale.handleBarcodeScanned("99999", (ignored) -> "CAD 1.00")
         );
     }
-
-    @Test
-    void givenEmptyBarcodeShouldReturnScanningErrorMessage() {
-        Assertions.assertEquals(
-                "Error: empty command",
-                PointOfSale.handleCommand("")
-        );
-    }
-
 }
