@@ -18,7 +18,7 @@ public class PointOfSale {
         if ("".equals(commandText)) {
             return "Error: empty command";
         } else {
-            Barcode barcode = Barcode.parse(commandText);
+            Barcode barcode = new Barcode(commandText);
             return handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::");
         }
     }
