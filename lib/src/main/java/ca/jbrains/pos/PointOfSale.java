@@ -1,7 +1,5 @@
 package ca.jbrains.pos;
 
-import io.vavr.control.Option;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -17,8 +15,7 @@ public class PointOfSale {
     }
 
     public static String handleCommand(String commandText) {
-        Option<Barcode> parseResult = Barcode.parse(commandText);
-        return parseResult.map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).getOrElse("Error: empty command");
+        return Barcode.parse(commandText).map(barcode -> handleBarcodeScanned(barcode, (ignored) -> "::a hardcoded response for every barcode::")).getOrElse("Error: empty command");
     }
 
     private static void displayToConsole(String message) {
