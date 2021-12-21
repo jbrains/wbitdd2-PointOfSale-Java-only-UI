@@ -18,20 +18,20 @@ public class PointOfSale {
                     public int getTotal() {
                         return 0;
                     }
-                }))
+                }, ignored -> Option.of(795)))
                 .forEachOrdered(System.out::println);
     }
 
-    public static String handleLine(String line, Basket basket) {
+    public static String handleLine(String line, Basket basket, Catalog catalog) {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(PointOfSale::handleBarcode)
+                .map(barcode -> handleBarcode(barcode, catalog))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode) {
-        return handleSellOneItemRequest(ignored -> Option.of(795), barcode);
+    private static String handleBarcode(Barcode barcode, Catalog catalog) {
+        return handleSellOneItemRequest(catalog, barcode);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
