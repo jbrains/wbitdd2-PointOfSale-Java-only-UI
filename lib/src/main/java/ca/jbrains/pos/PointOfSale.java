@@ -64,20 +64,15 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Catalog catalog, Basket basket, Barcode barcode) {
-        Either<String, Integer> matchingPriceOrMissingBarcode = findProductInCatalog(catalog, barcode);
-
-        return matchingPriceOrMissingBarcode.fold(
-                missingBarcodeText -> formatProductNotFoundMessage(missingBarcodeText),
+        return findProductInCatalog(catalog, barcode).fold(
+                missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
     }
 
     // REFACTOR Move into The Hole onto Catalog
-    private static Either<String, Integer> findProductInCatalog(Catalog catalog, Barcode barcode) {
-        String trustedBarcodeString = barcode.text();
-        Option<Integer> maybePrice = catalog.findPrice(trustedBarcodeString);
-        Either<String, Integer> matchingPriceOrMissingBarcode = maybePrice.toEither(trustedBarcodeString);
-        return matchingPriceOrMissingBarcode;
+    private static Either<Barcode, Integer> findProductInCatalog(Catalog catalog, Barcode barcode) {
+        return catalog.findPrice(barcode.text()).toEither(barcode);
     }
 
     private static String formatProductNotFoundMessage(String trustedBarcodeString) {
