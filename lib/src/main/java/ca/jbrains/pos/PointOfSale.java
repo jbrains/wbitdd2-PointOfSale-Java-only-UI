@@ -18,19 +18,29 @@ public class PointOfSale {
 
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyBasket(), ignored -> Option.of(795)))
+                .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
                 .forEachOrdered(consoleDisplay);
+    }
+
+    private static Catalog createAnyCatalog() {
+        return new Catalog() {
+            @Override
+            public Option<Integer> findPrice(String barcode) {
+                throw new RuntimeException("Not our job");
+            }
+        };
     }
 
     private static Basket createAnyBasket() {
         return new Basket() {
             @Override
             public void add(int price) {
+                throw new RuntimeException("Not our job");
             }
 
             @Override
             public int getTotal() {
-                return 0;
+                throw new RuntimeException("Not our job");
             }
         };
     }
