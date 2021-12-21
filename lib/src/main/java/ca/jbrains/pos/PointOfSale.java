@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 
 import java.io.BufferedReader;
@@ -63,14 +64,29 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Catalog catalog, Basket basket, Barcode barcode) {
+        Either<String, Integer> matchingPriceOrMissingBarcode = findProductInCatalog(catalog, barcode);
+
+        return matchingPriceOrMissingBarcode.fold(
+                missingBarcodeText -> formatProductNotFoundMessage(missingBarcodeText),
+                matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
+        );
+    }
+
+    // REFACTOR Move into The Hole onto Catalog
+    private static Either<String, Integer> findProductInCatalog(Catalog catalog, Barcode barcode) {
         String trustedBarcodeString = barcode.text();
         Option<Integer> maybePrice = catalog.findPrice(trustedBarcodeString);
-        if (!maybePrice.isEmpty()) {
-            int price = maybePrice.get();
-            basket.add(price);
-            return formatPrice(price);
-        } else
-            return String.format("Product not found: %s", trustedBarcodeString);
+        Either<String, Integer> matchingPriceOrMissingBarcode = maybePrice.toEither(trustedBarcodeString);
+        return matchingPriceOrMissingBarcode;
+    }
+
+    private static String formatProductNotFoundMessage(String trustedBarcodeString) {
+        return String.format("Product not found: %s", trustedBarcodeString);
+    }
+
+    private static String addToBasketAndFormatPrice(Basket basket, int price) {
+        basket.add(price);
+        return formatPrice(price);
     }
 
     public static String formatPrice(int priceInCanadianCents) {
