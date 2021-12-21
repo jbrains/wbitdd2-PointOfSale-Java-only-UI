@@ -30,6 +30,7 @@ public class TestSellOneItem {
         Assertions.assertEquals("CAD 1.00", response);
     }
 
+    // REFACTOR Move into RecordingBasket
     private Option<Integer> addInvokedWith = Option.none();
 
     @Test
