@@ -7,19 +7,24 @@ import io.vavr.control.Option;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class PointOfSale {
     public static void main(String[] args) {
         // REFACTOR Replace forEach(line -> a(b(line))) with forEach(b).forEach(a)
-        streamLinesFrom(new InputStreamReader(System.in))
+        runApplication(new InputStreamReader(System.in), System.out::println);
+    }
+
+    private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
+        streamLinesFrom(commandLinesReader)
                 .map(line -> handleLine(line, new Basket() {
                     @Override
                     public int getTotal() {
                         return 0;
                     }
                 }, ignored -> Option.of(795)))
-                .forEachOrdered(System.out::println);
+                .forEachOrdered(consoleDisplay);
     }
 
     public static String handleLine(String line, Basket basket, Catalog catalog) {
