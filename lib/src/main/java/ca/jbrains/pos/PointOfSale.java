@@ -52,8 +52,9 @@ public class PointOfSale {
         String trustedBarcodeString = barcode.text();
         Option<Integer> unformattedPrice = catalog.findPrice(trustedBarcodeString);
         if (!unformattedPrice.isEmpty()) {
-            basket.add(unformattedPrice.get());
-            return formatPrice(unformattedPrice.get());
+            int price = unformattedPrice.get();
+            basket.add(price);
+            return formatPrice(price);
         } else
             return String.format("Product not found: %s", trustedBarcodeString);
     }
