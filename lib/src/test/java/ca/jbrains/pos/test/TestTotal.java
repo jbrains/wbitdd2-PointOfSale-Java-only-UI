@@ -10,11 +10,29 @@ import org.junit.jupiter.api.Test;
 public class TestTotal {
     @Test
     void noItems() {
-        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(() -> 0));
+        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new Basket() {
+            @Override
+            public void add(int price) {
+            }
+
+            @Override
+            public int getTotal() {
+                return 0;
+            }
+        }));
     }
 
     @Test
     void oneItem() {
-        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(() -> 102));
+        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new Basket() {
+            @Override
+            public void add(int price) {
+            }
+
+            @Override
+            public int getTotal() {
+                return 102;
+            }
+        }));
     }
 }

@@ -20,6 +20,10 @@ public class PointOfSale {
         streamLinesFrom(commandLinesReader)
                 .map(line -> handleLine(line, new Basket() {
                     @Override
+                    public void add(int price) {
+                    }
+
+                    @Override
                     public int getTotal() {
                         return 0;
                     }
@@ -31,24 +35,26 @@ public class PointOfSale {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog))
+                .map(barcode -> handleBarcode(barcode, catalog, basket))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode, Catalog catalog) {
-        return handleSellOneItemRequest(catalog, barcode);
+    // REFACTOR Reorder the parameters
+    private static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
+        return handleSellOneItemRequest(catalog, basket, barcode);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Catalog catalog, Barcode barcode) {
+    public static String handleSellOneItemRequest(Catalog catalog, Basket basket, Barcode barcode) {
         String trustedBarcodeString = barcode.text();
         Option<Integer> unformattedPrice = catalog.findPrice(trustedBarcodeString);
-        if (!unformattedPrice.isEmpty())
+        if (!unformattedPrice.isEmpty()) {
+            basket.add(100);
             return formatPrice(unformattedPrice.get());
-        else
+        } else
             return String.format("Product not found: %s", trustedBarcodeString);
     }
 
