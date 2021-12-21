@@ -15,16 +15,7 @@ public class PurchaseTest {
     @Test
     void oneItem() {
         Catalog catalog = ignored -> Option.of(795);
-        Basket basket = new Basket() {
-            @Override
-            public void add(int price) {
-            }
-
-            @Override
-            public int getTotal() {
-                return 795;
-            }
-        };
+        Basket basket = new NotEmptyBasket(795);
 
         Assertions.assertEquals(
                 List.of("CAD 7.95", "Total: CAD 7.95"),
@@ -34,16 +25,7 @@ public class PurchaseTest {
     @Test
     void aDifferentItem() {
         Catalog catalog = ignored -> Option.of(995);
-        Basket basket = new Basket() {
-            @Override
-            public void add(int price) {
-            }
-
-            @Override
-            public int getTotal() {
-                return 995;
-            }
-        };
+        Basket basket = new NotEmptyBasket(995);
 
         Assertions.assertEquals(
                 List.of("CAD 9.95", "Total: CAD 9.95"),

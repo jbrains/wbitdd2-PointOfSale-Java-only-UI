@@ -26,21 +26,4 @@ public class TestTotal {
             return 0;
         }
     }
-
-    private static class NotEmptyBasket implements Basket {
-        private final int price;
-
-        public NotEmptyBasket(int price) {
-            this.price = price;
-        }
-
-        @Override
-        public void add(int price) {
-        }
-
-        @Override
-        public int getTotal() {
-            return price;
-        }
-    }
 }

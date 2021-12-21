@@ -18,17 +18,21 @@ public class PointOfSale {
 
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, new Basket() {
-                    @Override
-                    public void add(int price) {
-                    }
-
-                    @Override
-                    public int getTotal() {
-                        return 0;
-                    }
-                }, ignored -> Option.of(795)))
+                .map(line -> handleLine(line, createAnyBasket(), ignored -> Option.of(795)))
                 .forEachOrdered(consoleDisplay);
+    }
+
+    private static Basket createAnyBasket() {
+        return new Basket() {
+            @Override
+            public void add(int price) {
+            }
+
+            @Override
+            public int getTotal() {
+                return 0;
+            }
+        };
     }
 
     public static String handleLine(String line, Basket basket, Catalog catalog) {
