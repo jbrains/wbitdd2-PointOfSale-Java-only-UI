@@ -50,9 +50,9 @@ public class PointOfSale {
 
     public static String handleSellOneItemRequest(Catalog catalog, Basket basket, Barcode barcode) {
         String trustedBarcodeString = barcode.text();
-        Option<Integer> unformattedPrice = catalog.findPrice(trustedBarcodeString);
-        if (!unformattedPrice.isEmpty()) {
-            int price = unformattedPrice.get();
+        Option<Integer> maybePrice = catalog.findPrice(trustedBarcodeString);
+        if (!maybePrice.isEmpty()) {
+            int price = maybePrice.get();
             basket.add(price);
             return formatPrice(price);
         } else
