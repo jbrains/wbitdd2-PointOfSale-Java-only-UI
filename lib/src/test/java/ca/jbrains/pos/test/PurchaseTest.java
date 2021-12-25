@@ -17,6 +17,7 @@ public class PurchaseTest {
         Catalog catalog = ignored -> Option.of(795);
         Basket basket = new NotEmptyBasket(795);
 
+        // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 7.95", "Total: CAD 7.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket, catalog)).collect(Collectors.toList()));
@@ -27,6 +28,7 @@ public class PurchaseTest {
         Catalog catalog = ignored -> Option.of(995);
         Basket basket = new NotEmptyBasket(995);
 
+        // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 9.95", "Total: CAD 9.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket, catalog)).collect(Collectors.toList()));

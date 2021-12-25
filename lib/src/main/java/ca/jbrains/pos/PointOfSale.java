@@ -17,6 +17,7 @@ public class PointOfSale {
     }
 
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
+        // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
                 .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
                 .forEachOrdered(consoleDisplay);
