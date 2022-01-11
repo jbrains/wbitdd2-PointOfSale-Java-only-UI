@@ -3,7 +3,6 @@ package ca.jbrains.pos;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,7 +25,7 @@ public class PointOfSale {
     private static Catalog createAnyCatalog() {
         return new Catalog() {
             @Override
-            public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };
@@ -63,7 +62,7 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
-        return catalog.findProductInCatalog(barcode).fold(
+        return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
