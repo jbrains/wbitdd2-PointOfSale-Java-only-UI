@@ -5,7 +5,6 @@ import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class PurchaseTest {
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 7.95", "Total: CAD 7.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket, catalog)).collect(Collectors.toList()));
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, basket)).collect(Collectors.toList()));
     }
 
     @Test
@@ -31,6 +30,6 @@ public class PurchaseTest {
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 9.95", "Total: CAD 9.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket, catalog)).collect(Collectors.toList()));
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, basket)).collect(Collectors.toList()));
     }
 }

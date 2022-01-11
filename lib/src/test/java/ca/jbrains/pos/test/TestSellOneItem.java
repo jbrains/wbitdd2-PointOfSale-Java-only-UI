@@ -11,21 +11,21 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = PointOfSale.handleSellOneItemRequest(barcode -> Option.none(), null, new Barcode("99999"));
+        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), barcode -> Option.none(), null);
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = PointOfSale.handleSellOneItemRequest(barcode -> Option.none(), null, Barcode.makeBarcode("1111").get());
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), barcode -> Option.none(), null);
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        String response = PointOfSale.handleSellOneItemRequest(barcode -> Option.of(100), new DoNothingBasket(), Barcode.makeBarcode("99999").get());
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), barcode -> Option.of(100), new DoNothingBasket());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -37,7 +37,7 @@ public class TestSellOneItem {
     void addItemToBasketWhenProductIsFound() {
         Basket basket = new RecordingBasket();
 
-        PointOfSale.handleSellOneItemRequest(ignored -> Option.some(100), basket, Barcode.makeBarcode("::any barcode::").get());
+        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), ignored -> Option.some(100), basket);
         Assertions.assertEquals(Option.some(100), addInvokedWith);
     }
 

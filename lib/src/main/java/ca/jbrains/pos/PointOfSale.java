@@ -19,7 +19,7 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
+                .map(line -> handleLine(line, createAnyCatalog(), createAnyBasket()))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -46,7 +46,7 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Basket basket, Catalog catalog) {
+    public static String handleLine(String line, Catalog catalog, Basket basket) {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
@@ -54,24 +54,23 @@ public class PointOfSale {
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    // REFACTOR Reorder the parameters
     private static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
-        return handleSellOneItemRequest(catalog, basket, barcode);
+        return handleSellOneItemRequest(barcode, catalog, basket);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Catalog catalog, Basket basket, Barcode barcode) {
-        return findProductInCatalog(catalog, barcode).fold(
+    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
+        return findProductInCatalog(barcode, catalog).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
     }
 
     // REFACTOR Move into The Hole onto Catalog
-    private static Either<Barcode, Integer> findProductInCatalog(Catalog catalog, Barcode barcode) {
+    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, Catalog catalog) {
         return catalog.findPrice(barcode.text()).toEither(barcode);
     }
 
