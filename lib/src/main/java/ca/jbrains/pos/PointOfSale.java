@@ -26,7 +26,7 @@ public class PointOfSale {
     private static Catalog createAnyCatalog() {
         return new Catalog() {
             @Override
-            public Option<Integer> findPrice(String barcode) {
+            public Option<Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };
@@ -71,7 +71,7 @@ public class PointOfSale {
 
     // REFACTOR Move into The Hole onto Catalog
     private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, Catalog catalog) {
-        return catalog.findPrice(barcode.text()).toEither(barcode);
+        return catalog.findPrice(barcode).toEither(barcode);
     }
 
     private static String formatProductNotFoundMessage(String trustedBarcodeString) {
