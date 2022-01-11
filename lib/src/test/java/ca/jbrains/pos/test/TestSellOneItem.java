@@ -33,15 +33,12 @@ public class TestSellOneItem {
         Assertions.assertEquals("CAD 1.00", response);
     }
 
-    // REFACTOR Move into RecordingBasket
-    private Option<Integer> addInvokedWith = Option.none();
-
     @Test
     void addItemToBasketWhenProductIsFound() {
-        Basket basket = new RecordingBasket();
+        RecordingBasket basket = new RecordingBasket();
 
         PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog, basket);
-        Assertions.assertEquals(Option.some(100), addInvokedWith);
+        Assertions.assertEquals(Option.some(100), basket.recentPrice);
     }
 
     private static class DoNothingBasket implements Basket {
@@ -56,9 +53,11 @@ public class TestSellOneItem {
     }
 
     private class RecordingBasket implements Basket {
+        private Option<Integer> recentPrice;
+
         @Override
         public void add(int price) {
-            TestSellOneItem.this.addInvokedWith = Option.some(price);
+            recentPrice = Option.some(price);
         }
 
         @Override
