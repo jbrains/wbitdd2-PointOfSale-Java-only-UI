@@ -15,7 +15,6 @@ public class TestSellOneItem {
         public Either<Barcode, Integer> findPrice(Barcode barcode) {
             return Either.left(barcode);
         }
-
     };
     private final Catalog priceFoundCatalog = new PriceFoundCatalog(100);
 
