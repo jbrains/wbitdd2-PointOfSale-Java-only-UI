@@ -12,14 +12,9 @@ public class PriceFoundCatalog implements Catalog {
         this.value = value;
     }
 
-    @Override
-    public Option<Integer> findPrice(Barcode barcode) {
-        return Option.of(value);
-    }
-
     // REFACTOR Move into The Hole onto Catalog
     @Override
     public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-        return findPrice(barcode).toEither(barcode);
+        return Option.of(value).toEither(barcode);
     }
 }

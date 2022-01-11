@@ -27,11 +27,6 @@ public class PointOfSale {
         return new Catalog() {
             @Override
             public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-                return findPrice(barcode).toEither(barcode);
-            }
-
-            @Override
-            public Option<Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };

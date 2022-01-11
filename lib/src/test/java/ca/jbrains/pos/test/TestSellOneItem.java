@@ -14,13 +14,9 @@ public class TestSellOneItem {
         // REFACTOR Move into The Hole onto Catalog
         @Override
         public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-            return findPrice(barcode).toEither(barcode);
+            return Option.<Integer> none().toEither(barcode);
         }
 
-        @Override
-        public Option<Integer> findPrice(Barcode barcode) {
-            return Option.none();
-        }
     };
     private final Catalog priceFoundCatalog = new PriceFoundCatalog(100);
 
