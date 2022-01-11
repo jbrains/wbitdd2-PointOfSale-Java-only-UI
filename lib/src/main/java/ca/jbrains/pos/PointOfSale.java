@@ -27,7 +27,7 @@ public class PointOfSale {
         return new Catalog() {
             @Override
             public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-                return Catalog.super.findProductInCatalog(barcode);
+                return findPrice(barcode).toEither(barcode);
             }
 
             @Override

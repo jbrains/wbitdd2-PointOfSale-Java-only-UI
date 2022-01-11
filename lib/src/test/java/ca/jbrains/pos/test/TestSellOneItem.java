@@ -4,12 +4,19 @@ import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSellOneItem {
     private final Catalog priceNotFoundCatalog = new Catalog() {
+        // REFACTOR Move into The Hole onto Catalog
+        @Override
+        public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
+            return findPrice(barcode).toEither(barcode);
+        }
+
         @Override
         public Option<Integer> findPrice(Barcode barcode) {
             return Option.none();
