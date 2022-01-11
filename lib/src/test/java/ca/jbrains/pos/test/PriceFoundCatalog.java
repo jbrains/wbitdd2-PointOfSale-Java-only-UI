@@ -8,7 +8,7 @@ import io.vavr.control.Option;
 public class PriceFoundCatalog implements Catalog {
     private final int value;
 
-    PriceFoundCatalog(int value) {
+    public PriceFoundCatalog(int value) {
         this.value = value;
     }
 

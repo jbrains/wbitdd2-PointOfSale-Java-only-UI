@@ -4,18 +4,12 @@ import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
-import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSellOneItem {
-    private final Catalog priceNotFoundCatalog = new Catalog() {
-        @Override
-        public Either<Barcode, Integer> findPrice(Barcode barcode) {
-            return Either.left(barcode);
-        }
-    };
+    private final Catalog priceNotFoundCatalog = new PriceNotFoundCatalog();
     private final Catalog priceFoundCatalog = new PriceFoundCatalog(100);
 
     @Test
