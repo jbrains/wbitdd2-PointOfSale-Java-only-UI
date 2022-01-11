@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 
 import java.io.BufferedReader;
@@ -24,6 +25,11 @@ public class PointOfSale {
 
     private static Catalog createAnyCatalog() {
         return new Catalog() {
+            @Override
+            public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
+                return Catalog.super.findProductInCatalog(barcode);
+            }
+
             @Override
             public Option<Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");

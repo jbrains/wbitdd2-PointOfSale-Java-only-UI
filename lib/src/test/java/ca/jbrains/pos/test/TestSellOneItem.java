@@ -3,29 +3,37 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
+import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSellOneItem {
+    private final Catalog priceNotFoundCatalog = new Catalog() {
+        @Override
+        public Option<Integer> findPrice(Barcode barcode) {
+            return Option.none();
+        }
+    };
+    private final Catalog priceFoundCatalog = new PriceFoundCatalog(100);
 
     @Test
     void priceNotFound() {
-        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), barcode -> Option.none(), null);
+        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), priceNotFoundCatalog, null);
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), barcode -> Option.none(), null);
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), priceNotFoundCatalog, null);
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), barcode -> Option.of(100), new DoNothingBasket());
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), priceFoundCatalog, new DoNothingBasket());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -37,7 +45,7 @@ public class TestSellOneItem {
     void addItemToBasketWhenProductIsFound() {
         Basket basket = new RecordingBasket();
 
-        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), ignored -> Option.some(100), basket);
+        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog, basket);
         Assertions.assertEquals(Option.some(100), addInvokedWith);
     }
 
