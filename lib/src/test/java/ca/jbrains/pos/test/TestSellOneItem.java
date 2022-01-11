@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 public class TestSellOneItem {
     private final Catalog priceNotFoundCatalog = new Catalog() {
-        // REFACTOR Move into The Hole onto Catalog
         @Override
         public Either<Barcode, Integer> findPrice(Barcode barcode) {
             return Either.left(barcode);

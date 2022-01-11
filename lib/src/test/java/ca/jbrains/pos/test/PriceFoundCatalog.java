@@ -12,7 +12,6 @@ public class PriceFoundCatalog implements Catalog {
         this.value = value;
     }
 
-    // REFACTOR Move into The Hole onto Catalog
     @Override
     public Either<Barcode, Integer> findPrice(Barcode barcode) {
         return Either.right(value);
