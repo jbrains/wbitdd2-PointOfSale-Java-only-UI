@@ -62,7 +62,7 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Basket basket, LegacyCatalogAdapter catalog) {
+    public static String handleSellOneItemRequest(Barcode barcode, Basket basket, Catalog catalog) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
@@ -87,7 +87,7 @@ public class PointOfSale {
         return String.format("Total: %s", formatPrice(total));
     }
 
-    public static final class LegacyCatalogAdapter {
+    public static final class LegacyCatalogAdapter implements Catalog {
         private final LegacyCatalog legacyCatalog;
 
         public LegacyCatalogAdapter(LegacyCatalog legacyCatalog) {
@@ -95,6 +95,7 @@ public class PointOfSale {
         }
 
         // REFACTOR Move into The Hole onto Catalog
+        @Override
         public Either<Barcode, Integer> findPrice(Barcode barcode) {
             return legacyCatalog.findPrice(barcode).toEither(barcode);
         }
