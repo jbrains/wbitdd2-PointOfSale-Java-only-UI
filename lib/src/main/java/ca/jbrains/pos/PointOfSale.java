@@ -8,6 +8,7 @@ import io.vavr.control.Option;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -63,15 +64,15 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
-        return findProductInCatalog(barcode, legacyCatalog).fold(
+        return findProductInCatalog(barcode, new LegacyCatalogAdapter(legacyCatalog)).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
     }
 
     // REFACTOR Move into The Hole onto Catalog
-    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, LegacyCatalog legacyCatalog) {
-        return legacyCatalog.findPrice(barcode).toEither(barcode);
+    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, LegacyCatalogAdapter legacyCatalogAdapter) {
+        return legacyCatalogAdapter.legacyCatalog().findPrice(barcode).toEither(barcode);
     }
 
     private static String formatProductNotFoundMessage(String trustedBarcodeString) {
@@ -90,5 +91,17 @@ public class PointOfSale {
     public static String handleTotal(Basket basket) {
         int total = basket.getTotal();
         return String.format("Total: %s", formatPrice(total));
+    }
+
+    private static final class LegacyCatalogAdapter {
+        private final LegacyCatalog legacyCatalog;
+
+        private LegacyCatalogAdapter(LegacyCatalog legacyCatalog) {
+            this.legacyCatalog = legacyCatalog;
+        }
+
+        public LegacyCatalog legacyCatalog() {
+            return legacyCatalog;
+        }
     }
 }
