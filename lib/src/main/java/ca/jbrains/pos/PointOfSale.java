@@ -96,11 +96,7 @@ public class PointOfSale {
 
         // REFACTOR Move into The Hole onto Catalog
         public Either<Barcode, Integer> findPrice(Barcode barcode) {
-            return legacyCatalog().findPrice(barcode).toEither(barcode);
-        }
-
-        public LegacyCatalog legacyCatalog() {
-            return legacyCatalog;
+            return legacyCatalog.findPrice(barcode).toEither(barcode);
         }
     }
 }
