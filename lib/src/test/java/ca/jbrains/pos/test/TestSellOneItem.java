@@ -18,7 +18,7 @@ public class TestSellOneItem {
     }
 
     private Catalog catalogFindingPrice(Option<Integer> maybeMatchingPrice) {
-        return new PointOfSale.LegacyCatalogAdapter(barcode -> maybeMatchingPrice);
+        return barcode -> maybeMatchingPrice.toEither(barcode);
     }
 
     @Test
