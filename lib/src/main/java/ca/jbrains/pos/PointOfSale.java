@@ -50,12 +50,12 @@ public class PointOfSale {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, legacyCatalog, basket))
+                .map(barcode -> handleBarcode(barcode, basket, new LegacyCatalogAdapter(legacyCatalog)))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
-        return handleSellOneItemRequest(barcode, basket, new LegacyCatalogAdapter(legacyCatalog));
+    private static String handleBarcode(Barcode barcode, Basket basket, Catalog catalog) {
+        return handleSellOneItemRequest(barcode, basket, catalog);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
