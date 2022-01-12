@@ -3,6 +3,7 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.Catalog;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class PurchaseTest {
     @Test
     void oneItem() {
-        Catalog catalog = new PointOfSale.LegacyCatalogAdapter(ignored -> Option.of(795));
+        Catalog catalog = ignored -> Either.right(795);
         Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
@@ -24,7 +25,7 @@ public class PurchaseTest {
 
     @Test
     void aDifferentItem() {
-        Catalog catalog = new PointOfSale.LegacyCatalogAdapter(ignored -> Option.of(995));
+        Catalog catalog = ignored -> Either.right(995);
         Basket basket = new NotEmptyBasket(995);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
