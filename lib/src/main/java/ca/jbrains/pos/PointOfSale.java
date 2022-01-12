@@ -19,11 +19,15 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyBasket(), new LegacyCatalogAdapter(createAnyCatalog())))
+                .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static LegacyCatalog createAnyCatalog() {
+    private static Catalog createAnyCatalog() {
+        return new LegacyCatalogAdapter(createAnyLegacyCatalog());
+    }
+
+    private static LegacyCatalog createAnyLegacyCatalog() {
         return new LegacyCatalog() {
             @Override
             public Option<Integer> findPrice(Barcode barcode) {
