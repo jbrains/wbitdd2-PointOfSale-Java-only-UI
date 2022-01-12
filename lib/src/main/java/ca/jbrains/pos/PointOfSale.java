@@ -85,18 +85,4 @@ public class PointOfSale {
         int total = basket.getTotal();
         return String.format("Total: %s", formatPrice(total));
     }
-
-    public static final class LegacyCatalogAdapter implements Catalog {
-        private final LegacyCatalog legacyCatalog;
-
-        public LegacyCatalogAdapter(LegacyCatalog legacyCatalog) {
-            this.legacyCatalog = legacyCatalog;
-        }
-
-        // REFACTOR Move into The Hole onto Catalog
-        @Override
-        public Either<Barcode, Integer> findPrice(Barcode barcode) {
-            return legacyCatalog.findPrice(barcode).toEither(barcode);
-        }
-    }
 }
