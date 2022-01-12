@@ -3,7 +3,6 @@ package ca.jbrains.pos;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,13 +23,9 @@ public class PointOfSale {
     }
 
     private static Catalog createAnyCatalog() {
-        return new LegacyCatalogAdapter(createAnyLegacyCatalog());
-    }
-
-    private static LegacyCatalog createAnyLegacyCatalog() {
-        return new LegacyCatalog() {
+        return new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode barcode) {
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };
