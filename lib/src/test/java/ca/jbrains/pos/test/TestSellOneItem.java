@@ -17,7 +17,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Option.<Integer>none().toEither(barcode);
+                return Either.left(barcode);
             }
         }, null);
 
@@ -30,7 +30,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Option.<Integer>none().toEither(barcode);
+                return Either.left(barcode);
             }
         }, null);
 
@@ -43,7 +43,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Option.of(100).toEither(barcode);
+                return Either.right(100);
             }
         }, new DoNothingBasket());
 
@@ -61,7 +61,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Option.some(100).toEither(barcode);
+                return Either.right(100);
             }
         }, basket);
         Assertions.assertEquals(Option.some(100), addInvokedWith);

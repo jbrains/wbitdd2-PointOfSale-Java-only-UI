@@ -19,7 +19,7 @@ public class PurchaseTest {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Option.of(795).toEither(barcode);
+                return Either.right(795);
             }
         };
         Basket basket = new NotEmptyBasket(795);
@@ -36,7 +36,7 @@ public class PurchaseTest {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Option.of(995).toEither(barcode);
+                return Either.right(995);
             }
         };
         Basket basket = new NotEmptyBasket(995);
