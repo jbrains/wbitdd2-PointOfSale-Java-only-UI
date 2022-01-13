@@ -62,7 +62,7 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
-        return Catalog.findProductInCatalog(barcode, catalog).fold(
+        return catalog.findProductInCatalog(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );

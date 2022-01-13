@@ -6,8 +6,8 @@ import io.vavr.control.Option;
 
 public interface Catalog {
     // REFACTOR Move into The Hole onto Catalog
-    static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, Catalog catalog) {
-        return catalog.findPrice(barcode).toEither(barcode);
+    default Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
+        return findPrice(barcode).toEither(barcode);
     }
 
     // CONTRACT Assumes CAD as the currency
