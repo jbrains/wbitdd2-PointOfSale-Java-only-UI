@@ -2,7 +2,6 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.LegacyCatalog;
-import io.vavr.control.Either;
 import io.vavr.control.Option;
 
 import java.io.BufferedReader;
@@ -63,15 +62,10 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
-        return findProductInCatalog(barcode, legacyCatalog).fold(
+        return new LegacyCatalogAdapter(legacyCatalog).findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
-    }
-
-    // REFACTOR Move into The Hole onto Catalog
-    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, LegacyCatalog legacyCatalog) {
-        return legacyCatalog.findPrice(barcode).toEither(barcode);
     }
 
     private static String formatProductNotFoundMessage(String trustedBarcodeString) {
