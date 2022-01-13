@@ -14,7 +14,7 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        Catalog catalog = Mockito.mock(Catalog.class);
+        Catalog catalog = Mockito.spy(Catalog.class);
         Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.none());
 
         String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), catalog, null);
@@ -24,7 +24,7 @@ public class TestSellOneItem {
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        Catalog catalog = Mockito.mock(Catalog.class);
+        Catalog catalog = Mockito.spy(Catalog.class);
         Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.none());
 
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), catalog, null);
@@ -34,7 +34,7 @@ public class TestSellOneItem {
 
     @Test
     void priceFound() {
-        Catalog catalog = Mockito.mock(Catalog.class);
+        Catalog catalog = Mockito.spy(Catalog.class);
         Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.of(100));
 
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), catalog, new DoNothingBasket());
@@ -47,7 +47,7 @@ public class TestSellOneItem {
 
     @Test
     void addItemToBasketWhenProductIsFound() {
-        Catalog catalog = Mockito.mock(Catalog.class);
+        Catalog catalog = Mockito.spy(Catalog.class);
         Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.some(100));
 
         Basket basket = new RecordingBasket();
