@@ -6,6 +6,7 @@ import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,9 @@ import java.util.stream.Collectors;
 public class PurchaseTest {
     @Test
     void oneItem() {
-        Catalog catalog = ignored -> Option.of(795);
+        Catalog catalog = Mockito.mock(Catalog.class);
+        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.of(795));
+
         Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
@@ -24,7 +27,9 @@ public class PurchaseTest {
 
     @Test
     void aDifferentItem() {
-        Catalog catalog = ignored -> Option.of(995);
+        Catalog catalog = Mockito.mock(Catalog.class);
+        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.of(995));
+
         Basket basket = new NotEmptyBasket(995);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
