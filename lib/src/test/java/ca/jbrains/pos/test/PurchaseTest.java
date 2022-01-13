@@ -4,6 +4,7 @@ import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,12 @@ public class PurchaseTest {
     @Test
     void oneItem() {
         Catalog catalog = new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return legacyFindPrice(barcode).toEither(barcode);
+            }
+
             public Option<Integer> legacyFindPrice(Barcode ignored) {
                 return Option.of(795);
             }
@@ -31,7 +37,12 @@ public class PurchaseTest {
     @Test
     void aDifferentItem() {
         Catalog catalog = new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return legacyFindPrice(barcode).toEither(barcode);
+            }
+
             public Option<Integer> legacyFindPrice(Barcode ignored) {
                 return Option.of(995);
             }

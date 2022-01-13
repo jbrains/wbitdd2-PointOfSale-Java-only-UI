@@ -4,6 +4,7 @@ import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,12 @@ public class TestSellOneItem {
     @Test
     void priceNotFound() {
         String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return legacyFindPrice(barcode).toEither(barcode);
+            }
+
             public Option<Integer> legacyFindPrice(Barcode barcode) {
                 return Option.none();
             }
@@ -25,7 +31,12 @@ public class TestSellOneItem {
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return legacyFindPrice(barcode).toEither(barcode);
+            }
+
             public Option<Integer> legacyFindPrice(Barcode barcode) {
                 return Option.none();
             }
@@ -37,7 +48,12 @@ public class TestSellOneItem {
     @Test
     void priceFound() {
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return legacyFindPrice(barcode).toEither(barcode);
+            }
+
             public Option<Integer> legacyFindPrice(Barcode barcode) {
                 return Option.of(100);
             }
@@ -54,7 +70,12 @@ public class TestSellOneItem {
         Basket basket = new RecordingBasket();
 
         PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return legacyFindPrice(barcode).toEither(barcode);
+            }
+
             public Option<Integer> legacyFindPrice(Barcode ignored) {
                 return Option.some(100);
             }
