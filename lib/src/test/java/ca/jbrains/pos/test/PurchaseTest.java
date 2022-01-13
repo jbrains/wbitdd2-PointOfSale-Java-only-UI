@@ -1,12 +1,9 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Catalog;
-import ca.jbrains.pos.LegacyCatalogAdapter;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
-import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
