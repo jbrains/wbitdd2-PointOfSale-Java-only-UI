@@ -16,7 +16,7 @@ public class PurchaseTest {
     void oneItem() {
         Catalog catalog = new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode ignored) {
+            public Option<Integer> legacyFindPrice(Barcode ignored) {
                 return Option.of(795);
             }
         };
@@ -32,7 +32,7 @@ public class PurchaseTest {
     void aDifferentItem() {
         Catalog catalog = new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode ignored) {
+            public Option<Integer> legacyFindPrice(Barcode ignored) {
                 return Option.of(995);
             }
         };

@@ -14,7 +14,7 @@ public class TestSellOneItem {
     void priceNotFound() {
         String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode barcode) {
+            public Option<Integer> legacyFindPrice(Barcode barcode) {
                 return Option.none();
             }
         }, null);
@@ -26,7 +26,7 @@ public class TestSellOneItem {
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode barcode) {
+            public Option<Integer> legacyFindPrice(Barcode barcode) {
                 return Option.none();
             }
         }, null);
@@ -38,7 +38,7 @@ public class TestSellOneItem {
     void priceFound() {
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode barcode) {
+            public Option<Integer> legacyFindPrice(Barcode barcode) {
                 return Option.of(100);
             }
         }, new DoNothingBasket());
@@ -55,7 +55,7 @@ public class TestSellOneItem {
 
         PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode ignored) {
+            public Option<Integer> legacyFindPrice(Barcode ignored) {
                 return Option.some(100);
             }
         }, basket);
