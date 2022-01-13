@@ -1,8 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
-import ca.jbrains.pos.domain.LegacyCatalog;
-import io.vavr.control.Option;
+import io.vavr.control.Either;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,14 +17,14 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyBasket(), new LegacyCatalogAdapter(createAnyCatalog())))
+                .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static LegacyCatalog createAnyCatalog() {
-        return new LegacyCatalog() {
+    private static Catalog createAnyCatalog() {
+        return new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode barcode) {
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };
