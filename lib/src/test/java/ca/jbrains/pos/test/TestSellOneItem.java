@@ -3,41 +3,40 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
-import ca.jbrains.pos.domain.Catalog;
+import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        Catalog catalog = Mockito.mock(Catalog.class);
-        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.none());
+        LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
+        Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.none());
 
-        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), catalog, null);
+        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), legacyCatalog, null);
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        Catalog catalog = Mockito.mock(Catalog.class);
-        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.none());
+        LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
+        Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.none());
 
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), catalog, null);
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), legacyCatalog, null);
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        Catalog catalog = Mockito.mock(Catalog.class);
-        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.of(100));
+        LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
+        Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.of(100));
 
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), catalog, new DoNothingBasket());
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), legacyCatalog, new DoNothingBasket());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -47,12 +46,12 @@ public class TestSellOneItem {
 
     @Test
     void addItemToBasketWhenProductIsFound() {
-        Catalog catalog = Mockito.mock(Catalog.class);
-        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.some(100));
+        LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
+        Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.some(100));
 
         Basket basket = new RecordingBasket();
 
-        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), catalog, basket);
+        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), legacyCatalog, basket);
         Assertions.assertEquals(Option.some(100), addInvokedWith);
     }
 
