@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
 public class PurchaseTest {
     @Test
     void oneItem() {
-        LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
-        Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.of(795));
-        LegacyCatalogAdapter legacyCatalogAdapter = new LegacyCatalogAdapter(legacyCatalog);
         Catalog catalog = Mockito.mock(Catalog.class);
         Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Either.right(795));
 
