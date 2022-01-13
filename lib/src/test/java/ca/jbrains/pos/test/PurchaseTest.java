@@ -3,6 +3,7 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ public class PurchaseTest {
     @Test
     void oneItem() {
         Catalog catalog = Mockito.spy(Catalog.class);
-        Mockito.when(catalog.legacyFindPrice(Mockito.any())).thenReturn(Option.of(795));
+        Mockito.doReturn(Either.right(795)).when(catalog).findPrice(Mockito.any());
 
         Basket basket = new NotEmptyBasket(795);
 
