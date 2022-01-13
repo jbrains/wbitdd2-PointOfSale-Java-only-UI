@@ -29,7 +29,7 @@ public class PurchaseTest {
     @Test
     void aDifferentItem() {
         Catalog catalog = Mockito.spy(Catalog.class);
-        Mockito.when(catalog.legacyFindPrice(Mockito.any())).thenReturn(Option.of(995));
+        Mockito.doReturn(Either.right(995)).when(catalog).findPrice(Mockito.any());
 
         Basket basket = new NotEmptyBasket(995);
 
