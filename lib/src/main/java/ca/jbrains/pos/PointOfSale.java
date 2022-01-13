@@ -24,11 +24,8 @@ public class PointOfSale {
     }
 
     private static Catalog createAnyCatalog() {
-        return new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                throw new RuntimeException("Not our job");
-            }
+        return barcode -> {
+            throw new RuntimeException("Not our job");
         };
     }
 

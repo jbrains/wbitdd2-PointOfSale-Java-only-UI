@@ -13,36 +13,21 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Either.left(barcode);
-            }
-        }, null);
+        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), Either::left, null);
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Either.left(barcode);
-            }
-        }, null);
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), Either::left, null);
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Either.right(100);
-            }
-        }, new DoNothingBasket());
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), ignored -> Either.right(100), new DoNothingBasket());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -54,12 +39,7 @@ public class TestSellOneItem {
     void addItemToBasketWhenProductIsFound() {
         Basket basket = new RecordingBasket();
 
-        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Either.right(100);
-            }
-        }, basket);
+        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), ignored -> Either.right(100), basket);
         Assertions.assertEquals(Option.some(100), addInvokedWith);
     }
 

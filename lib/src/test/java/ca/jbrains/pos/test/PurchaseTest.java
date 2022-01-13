@@ -15,12 +15,7 @@ import java.util.stream.Collectors;
 public class PurchaseTest {
     @Test
     void oneItem() {
-        Catalog catalog = new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Either.right(795);
-            }
-        };
+        Catalog catalog = ignored -> Either.right(795);
         Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
@@ -31,12 +26,7 @@ public class PurchaseTest {
 
     @Test
     void aDifferentItem() {
-        Catalog catalog = new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return Either.right(995);
-            }
-        };
+        Catalog catalog = ignored -> Either.right(995);
         Basket basket = new NotEmptyBasket(995);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
