@@ -14,7 +14,6 @@ public class TestSellOneItem {
     @Test
     void priceNotFound() {
         String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.left(barcode);
@@ -27,7 +26,6 @@ public class TestSellOneItem {
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.left(barcode);
@@ -40,7 +38,6 @@ public class TestSellOneItem {
     @Test
     void priceFound() {
         String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.right(100);
@@ -58,7 +55,6 @@ public class TestSellOneItem {
         Basket basket = new RecordingBasket();
 
         PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.right(100);

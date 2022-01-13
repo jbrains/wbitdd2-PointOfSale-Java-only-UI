@@ -25,7 +25,6 @@ public class PointOfSale {
 
     private static Catalog createAnyCatalog() {
         return new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");

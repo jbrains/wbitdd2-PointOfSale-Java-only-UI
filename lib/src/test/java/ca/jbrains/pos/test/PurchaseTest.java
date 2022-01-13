@@ -16,7 +16,6 @@ public class PurchaseTest {
     @Test
     void oneItem() {
         Catalog catalog = new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.right(795);
@@ -33,7 +32,6 @@ public class PurchaseTest {
     @Test
     void aDifferentItem() {
         Catalog catalog = new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.right(995);
