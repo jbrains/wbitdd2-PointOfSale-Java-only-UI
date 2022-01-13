@@ -15,7 +15,7 @@ public class PurchaseTest {
     @Test
     void oneItem() {
         Catalog catalog = Mockito.spy(Catalog.class);
-        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.of(795));
+        Mockito.when(catalog.legacyFindPrice(Mockito.any())).thenReturn(Option.of(795));
 
         Basket basket = new NotEmptyBasket(795);
 
@@ -28,7 +28,7 @@ public class PurchaseTest {
     @Test
     void aDifferentItem() {
         Catalog catalog = Mockito.spy(Catalog.class);
-        Mockito.when(catalog.findPrice(Mockito.any())).thenReturn(Option.of(995));
+        Mockito.when(catalog.legacyFindPrice(Mockito.any())).thenReturn(Option.of(995));
 
         Basket basket = new NotEmptyBasket(995);
 
