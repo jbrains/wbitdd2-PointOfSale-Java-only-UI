@@ -17,11 +17,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return legacyFindPrice(barcode).toEither(barcode);
-            }
-
-            public Option<Integer> legacyFindPrice(Barcode barcode) {
-                return Option.none();
+                return Option.<Integer>none().toEither(barcode);
             }
         }, null);
 
@@ -34,11 +30,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return legacyFindPrice(barcode).toEither(barcode);
-            }
-
-            public Option<Integer> legacyFindPrice(Barcode barcode) {
-                return Option.none();
+                return Option.<Integer>none().toEither(barcode);
             }
         }, null);
 
@@ -51,11 +43,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return legacyFindPrice(barcode).toEither(barcode);
-            }
-
-            public Option<Integer> legacyFindPrice(Barcode barcode) {
-                return Option.of(100);
+                return Option.of(100).toEither(barcode);
             }
         }, new DoNothingBasket());
 
@@ -73,11 +61,7 @@ public class TestSellOneItem {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return legacyFindPrice(barcode).toEither(barcode);
-            }
-
-            public Option<Integer> legacyFindPrice(Barcode ignored) {
-                return Option.some(100);
+                return Option.some(100).toEither(barcode);
             }
         }, basket);
         Assertions.assertEquals(Option.some(100), addInvokedWith);

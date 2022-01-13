@@ -28,10 +28,6 @@ public class PointOfSale {
             // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return legacyFindPrice(barcode).toEither(barcode);
-            }
-
-            public Option<Integer> legacyFindPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };
