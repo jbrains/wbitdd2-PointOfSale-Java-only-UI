@@ -18,7 +18,7 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyBasket()))
+                .map(line -> handleLine(line, createAnyBasket(), new LegacyCatalogAdapter(createAnyCatalog())))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -45,24 +45,24 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, LegacyCatalog legacyCatalog, Basket basket) {
+    public static String handleLine(String line, Basket basket, Catalog catalog) {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, legacyCatalog, basket))
+                .map(barcode -> handleBarcode(barcode, basket, catalog))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
-        return handleSellOneItemRequest(barcode, legacyCatalog, basket);
+    private static String handleBarcode(Barcode barcode, Basket basket, Catalog catalog) {
+        return handleSellOneItemRequest(barcode, basket, catalog);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
-        return new LegacyCatalogAdapter(legacyCatalog).findPrice(barcode).fold(
+    public static String handleSellOneItemRequest(Barcode barcode, Basket basket, Catalog catalog) {
+        return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );

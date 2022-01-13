@@ -1,6 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Barcode;
+import ca.jbrains.pos.LegacyCatalogAdapter;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.LegacyCatalog;
@@ -16,7 +17,7 @@ public class TestSellOneItem {
         LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
         Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.none());
 
-        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), legacyCatalog, null);
+        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), null, new LegacyCatalogAdapter(legacyCatalog));
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
@@ -26,7 +27,7 @@ public class TestSellOneItem {
         LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
         Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.none());
 
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), legacyCatalog, null);
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), null, new LegacyCatalogAdapter(legacyCatalog));
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
@@ -36,7 +37,7 @@ public class TestSellOneItem {
         LegacyCatalog legacyCatalog = Mockito.mock(LegacyCatalog.class);
         Mockito.when(legacyCatalog.findPrice(Mockito.any())).thenReturn(Option.of(100));
 
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), legacyCatalog, new DoNothingBasket());
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), new DoNothingBasket(), new LegacyCatalogAdapter(legacyCatalog));
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -51,7 +52,7 @@ public class TestSellOneItem {
 
         Basket basket = new RecordingBasket();
 
-        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), legacyCatalog, basket);
+        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), basket, new LegacyCatalogAdapter(legacyCatalog));
         Assertions.assertEquals(Option.some(100), addInvokedWith);
     }
 
