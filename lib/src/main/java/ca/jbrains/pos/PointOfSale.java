@@ -1,8 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
-import ca.jbrains.pos.domain.Catalog;
-import io.vavr.control.Either;
+import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Option;
 
 import java.io.BufferedReader;
@@ -23,8 +22,8 @@ public class PointOfSale {
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static Catalog createAnyCatalog() {
-        return new Catalog() {
+    private static LegacyCatalog createAnyCatalog() {
+        return new LegacyCatalog() {
             @Override
             public Option<Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
@@ -46,32 +45,27 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Catalog catalog, Basket basket) {
+    public static String handleLine(String line, LegacyCatalog legacyCatalog, Basket basket) {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog, basket))
+                .map(barcode -> handleBarcode(barcode, legacyCatalog, basket))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
-        return handleSellOneItemRequest(barcode, catalog, basket);
+    private static String handleBarcode(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
+        return handleSellOneItemRequest(barcode, legacyCatalog, basket);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
-        return findProductInCatalog(barcode, catalog).fold(
+    public static String handleSellOneItemRequest(Barcode barcode, LegacyCatalog legacyCatalog, Basket basket) {
+        return new LegacyCatalogAdapter(legacyCatalog).findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
-    }
-
-    // REFACTOR Move into The Hole onto Catalog
-    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, Catalog catalog) {
-        return catalog.findPrice(barcode).toEither(barcode);
     }
 
     private static String formatProductNotFoundMessage(String trustedBarcodeString) {
