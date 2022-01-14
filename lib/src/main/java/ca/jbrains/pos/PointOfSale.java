@@ -2,9 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
-import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -4,7 +4,6 @@ import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
-import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Either;
 import org.jmock.Expectations;
 import org.jmock.junit5.JUnit5Mockery;
