@@ -4,7 +4,9 @@ import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.LegacyCatalogAdapter;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
+import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.LegacyCatalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.jmock.Expectations;
 import org.jmock.junit5.JUnit5Mockery;
@@ -19,19 +21,20 @@ public class PurchaseTest {
     @RegisterExtension
     final JUnit5Mockery context = new JUnit5Mockery();
     private final LegacyCatalog legacyCatalog = context.mock(LegacyCatalog.class);
+    private final Catalog catalog = context.mock(Catalog.class);
 
     @Test
     void oneItem() {
         context.checking(new Expectations() {{
-            allowing(legacyCatalog).findPrice(with(aNonNull(Barcode.class)));
-            will(returnValue(Option.of(795)));
+            allowing(catalog).findPrice(with(aNonNull(Barcode.class)));
+            will(returnValue(Either.right(795)));
         }});
         Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 7.95", "Total: CAD 7.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket, new LegacyCatalogAdapter(legacyCatalog))).collect(Collectors.toList()));
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, basket, catalog)).collect(Collectors.toList()));
     }
 
     @Test
