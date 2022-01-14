@@ -1,19 +1,30 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import io.vavr.control.Option;
+import org.jmock.Expectations;
+import org.jmock.junit5.JUnit5Mockery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PurchaseTest {
+    @RegisterExtension
+    final JUnit5Mockery context = new JUnit5Mockery();
+    private final Catalog catalog = context.mock(Catalog.class);
+
     @Test
     void oneItem() {
-        Catalog catalog = ignored -> Option.of(795);
+        context.checking(new Expectations() {{
+            allowing(catalog).findPrice(with(aNonNull(Barcode.class)));
+            will(returnValue(Option.of(795)));
+        }});
         Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
@@ -24,7 +35,10 @@ public class PurchaseTest {
 
     @Test
     void aDifferentItem() {
-        Catalog catalog = ignored -> Option.of(995);
+        context.checking(new Expectations() {{
+            allowing(catalog).findPrice(with(aNonNull(Barcode.class)));
+            will(returnValue(Option.of(995)));
+        }});
         Basket basket = new NotEmptyBasket(995);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result

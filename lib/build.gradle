@@ -9,6 +9,7 @@ repositories {
 dependencies {
     implementation 'io.vavr:vavr:1.0.0-alpha-4'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+    testImplementation 'org.jmock:jmock-junit5:2.12.0'
 }
 
 tasks.named('test') {
