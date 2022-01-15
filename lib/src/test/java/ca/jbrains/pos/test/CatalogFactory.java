@@ -2,11 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.Catalog;
-import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
