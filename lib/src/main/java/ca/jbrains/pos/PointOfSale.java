@@ -1,7 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
-import ca.jbrains.pos.domain.Catalog;
+import ca.jbrains.pos.domain.LegacyCatalog;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -23,8 +23,8 @@ public class PointOfSale {
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static Catalog createAnyCatalog() {
-        return new Catalog() {
+    private static LegacyCatalog createAnyCatalog() {
+        return new LegacyCatalog() {
             @Override
             public Option<Integer> findPrice(Barcode barcode) {
                 throw new RuntimeException("Not our job");
@@ -87,10 +87,10 @@ public class PointOfSale {
         return String.format("Total: %s", formatPrice(total));
     }
 
-    public static record LegacyCatalogAdapter(Catalog catalog) {
+    public static record LegacyCatalogAdapter(LegacyCatalog legacyCatalog) {
         // REFACTOR Move into The Hole onto Catalog
         public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-            return catalog().findPrice(barcode).toEither(barcode);
+            return legacyCatalog().findPrice(barcode).toEither(barcode);
         }
     }
 }
