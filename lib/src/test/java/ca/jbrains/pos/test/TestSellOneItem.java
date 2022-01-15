@@ -11,21 +11,27 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"), null, new PointOfSale.LegacyCatalogAdapter(barcode -> Option.none()));
+        String response = PointOfSale.handleSellOneItemRequest(new Barcode("99999"),
+                null,
+                CatalogFactory.notFoundCatalog());
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(), null, new PointOfSale.LegacyCatalogAdapter(barcode -> Option.none()));
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("1111").get(),
+                null,
+                CatalogFactory.notFoundCatalog());
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(), new DoNothingBasket(), new PointOfSale.LegacyCatalogAdapter(barcode -> Option.of(100)));
+        String response = PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("99999").get(),
+                new DoNothingBasket(),
+                CatalogFactory.catalogWithPrice(100));
 
         Assertions.assertEquals("CAD 1.00", response);
     }
