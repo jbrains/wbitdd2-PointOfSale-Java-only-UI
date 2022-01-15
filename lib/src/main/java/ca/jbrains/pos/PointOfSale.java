@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 
 import java.io.BufferedReader;
@@ -24,7 +25,12 @@ public class PointOfSale {
 
     private static Catalog createAnyCatalog() {
         return new Catalog() {
+            // REFACTOR Move into The Hole onto Catalog
             @Override
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
+                return findPriceLegacy(barcode).toEither(barcode);
+            }
+
             public Option<Integer> findPriceLegacy(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
