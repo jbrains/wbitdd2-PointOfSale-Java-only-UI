@@ -87,9 +87,10 @@ public class PointOfSale {
         return String.format("Total: %s", formatPrice(total));
     }
 
-    private static record LegacyCatalogAdapter(LegacyCatalog legacyCatalog) {
+    private static record LegacyCatalogAdapter(LegacyCatalog legacyCatalog) implements Catalog {
         // REFACTOR Move into The Hole onto Catalog
-        private Either<Barcode, Integer> findPrice(Barcode barcode) {
+        @Override
+        public Either<Barcode, Integer> findPrice(Barcode barcode) {
             return legacyCatalog().findPrice(barcode).toEither(barcode);
         }
     }
