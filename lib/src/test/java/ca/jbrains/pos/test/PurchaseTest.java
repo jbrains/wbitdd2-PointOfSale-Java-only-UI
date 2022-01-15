@@ -3,7 +3,6 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
-import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
