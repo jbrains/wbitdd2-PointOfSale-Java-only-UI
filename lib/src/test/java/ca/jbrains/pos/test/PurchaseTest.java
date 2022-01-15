@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class PurchaseTest {
     @Test
     void oneItem() {
-        Catalog catalog = ignored -> Option.of(795);
+        Catalog catalog = CatalogFactory.catalogWithPrice(795);
         Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
@@ -24,7 +24,7 @@ public class PurchaseTest {
 
     @Test
     void aDifferentItem() {
-        Catalog catalog = ignored -> Option.of(995);
+        Catalog catalog = CatalogFactory.catalogWithPrice(995);
         Basket basket = new NotEmptyBasket(995);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
