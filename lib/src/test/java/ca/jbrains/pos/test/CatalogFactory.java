@@ -1,22 +1,24 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.domain.Catalog;
-import io.vavr.control.Option;
+import io.vavr.control.Either;
+import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CatalogFactory {
     static Catalog priceNotFoundCatalog() {
-        Catalog catalog = spy(Catalog.class);
-        when(catalog.findPriceLegacy(any())).thenReturn(Option.none());
+        Catalog catalog = mock(Catalog.class);
+        when(catalog.findPrice(any()))
+                .thenAnswer((Answer<Either<Barcode, Integer>>) invocation -> Either.left(invocation.getArgument(0)));
         return catalog;
     }
 
     static Catalog catalogWithPrice(int value) {
-        Catalog catalog = spy(Catalog.class);
-        when(catalog.findPriceLegacy(any())).thenReturn(Option.of(value));
+        Catalog catalog = mock(Catalog.class);
+        when(catalog.findPrice(any())).thenReturn(Either.right(value));
         return catalog;
     }
 }
