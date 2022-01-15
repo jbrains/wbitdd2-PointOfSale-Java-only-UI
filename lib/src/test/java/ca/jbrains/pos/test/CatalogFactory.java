@@ -8,29 +8,21 @@ import io.vavr.control.Option;
 public class CatalogFactory {
     static Catalog catalogWithPrice(int price) {
         return new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-                return findPrice(barcode).toEither(barcode);
+                return Either.right(price);
             }
 
-            public Option<Integer> findPrice(Barcode barcode) {
-                return Option.of(price);
-            }
         };
     }
 
     static Catalog priceNotFoundCatalog() {
         return new Catalog() {
-            // REFACTOR Move into The Hole onto Catalog
             @Override
             public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
-                return findPrice(barcode).toEither(barcode);
+                return Either.left(barcode);
             }
 
-            public Option<Integer> findPrice(Barcode barcode) {
-                return Option.none();
-            }
         };
     }
 }
