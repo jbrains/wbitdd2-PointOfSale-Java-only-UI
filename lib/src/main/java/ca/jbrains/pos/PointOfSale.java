@@ -19,7 +19,7 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyBasket()))
+                .map(line -> handleLine(line, createAnyBasket(), new LegacyCatalogAdapter(createAnyCatalog())))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -46,11 +46,11 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Catalog catalog, Basket basket) {
+    public static String handleLine(String line, Basket basket, LegacyCatalogAdapter legacyCatalogAdapter) {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, basket, new LegacyCatalogAdapter(catalog)))
+                .map(barcode -> handleBarcode(barcode, basket, legacyCatalogAdapter))
                 .getOrElse("Scanning error: empty barcode");
     }
 
