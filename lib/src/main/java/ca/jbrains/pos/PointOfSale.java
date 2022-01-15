@@ -23,16 +23,9 @@ public class PointOfSale {
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static LegacyCatalogAdapter createAnyCatalog() {
-        return new LegacyCatalogAdapter(createAnyLegacyCatalog());
-    }
-
-    private static LegacyCatalog createAnyLegacyCatalog() {
-        return new LegacyCatalog() {
-            @Override
-            public Option<Integer> findPrice(Barcode barcode) {
-                throw new RuntimeException("Not our job");
-            }
+    private static Catalog createAnyCatalog() {
+        return barcode -> {
+            throw new RuntimeException("Not our job");
         };
     }
 

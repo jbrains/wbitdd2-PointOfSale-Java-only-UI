@@ -1,14 +1,16 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Catalog;
 import ca.jbrains.pos.PointOfSale;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 
 public class CatalogFactory {
-    static PointOfSale.LegacyCatalogAdapter catalogWithPrice(int value) {
-        return new PointOfSale.LegacyCatalogAdapter(ignored -> Option.of(value));
+    static Catalog catalogWithPrice(int value) {
+        return ignored -> Either.right(value);
     }
 
-    static PointOfSale.LegacyCatalogAdapter notFoundCatalog() {
-        return new PointOfSale.LegacyCatalogAdapter(barcode -> Option.none());
+    static Catalog notFoundCatalog() {
+        return barcode -> Either.left(barcode);
     }
 }
