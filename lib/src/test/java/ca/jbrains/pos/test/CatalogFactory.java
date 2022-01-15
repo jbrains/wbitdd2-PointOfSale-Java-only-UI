@@ -9,7 +9,7 @@ public class CatalogFactory {
     static Catalog catalogWithPrice(int price) {
         return new Catalog() {
             @Override
-            public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.right(price);
             }
 
@@ -19,7 +19,7 @@ public class CatalogFactory {
     static Catalog priceNotFoundCatalog() {
         return new Catalog() {
             @Override
-            public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
+            public Either<Barcode, Integer> findPrice(Barcode barcode) {
                 return Either.left(barcode);
             }
 
