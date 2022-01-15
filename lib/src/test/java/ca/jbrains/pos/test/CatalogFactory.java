@@ -7,4 +7,8 @@ public class CatalogFactory {
     static PointOfSale.LegacyCatalogAdapter catalogWithPrice(int value) {
         return new PointOfSale.LegacyCatalogAdapter(ignored -> Option.of(value));
     }
+
+    static PointOfSale.LegacyCatalogAdapter notFoundCatalog() {
+        return new PointOfSale.LegacyCatalogAdapter(barcode -> Option.none());
+    }
 }
