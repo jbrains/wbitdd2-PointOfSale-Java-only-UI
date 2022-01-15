@@ -19,11 +19,15 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyBasket(), new LegacyCatalogAdapter(createAnyCatalog())))
+                .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static LegacyCatalog createAnyCatalog() {
+    private static LegacyCatalogAdapter createAnyCatalog() {
+        return new LegacyCatalogAdapter(createAnyLegacyCatalog());
+    }
+
+    private static LegacyCatalog createAnyLegacyCatalog() {
         return new LegacyCatalog() {
             @Override
             public Option<Integer> findPrice(Barcode barcode) {
@@ -46,24 +50,24 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Basket basket, LegacyCatalogAdapter legacyCatalogAdapter) {
+    public static String handleLine(String line, Basket basket, Catalog catalog) {
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, basket, legacyCatalogAdapter))
+                .map(barcode -> handleBarcode(barcode, basket, catalog))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode, Basket basket, LegacyCatalogAdapter legacyCatalogAdapter) {
-        return handleSellOneItemRequest(barcode, basket, legacyCatalogAdapter);
+    private static String handleBarcode(Barcode barcode, Basket basket, Catalog catalog) {
+        return handleSellOneItemRequest(barcode, basket, catalog);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Basket basket, LegacyCatalogAdapter legacyCatalogAdapter) {
-        return legacyCatalogAdapter.findProductInCatalog(barcode).fold(
+    public static String handleSellOneItemRequest(Barcode barcode, Basket basket, Catalog catalog) {
+        return catalog.findProductInCatalog(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
@@ -87,8 +91,9 @@ public class PointOfSale {
         return String.format("Total: %s", formatPrice(total));
     }
 
-    public static record LegacyCatalogAdapter(LegacyCatalog legacyCatalog) {
+    public static record LegacyCatalogAdapter(LegacyCatalog legacyCatalog) implements Catalog {
         // REFACTOR Move into The Hole onto Catalog
+        @Override
         public Either<Barcode, Integer> findProductInCatalog(Barcode barcode) {
             return legacyCatalog().findPrice(barcode).toEither(barcode);
         }
