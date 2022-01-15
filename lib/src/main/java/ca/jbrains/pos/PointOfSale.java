@@ -55,15 +55,15 @@ public class PointOfSale {
     }
 
     private static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
-        return handleSellOneItemRequest(barcode, catalog, basket);
+        return handleSellOneItemRequest(barcode, basket, new LegacyCatalogAdapter(catalog));
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
-        return new LegacyCatalogAdapter(catalog).findProductInCatalog(barcode).fold(
+    public static String handleSellOneItemRequest(Barcode barcode, Basket basket, LegacyCatalogAdapter legacyCatalogAdapter) {
+        return legacyCatalogAdapter.findProductInCatalog(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
