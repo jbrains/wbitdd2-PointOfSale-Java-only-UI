@@ -1,9 +1,6 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
-import ca.jbrains.pos.domain.LegacyCatalog;
-import io.vavr.control.Either;
-import io.vavr.control.Option;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,16 +16,13 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyBasket(), new LegacyCatalogAdapter(createAnyCatalog())))
+                .map(line -> handleLine(line, createAnyBasket(), createAnyCatalog()))
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static LegacyCatalog createAnyCatalog() {
-        return new LegacyCatalog() {
-            @Override
-            public Option<Integer> findPrice(Barcode barcode) {
-                throw new RuntimeException("Not our job");
-            }
+    private static Catalog createAnyCatalog() {
+        return barcode -> {
+            throw new RuntimeException("Not our job");
         };
     }
 
@@ -85,13 +79,5 @@ public class PointOfSale {
     public static String handleTotal(Basket basket) {
         int total = basket.getTotal();
         return String.format("Total: %s", formatPrice(total));
-    }
-
-    public static record LegacyCatalogAdapter(LegacyCatalog legacyCatalog) implements Catalog {
-        // REFACTOR Move into The Hole onto Catalog
-        @Override
-        public Either<Barcode, Integer> findPrice(Barcode barcode) {
-            return legacyCatalog().findPrice(barcode).toEither(barcode);
-        }
     }
 }

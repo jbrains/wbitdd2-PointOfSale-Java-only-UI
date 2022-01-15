@@ -61,8 +61,8 @@ public class TestSellOneItem {
     @Test
     void addItemToBasketWhenProductIsFound() {
         Basket basket = new RecordingBasket();
-
-        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), basket, new PointOfSale.LegacyCatalogAdapter(ignored -> Option.some(100)));
+        catalogFixtureSetup.catalogWithPrice(context, 100, catalog);
+        PointOfSale.handleSellOneItemRequest(Barcode.makeBarcode("::any barcode::").get(), basket, catalog);
         Assertions.assertEquals(Option.some(100), addInvokedWith);
     }
 
