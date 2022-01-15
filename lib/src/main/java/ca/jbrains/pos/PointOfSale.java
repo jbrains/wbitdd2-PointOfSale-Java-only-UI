@@ -25,7 +25,7 @@ public class PointOfSale {
     private static Catalog createAnyCatalog() {
         return new Catalog() {
             @Override
-            public Option<Integer> findPrice(Barcode barcode) {
+            public Option<Integer> findPriceLegacy(Barcode barcode) {
                 throw new RuntimeException("Not our job");
             }
         };
@@ -62,7 +62,7 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
-        return catalog.findProductInCatalog(barcode).fold(
+        return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
