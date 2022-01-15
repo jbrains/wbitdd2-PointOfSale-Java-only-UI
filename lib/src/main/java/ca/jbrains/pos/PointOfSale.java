@@ -63,15 +63,15 @@ public class PointOfSale {
     }
 
     public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
-        return findProductInCatalog(barcode, catalog).fold(
+        return findProductInCatalog(barcode, new LegacyCatalogAdapter(catalog)).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
         );
     }
 
     // REFACTOR Move into The Hole onto Catalog
-    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, Catalog catalog) {
-        return catalog.findPrice(barcode).toEither(barcode);
+    private static Either<Barcode, Integer> findProductInCatalog(Barcode barcode, LegacyCatalogAdapter legacyCatalogAdapter) {
+        return legacyCatalogAdapter.catalog().findPrice(barcode).toEither(barcode);
     }
 
     private static String formatProductNotFoundMessage(String trustedBarcodeString) {
@@ -90,5 +90,8 @@ public class PointOfSale {
     public static String handleTotal(Basket basket) {
         int total = basket.getTotal();
         return String.format("Total: %s", formatPrice(total));
+    }
+
+    private static record LegacyCatalogAdapter(Catalog catalog) {
     }
 }
