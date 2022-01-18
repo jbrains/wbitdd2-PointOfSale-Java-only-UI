@@ -10,7 +10,7 @@ public class TestTotal {
     @Test
     void noItems() {
         EmptyBasket basket = new EmptyBasket();
-        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(basket, new PurchaseProvider() {
+        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
@@ -24,7 +24,7 @@ public class TestTotal {
     @Test
     void oneItem() {
         NotEmptyBasket basket = new NotEmptyBasket(102);
-        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(basket, new PurchaseProvider() {
+        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }

@@ -47,7 +47,7 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, Basket basket) {
-        if ("total".equals(line)) return handleTotal(basket, new PurchaseProvider() {
+        if ("total".equals(line)) return handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
@@ -91,7 +91,7 @@ public class PointOfSale {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
 
-    public static String handleTotal(Basket basket, PurchaseProvider purchaseProvider) {
+    public static String handleTotal(PurchaseProvider purchaseProvider) {
         purchaseProvider.startPurchase();
         int total = purchaseProvider.getTotal();
         return String.format("Total: %s", formatPrice(total));

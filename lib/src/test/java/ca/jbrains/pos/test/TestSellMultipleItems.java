@@ -38,7 +38,7 @@ public class TestSellMultipleItems {
                 return basket.getTotal();
             }
         };
-        PointOfSale.handleTotal(basket, purchaseProvider);
+        PointOfSale.handleTotal(purchaseProvider);
 
         RecordingBasket secondShopperBasket = new RecordingBasket();
         PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket);
@@ -51,7 +51,7 @@ public class TestSellMultipleItems {
                 return secondShopperBasket.getTotal();
             }
         };
-        PointOfSale.handleTotal(secondShopperBasket, purchaseProvider);
+        PointOfSale.handleTotal(purchaseProvider);
 
         Assertions.assertEquals(Option.of(100), basket.recentPrice);
         Assertions.assertEquals(Option.of(150), secondShopperBasket.recentPrice);
@@ -71,7 +71,7 @@ public class TestSellMultipleItems {
                 return -1;
             }
         };
-        PointOfSale.handleTotal(dummyBasket, new PurchaseProvider() {
+        PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
