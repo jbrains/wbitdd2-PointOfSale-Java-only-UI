@@ -54,13 +54,18 @@ public class TestSellMultipleItems {
 
             @Override
             public int getTotal() {
-                return 0;
+                // irrelevant value
+                return -1;
             }
         };
         PointOfSale.handleTotal(dummyBasket, new PurchaseProvider() {
             @Override
             public void startPurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
+            }
+
+            public int getTotal() {
+                return dummyBasket.getTotal();
             }
         });
 
