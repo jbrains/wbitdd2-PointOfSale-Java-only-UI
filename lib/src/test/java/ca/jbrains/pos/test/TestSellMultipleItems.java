@@ -33,11 +33,24 @@ public class TestSellMultipleItems {
             @Override
             public void startPurchase() {
             }
+
+            public int getTotal() {
+                return basket.getTotal();
+            }
         };
         PointOfSale.handleTotal(basket, purchaseProvider);
 
         RecordingBasket secondShopperBasket = new RecordingBasket();
         PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket);
+        purchaseProvider = new PurchaseProvider() {
+            @Override
+            public void startPurchase() {
+            }
+
+            public int getTotal() {
+                return secondShopperBasket.getTotal();
+            }
+        };
         PointOfSale.handleTotal(secondShopperBasket, purchaseProvider);
 
         Assertions.assertEquals(Option.of(100), basket.recentPrice);
@@ -64,6 +77,7 @@ public class TestSellMultipleItems {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
             }
 
+            @Override
             public int getTotal() {
                 return dummyBasket.getTotal();
             }

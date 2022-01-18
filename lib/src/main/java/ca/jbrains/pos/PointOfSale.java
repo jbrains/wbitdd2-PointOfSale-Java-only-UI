@@ -51,6 +51,11 @@ public class PointOfSale {
             @Override
             public void startPurchase() {
             }
+
+            @Override
+            public int getTotal() {
+                return basket.getTotal();
+            }
         });
 
         return Barcode.makeBarcode(line)
@@ -88,7 +93,7 @@ public class PointOfSale {
 
     public static String handleTotal(Basket basket, PurchaseProvider purchaseProvider) {
         purchaseProvider.startPurchase();
-        int total = basket.getTotal();
+        int total = purchaseProvider.getTotal();
         return String.format("Total: %s", formatPrice(total));
     }
 }
