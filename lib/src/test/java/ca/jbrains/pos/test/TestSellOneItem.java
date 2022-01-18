@@ -52,17 +52,4 @@ public class TestSellOneItem {
         }
     }
 
-    private class RecordingBasket implements Basket {
-        private Option<Integer> recentPrice;
-
-        @Override
-        public void add(int price) {
-            recentPrice = Option.some(price);
-        }
-
-        @Override
-        public int getTotal() {
-            return 0;
-        }
-    }
 }

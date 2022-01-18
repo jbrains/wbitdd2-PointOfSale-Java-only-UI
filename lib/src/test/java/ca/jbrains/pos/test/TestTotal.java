@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 public class TestTotal {
     @Test
     void noItems() {
-        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new EmptyBasket()));
+        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.legacyHandleTotal(new EmptyBasket()));
     }
 
     @Test
     void oneItem() {
-        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new NotEmptyBasket(102)));
+        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.legacyHandleTotal(new NotEmptyBasket(102)));
     }
 
     private static class EmptyBasket implements Basket {

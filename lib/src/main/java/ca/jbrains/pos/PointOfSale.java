@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
+import ca.jbrains.pos.domain.PurchaseProvider;
 import io.vavr.control.Either;
 
 import java.io.BufferedReader;
@@ -46,6 +47,7 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, Basket basket) {
+        // REFACTOR This should be invoking handleTotal()
         if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
 
         return Barcode.makeBarcode(line)
@@ -53,7 +55,7 @@ public class PointOfSale {
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    private static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
+    public static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
         return handleSellOneItemRequest(barcode, catalog, basket);
     }
 
@@ -81,8 +83,13 @@ public class PointOfSale {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
 
-    public static String handleTotal(Basket basket) {
+    public static String legacyHandleTotal(Basket basket) {
         int total = basket.getTotal();
         return String.format("Total: %s", formatPrice(total));
+    }
+
+    public static void handleTotal(Basket basket, PurchaseProvider purchaseProvider) {
+        legacyHandleTotal(basket);
+        purchaseProvider.startPurchase();
     }
 }
