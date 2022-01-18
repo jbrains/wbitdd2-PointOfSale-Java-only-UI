@@ -92,6 +92,8 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseProvider purchaseProvider) {
+        // SMELL Temporal coupling between these two statements.
+        // DEFECT These statements are probably backwards.
         purchaseProvider.startPurchase();
         int total = purchaseProvider.getTotal();
         return String.format("Total: %s", formatPrice(total));
