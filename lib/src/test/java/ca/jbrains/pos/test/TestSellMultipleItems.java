@@ -29,11 +29,16 @@ public class TestSellMultipleItems {
 
         RecordingBasket basket = new RecordingBasket();
         PointOfSale.handleBarcode(new Barcode("12345"), catalog, basket);
-        PointOfSale.legacyHandleTotal(basket);
+        PurchaseProvider purchaseProvider = new PurchaseProvider() {
+            @Override
+            public void startPurchase() {
+            }
+        };
+        PointOfSale.handleTotal(basket, purchaseProvider);
 
         RecordingBasket secondShopperBasket = new RecordingBasket();
         PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket);
-        PointOfSale.legacyHandleTotal(secondShopperBasket);
+        PointOfSale.handleTotal(secondShopperBasket, purchaseProvider);
 
         Assertions.assertEquals(Option.of(100), basket.recentPrice);
         Assertions.assertEquals(Option.of(150), secondShopperBasket.recentPrice);

@@ -47,8 +47,11 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, Basket basket) {
-        // REFACTOR This should be invoking handleTotal()
-        if ("total".equals(line)) return String.format("Total: %s", formatPrice(basket.getTotal()));
+        if ("total".equals(line)) return handleTotal(basket, new PurchaseProvider() {
+            @Override
+            public void startPurchase() {
+            }
+        });
 
         return Barcode.makeBarcode(line)
                 .map(barcode -> handleBarcode(barcode, catalog, basket))
@@ -83,13 +86,9 @@ public class PointOfSale {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
 
-    public static String legacyHandleTotal(Basket basket) {
+    public static String handleTotal(Basket basket, PurchaseProvider purchaseProvider) {
+        purchaseProvider.startPurchase();
         int total = basket.getTotal();
         return String.format("Total: %s", formatPrice(total));
-    }
-
-    public static void handleTotal(Basket basket, PurchaseProvider purchaseProvider) {
-        legacyHandleTotal(basket);
-        purchaseProvider.startPurchase();
     }
 }
