@@ -34,24 +34,4 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, purchaseProvider)).collect(Collectors.toList()));
     }
 
-    private static class StubCurrentPurchaseTotalPurchaseProvider implements PurchaseProvider {
-        private int total;
-
-        private StubCurrentPurchaseTotalPurchaseProvider(int total) {
-            this.total = total;
-        }
-
-        @Override
-        public void startPurchase() {
-        }
-
-        @Override
-        public int getTotal() {
-            return total;
-        }
-
-        @Override
-        public void addItem(int price) {
-        }
-    }
 }

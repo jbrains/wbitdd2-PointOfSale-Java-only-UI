@@ -28,26 +28,7 @@ public class TestTotal {
 
     @Test
     void oneItem() {
-        NotEmptyBasket basket = new NotEmptyBasket(102);
-        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(adaptBasketToPurchaseProvider(basket)));
-    }
-
-    public static PurchaseProvider adaptBasketToPurchaseProvider(Basket basket) {
-        return new PurchaseProvider() {
-            @Override
-            public void startPurchase() {
-            }
-
-            @Override
-            public int getTotal() {
-                return basket.getTotal();
-            }
-
-            @Override
-            public void addItem(int price) {
-                basket.add(price);
-            }
-        };
+        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new StubCurrentPurchaseTotalPurchaseProvider(102)));
     }
 
     private static class EmptyBasket implements Basket {
