@@ -1,6 +1,5 @@
 package ca.jbrains.pos;
 
-import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseProvider;
 import io.vavr.control.Either;
@@ -19,42 +18,33 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), new PurchaseProvider() {
-                    @Override
-                    public void startPurchase() {
-                    }
-
-                    @Override
-                    public int getTotal() {
-                        return createAnyBasket().getTotal();
-                    }
-
-                    @Override
-                    public void addItem(int price) {
-                        createAnyBasket().add(price);
-                    }
-                }))
+                .map(line -> handleLine(line, createAnyCatalog(), createNotOurJobPurchaseProvider()))
                 .forEachOrdered(consoleDisplay);
+    }
+
+    private static PurchaseProvider createNotOurJobPurchaseProvider() {
+        return new PurchaseProvider() {
+            @Override
+            public void startPurchase() {
+                throw new RuntimeException("Not our job");
+            }
+
+            @Override
+            public int getTotal() {
+                throw new RuntimeException("Not our job");
+            }
+
+            @Override
+            public void addItem(int price) {
+                throw new RuntimeException("Not our job");
+            }
+        };
     }
 
     private static Catalog createAnyCatalog() {
         return new Catalog() {
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                throw new RuntimeException("Not our job");
-            }
-        };
-    }
-
-    private static Basket createAnyBasket() {
-        return new Basket() {
-            @Override
-            public void add(int price) {
-                throw new RuntimeException("Not our job");
-            }
-
-            @Override
-            public int getTotal() {
                 throw new RuntimeException("Not our job");
             }
         };
