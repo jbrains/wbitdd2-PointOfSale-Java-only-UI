@@ -59,21 +59,4 @@ public class TestSellOneItem {
         Assertions.assertEquals(Option.some(100), purchaseProvider.priceOfMostRecentItemAdded);
     }
 
-    private static class RecordingPurchaseProvider implements PurchaseProvider {
-        public Option<Integer> priceOfMostRecentItemAdded = Option.none();
-
-        @Override
-        public void startPurchase() {
-        }
-
-        @Override
-        public int getTotal() {
-            return 0;
-        }
-
-        @Override
-        public void addItem(int price) {
-            this.priceOfMostRecentItemAdded = Option.some(price);
-        }
-    }
 }

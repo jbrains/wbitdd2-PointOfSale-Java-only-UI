@@ -14,73 +14,8 @@ import org.junit.jupiter.api.Test;
 public class TestSellMultipleItems {
     private boolean startPurchaseInvoked = false;
 
-    @Disabled("wip")
-    @Test
-    void differentCustomersShouldHaveSeparateBaskets() {
-        // REFACTOR Maybe use Mockito to stub?
-        Catalog catalog = new Catalog() {
-            @Override
-            public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                return new Barcode("12345").equals(barcode)
-                        ? Either.right(100)
-                        : Either.right(150);
-            }
-        };
-
-        RecordingBasket basket = new RecordingBasket();
-        PurchaseProvider purchaseProvider = new PurchaseProvider() {
-            @Override
-            public void startPurchase() {
-            }
-
-            public int getTotal() {
-                return basket.getTotal();
-            }
-
-            @Override
-            public void addItem(int price) {
-                basket.add(price);
-            }
-        };
-        PointOfSale.handleBarcode(new Barcode("12345"), catalog, purchaseProvider);
-        PointOfSale.handleTotal(purchaseProvider);
-
-        RecordingBasket secondShopperBasket = new RecordingBasket();
-        purchaseProvider = new PurchaseProvider() {
-            @Override
-            public void startPurchase() {
-            }
-
-            public int getTotal() {
-                return secondShopperBasket.getTotal();
-            }
-
-            @Override
-            public void addItem(int price) {
-                secondShopperBasket.add(price);
-            }
-        };
-        PointOfSale.handleBarcode(new Barcode("67890"), catalog, purchaseProvider);
-        PointOfSale.handleTotal(purchaseProvider);
-
-        Assertions.assertEquals(Option.of(100), basket.recentPrice);
-        Assertions.assertEquals(Option.of(150), secondShopperBasket.recentPrice);
-    }
-
     @Test
     void newPurchaseUsesNewBasket() {
-        Basket dummyBasket = new Basket() {
-            @Override
-            public void add(int price) {
-                // Intentionally do nothing
-            }
-
-            @Override
-            public int getTotal() {
-                // irrelevant value
-                return -1;
-            }
-        };
         PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
@@ -89,12 +24,13 @@ public class TestSellMultipleItems {
 
             @Override
             public int getTotal() {
-                return dummyBasket.getTotal();
+                // Stub to return an irrelevant value
+                return -6183712;
             }
 
             @Override
             public void addItem(int price) {
-                dummyBasket.add(price);
+                throw new RuntimeException("Don't invoke me");
             }
         });
 
