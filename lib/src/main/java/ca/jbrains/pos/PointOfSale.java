@@ -60,15 +60,11 @@ public class PointOfSale {
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    public static String handleBarcode(Barcode barcode, Catalog catalog, PurchaseProvider purchaseProvider) {
-        return handleSellOneItemRequest(barcode, catalog, purchaseProvider);
-    }
-
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, PurchaseProvider purchaseProvider) {
+    public static String handleBarcode(Barcode barcode, Catalog catalog, PurchaseProvider purchaseProvider) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(purchaseProvider, matchingPrice)
