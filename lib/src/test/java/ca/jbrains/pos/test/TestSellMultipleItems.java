@@ -42,7 +42,7 @@ public class TestSellMultipleItems {
                 basket.add(price);
             }
         };
-        PointOfSale.handleBarcode(new Barcode("12345"), catalog, basket, purchaseProvider);
+        PointOfSale.handleBarcode(new Barcode("12345"), catalog, purchaseProvider);
         PointOfSale.handleTotal(purchaseProvider);
 
         RecordingBasket secondShopperBasket = new RecordingBasket();
@@ -60,7 +60,7 @@ public class TestSellMultipleItems {
                 secondShopperBasket.add(price);
             }
         };
-        PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket, purchaseProvider);
+        PointOfSale.handleBarcode(new Barcode("67890"), catalog, purchaseProvider);
         PointOfSale.handleTotal(purchaseProvider);
 
         Assertions.assertEquals(Option.of(100), basket.recentPrice);

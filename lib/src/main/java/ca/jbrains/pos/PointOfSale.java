@@ -19,7 +19,21 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyBasket()))
+                .map(line -> handleLine(line, createAnyCatalog(), new PurchaseProvider() {
+                    @Override
+                    public void startPurchase() {
+                    }
+
+                    @Override
+                    public int getTotal() {
+                        return createAnyBasket().getTotal();
+                    }
+
+                    @Override
+                    public void addItem(int price) {
+                        createAnyBasket().add(price);
+                    }
+                }))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -46,43 +60,28 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Catalog catalog, Basket basket) {
-        PurchaseProvider purchaseProvider = new PurchaseProvider() {
-            @Override
-            public void startPurchase() {
-            }
-
-            @Override
-            public int getTotal() {
-                return basket.getTotal();
-            }
-
-            @Override
-            public void addItem(int price) {
-                basket.add(price);
-            }
-        };
+    public static String handleLine(String line, Catalog catalog, PurchaseProvider purchaseProvider) {
         if ("total".equals(line)) {
             return handleTotal(purchaseProvider);
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog, basket, purchaseProvider))
+                .map(barcode -> handleBarcode(barcode, catalog, purchaseProvider))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    public static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket, PurchaseProvider purchaseProvider) {
-        return handleSellOneItemRequest(barcode, catalog, basket, purchaseProvider);
+    public static String handleBarcode(Barcode barcode, Catalog catalog, PurchaseProvider purchaseProvider) {
+        return handleSellOneItemRequest(barcode, catalog, purchaseProvider);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket, PurchaseProvider purchaseProvider) {
+    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, PurchaseProvider purchaseProvider) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
-                matchingPrice -> addToBasketAndFormatPrice(basket, purchaseProvider, matchingPrice)
+                matchingPrice -> addToBasketAndFormatPrice(purchaseProvider, matchingPrice)
         );
     }
 
@@ -90,7 +89,7 @@ public class PointOfSale {
         return String.format("Product not found: %s", trustedBarcodeString);
     }
 
-    private static String addToBasketAndFormatPrice(Basket basket, PurchaseProvider purchaseProvider, int price) {
+    private static String addToBasketAndFormatPrice(PurchaseProvider purchaseProvider, int price) {
         purchaseProvider.addItem(price);
         return formatPrice(price);
     }
