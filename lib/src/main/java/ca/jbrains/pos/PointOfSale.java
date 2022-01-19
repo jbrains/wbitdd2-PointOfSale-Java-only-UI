@@ -47,7 +47,7 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, Basket basket) {
-        if ("total".equals(line)) return handleTotal(new PurchaseProvider() {
+        PurchaseProvider purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
@@ -56,25 +56,33 @@ public class PointOfSale {
             public int getTotal() {
                 return basket.getTotal();
             }
-        });
+
+            @Override
+            public void addItem(int price) {
+                basket.add(price);
+            }
+        };
+        if ("total".equals(line)) {
+            return handleTotal(purchaseProvider);
+        }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog, basket))
+                .map(barcode -> handleBarcode(barcode, catalog, basket, purchaseProvider))
                 .getOrElse("Scanning error: empty barcode");
     }
 
-    public static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
-        return handleSellOneItemRequest(barcode, catalog, basket);
+    public static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket, PurchaseProvider purchaseProvider) {
+        return handleSellOneItemRequest(barcode, catalog, basket, purchaseProvider);
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket) {
+    public static String handleSellOneItemRequest(Barcode barcode, Catalog catalog, Basket basket, PurchaseProvider purchaseProvider) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
-                matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
+                matchingPrice -> addToBasketAndFormatPrice(basket, purchaseProvider, matchingPrice)
         );
     }
 
@@ -82,8 +90,8 @@ public class PointOfSale {
         return String.format("Product not found: %s", trustedBarcodeString);
     }
 
-    private static String addToBasketAndFormatPrice(Basket basket, int price) {
-        basket.add(price);
+    private static String addToBasketAndFormatPrice(Basket basket, PurchaseProvider purchaseProvider, int price) {
+        purchaseProvider.addItem(price);
         return formatPrice(price);
     }
 

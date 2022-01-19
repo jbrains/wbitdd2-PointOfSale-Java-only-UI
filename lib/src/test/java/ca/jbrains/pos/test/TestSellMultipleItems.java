@@ -28,7 +28,6 @@ public class TestSellMultipleItems {
         };
 
         RecordingBasket basket = new RecordingBasket();
-        PointOfSale.handleBarcode(new Barcode("12345"), catalog, basket);
         PurchaseProvider purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
@@ -37,11 +36,16 @@ public class TestSellMultipleItems {
             public int getTotal() {
                 return basket.getTotal();
             }
+
+            @Override
+            public void addItem(int price) {
+                basket.add(price);
+            }
         };
+        PointOfSale.handleBarcode(new Barcode("12345"), catalog, basket, purchaseProvider);
         PointOfSale.handleTotal(purchaseProvider);
 
         RecordingBasket secondShopperBasket = new RecordingBasket();
-        PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket);
         purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
@@ -50,7 +54,13 @@ public class TestSellMultipleItems {
             public int getTotal() {
                 return secondShopperBasket.getTotal();
             }
+
+            @Override
+            public void addItem(int price) {
+                secondShopperBasket.add(price);
+            }
         };
+        PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket, purchaseProvider);
         PointOfSale.handleTotal(purchaseProvider);
 
         Assertions.assertEquals(Option.of(100), basket.recentPrice);
@@ -80,6 +90,11 @@ public class TestSellMultipleItems {
             @Override
             public int getTotal() {
                 return dummyBasket.getTotal();
+            }
+
+            @Override
+            public void addItem(int price) {
+                dummyBasket.add(price);
             }
         });
 
