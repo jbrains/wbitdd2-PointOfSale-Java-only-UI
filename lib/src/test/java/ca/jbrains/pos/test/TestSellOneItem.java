@@ -49,33 +49,26 @@ public class TestSellOneItem {
 
     @Test
     void addItemToBasketWhenProductIsFound() {
-        RecordingPurchaseProvider purchaseProvider = new RecordingPurchaseProvider(new RecordingBasket());
+        RecordingPurchaseProvider purchaseProvider = new RecordingPurchaseProvider();
         PointOfSale.handleBarcode(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog,
                 purchaseProvider);
         Assertions.assertEquals(Option.some(100), purchaseProvider.price);
     }
 
     private static class RecordingPurchaseProvider implements PurchaseProvider {
-        private final RecordingBasket basket;
         private Option<Integer> price;
-
-        public RecordingPurchaseProvider(RecordingBasket basket) {
-            this.basket = basket;
-        }
 
         @Override
         public void startPurchase() {
-
         }
 
         @Override
         public int getTotal() {
-            return basket.getTotal();
+            return -1;
         }
 
         @Override
         public void addPriceOfScannedItem(int price) {
-            basket.add(price);
             this.price = Option.some(price);
         }
     }
