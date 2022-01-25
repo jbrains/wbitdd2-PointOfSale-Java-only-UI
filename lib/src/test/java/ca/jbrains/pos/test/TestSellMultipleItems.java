@@ -27,20 +27,18 @@ public class TestSellMultipleItems {
             }
         };
 
-        RecordingBasket basket = new RecordingBasket();
         PurchaseProvider purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
 
             public int getTotal() {
-                return basket.getTotal();
+                return -1;
             }
         };
       PointOfSale.handleBarcode(new Barcode("12345"), catalog, purchaseProvider);
         PointOfSale.handleTotal(purchaseProvider);
 
-        RecordingBasket secondShopperBasket = new RecordingBasket();
       PointOfSale.handleBarcode(new Barcode("67890"), catalog, purchaseProvider);
       purchaseProvider = new PurchaseProvider() {
             @Override
@@ -48,13 +46,12 @@ public class TestSellMultipleItems {
             }
 
             public int getTotal() {
-                return secondShopperBasket.getTotal();
+                return -1;
             }
         };
         PointOfSale.handleTotal(purchaseProvider);
 
-        Assertions.assertEquals(Option.of(100), basket.recentPrice);
-        Assertions.assertEquals(Option.of(150), secondShopperBasket.recentPrice);
+        Assertions.fail("PurchaseProvider needs to verify the items that were added");
     }
 
     @Test
