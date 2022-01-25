@@ -41,6 +41,11 @@ public class TestSellOneItem {
                     public int getTotal() {
                         return 0;
                     }
+
+                    @Override
+                    public void addPriceOfScannedItem(int price) {
+
+                    }
                 });
 
         Assertions.assertEquals("CAD 1.00", response);

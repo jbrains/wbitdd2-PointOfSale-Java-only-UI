@@ -5,7 +5,5 @@ public interface PurchaseProvider {
 
     int getTotal();
 
-    default void addPriceOfScannedItem(int price) {
-
-    }
+    void addPriceOfScannedItem(int price);
 }
