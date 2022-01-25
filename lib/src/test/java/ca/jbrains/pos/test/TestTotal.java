@@ -11,14 +11,18 @@ import java.util.Locale;
 public class TestTotal {
     @Test
     void noItems() {
-        EmptyBasket basket = new EmptyBasket();
         Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
 
+            @Override
+            public void addPriceOfScannedItem(int price) {
+            }
+
+            @Override
             public int getTotal() {
-                return basket.getTotal();
+                return 0;
             }
         }));
     }
@@ -38,16 +42,5 @@ public class TestTotal {
                 return 102;
             }
         }));
-    }
-
-    private static class EmptyBasket implements Basket {
-        @Override
-        public void add(int price) {
-        }
-
-        @Override
-        public int getTotal() {
-            return 0;
-        }
     }
 }
