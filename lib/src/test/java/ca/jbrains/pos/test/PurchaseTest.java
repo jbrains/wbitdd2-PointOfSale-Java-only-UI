@@ -14,7 +14,6 @@ public class PurchaseTest {
     @Test
     void oneItem() {
         Catalog catalog = new PriceFoundCatalog(795);
-        Basket basket = new NotEmptyBasket(795);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
@@ -25,8 +24,12 @@ public class PurchaseTest {
                     }
 
                     @Override
+                    public void addPriceOfScannedItem(int price) {
+                    }
+
+                    @Override
                     public int getTotal() {
-                        return basket.getTotal();
+                        return 795;
                     }
                 })).collect(Collectors.toList()));
     }
