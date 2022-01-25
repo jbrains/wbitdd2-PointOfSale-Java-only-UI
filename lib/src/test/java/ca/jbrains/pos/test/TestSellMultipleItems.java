@@ -28,8 +28,8 @@ public class TestSellMultipleItems {
         };
 
         RecordingBasket basket = new RecordingBasket();
-        PointOfSale.handleBarcode(new Barcode("12345"), catalog, basket);
-        PurchaseProvider purchaseProvider = new PurchaseProvider() {
+      PointOfSale.handleBarcode(new Barcode("12345"), catalog, basket);
+      PurchaseProvider purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
@@ -41,8 +41,8 @@ public class TestSellMultipleItems {
         PointOfSale.handleTotal(purchaseProvider);
 
         RecordingBasket secondShopperBasket = new RecordingBasket();
-        PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket);
-        purchaseProvider = new PurchaseProvider() {
+      PointOfSale.handleBarcode(new Barcode("67890"), catalog, basket);
+      purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
