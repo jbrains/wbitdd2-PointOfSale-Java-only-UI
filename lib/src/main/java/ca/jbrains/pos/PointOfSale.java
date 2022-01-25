@@ -74,7 +74,7 @@ public class PointOfSale {
         PurchaseProvider purchaseProvider) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
-                matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
+                matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice, purchaseProvider)
         );
     }
 
@@ -82,7 +82,7 @@ public class PointOfSale {
         return String.format("Product not found: %s", trustedBarcodeString);
     }
 
-    private static String addToBasketAndFormatPrice(Basket basket, int price) {
+    private static String addToBasketAndFormatPrice(Basket basket, int price, PurchaseProvider purchaseProvider) {
         basket.add(price);
         return formatPrice(price);
     }
