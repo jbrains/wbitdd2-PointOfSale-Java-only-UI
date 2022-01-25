@@ -65,7 +65,7 @@ public class TestSellOneItem {
 
                     @Override
                     public void addPriceOfScannedItem(int price) {
-                        basket.recentPrice = Option.some(price);
+                        basket.add(price);
                     }
                 });
         Assertions.assertEquals(Option.some(100), basket.recentPrice);
