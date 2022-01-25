@@ -70,16 +70,4 @@ public class TestSellOneItem {
                 });
         Assertions.assertEquals(Option.some(100), basket.recentPrice);
     }
-
-    private static class DoNothingBasket implements Basket {
-        @Override
-        public void add(int price) {
-        }
-
-        @Override
-        public int getTotal() {
-            return 0;
-        }
-    }
-
 }
