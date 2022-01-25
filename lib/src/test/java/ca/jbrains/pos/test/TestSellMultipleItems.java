@@ -9,7 +9,7 @@ public class TestSellMultipleItems {
     private boolean startPurchaseInvoked = false;
 
     @Test
-    void newPurchaseUsesNewBasket() {
+    void handleTotalStartsNewPurchase() {
         PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {

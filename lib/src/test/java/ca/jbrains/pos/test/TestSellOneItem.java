@@ -52,7 +52,7 @@ public class TestSellOneItem {
     }
 
     @Test
-    void addItemToBasketWhenProductIsFound() {
+    void rememberTheScannedItemWhenProductIsFound() {
         RecordingPurchaseProvider purchaseProvider = new RecordingPurchaseProvider();
         PointOfSale.handleBarcode(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog,
                 purchaseProvider);
