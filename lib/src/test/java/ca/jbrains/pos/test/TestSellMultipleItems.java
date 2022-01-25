@@ -1,7 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.domain.PurchaseProvider;
+import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ public class TestSellMultipleItems {
 
     @Test
     void handleTotalStartsNewPurchase() {
-        PointOfSale.handleTotal(new PurchaseProvider() {
+        PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public void startNextPurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;

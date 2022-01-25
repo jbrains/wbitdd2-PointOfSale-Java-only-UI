@@ -1,6 +1,6 @@
 package ca.jbrains.pos.domain;
 
-public interface PurchaseProvider {
+public interface PurchaseAccumulator {
     void startNextPurchase();
 
     int getTotalOfCurrentPurchase();

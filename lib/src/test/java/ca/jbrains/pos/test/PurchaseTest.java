@@ -2,7 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Catalog;
-import ca.jbrains.pos.domain.PurchaseProvider;
+import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ public class PurchaseTest {
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 7.95", "Total: CAD 7.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseProvider() {
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public void startNextPurchase() {
                     }
@@ -40,7 +40,7 @@ public class PurchaseTest {
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 9.95", "Total: CAD 9.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseProvider() {
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public void startNextPurchase() {
                     }

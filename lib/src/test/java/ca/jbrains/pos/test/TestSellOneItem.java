@@ -3,7 +3,7 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Catalog;
-import ca.jbrains.pos.domain.PurchaseProvider;
+import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class TestSellOneItem {
     @Test
     void priceFound() {
         String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
-                new PurchaseProvider() {
+                new PurchaseAccumulator() {
                     @Override
                     public void startNextPurchase() {
 
@@ -53,13 +53,13 @@ public class TestSellOneItem {
 
     @Test
     void rememberTheScannedItemWhenProductIsFound() {
-        RecordingPurchaseProvider purchaseProvider = new RecordingPurchaseProvider();
+        RecordingPurchaseAccumulator purchaseProvider = new RecordingPurchaseAccumulator();
         PointOfSale.handleBarcode(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog,
                 purchaseProvider);
         Assertions.assertEquals(Option.some(100), purchaseProvider.price);
     }
 
-    private static class RecordingPurchaseProvider implements PurchaseProvider {
+    private static class RecordingPurchaseAccumulator implements PurchaseAccumulator {
         private Option<Integer> price;
 
         @Override

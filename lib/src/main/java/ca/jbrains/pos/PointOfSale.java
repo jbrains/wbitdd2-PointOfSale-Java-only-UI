@@ -1,7 +1,7 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Catalog;
-import ca.jbrains.pos.domain.PurchaseProvider;
+import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Either;
 
 import java.io.BufferedReader;
@@ -28,8 +28,8 @@ public class PointOfSale {
                 .forEachOrdered(consoleDisplay);
     }
 
-    private static PurchaseProvider createAnyPurchaseProvider() {
-        return new PurchaseProvider() {
+    private static PurchaseAccumulator createAnyPurchaseProvider() {
+        return new PurchaseAccumulator() {
             @Override
             public void startNextPurchase() {
                 throw new RuntimeException("Not our job");
@@ -56,13 +56,13 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Catalog catalog, PurchaseProvider purchaseProvider) {
+    public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator) {
         if ("total".equals(line)) {
-            return handleTotal(purchaseProvider);
+            return handleTotal(purchaseAccumulator);
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog, purchaseProvider))
+                .map(barcode -> handleBarcode(barcode, catalog, purchaseAccumulator))
                 .getOrElse("Scanning error: empty barcode");
     }
 
@@ -71,10 +71,10 @@ public class PointOfSale {
     }
 
     public static String handleBarcode(Barcode barcode, Catalog catalog,
-                                       PurchaseProvider purchaseProvider) {
+                                       PurchaseAccumulator purchaseAccumulator) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
-                matchingPrice -> handleProductFound(matchingPrice, purchaseProvider)
+                matchingPrice -> handleProductFound(matchingPrice, purchaseAccumulator)
         );
     }
 
@@ -82,8 +82,8 @@ public class PointOfSale {
         return String.format("Product not found: %s", trustedBarcodeString);
     }
 
-    private static String handleProductFound(int price, PurchaseProvider purchaseProvider) {
-        purchaseProvider.addPriceOfScannedItemToCurrentPurchase(price);
+    private static String handleProductFound(int price, PurchaseAccumulator purchaseAccumulator) {
+        purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
         return formatPrice(price);
     }
 
@@ -91,11 +91,11 @@ public class PointOfSale {
         return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
     }
 
-    public static String handleTotal(PurchaseProvider purchaseProvider) {
+    public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
         // SMELL Temporal coupling between these two statements.
         // DEFECT These statements are probably backwards.
-        purchaseProvider.startNextPurchase();
-        int total = purchaseProvider.getTotalOfCurrentPurchase();
+        purchaseAccumulator.startNextPurchase();
+        int total = purchaseAccumulator.getTotalOfCurrentPurchase();
         return String.format("Total: %s", formatPrice(total));
     }
 }
