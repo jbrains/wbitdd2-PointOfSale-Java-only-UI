@@ -47,7 +47,7 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, Basket basket) {
-        if ("total".equals(line)) return handleTotal(new PurchaseProvider() {
+        PurchaseProvider purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
@@ -56,10 +56,13 @@ public class PointOfSale {
             public int getTotal() {
                 return basket.getTotal();
             }
-        });
+        };
+        if ("total".equals(line)) {
+            return handleTotal(purchaseProvider);
+        }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog, basket))
+                .map(barcode -> handleBarcode(barcode, catalog, basket, purchaseProvider))
                 .getOrElse("Scanning error: empty barcode");
     }
 
@@ -67,7 +70,8 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket) {
+    public static String handleBarcode(Barcode barcode, Catalog catalog, Basket basket,
+        PurchaseProvider purchaseProvider) {
         return catalog.findPrice(barcode).fold(
                 missingBarcode -> formatProductNotFoundMessage(missingBarcode.text()),
                 matchingPrice -> addToBasketAndFormatPrice(basket, matchingPrice)
