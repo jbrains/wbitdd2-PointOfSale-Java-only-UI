@@ -2,7 +2,6 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseProvider;
 import io.vavr.control.Option;

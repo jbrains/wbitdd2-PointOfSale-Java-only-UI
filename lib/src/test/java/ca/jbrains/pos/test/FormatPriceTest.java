@@ -4,8 +4,6 @@ import ca.jbrains.pos.PointOfSale;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
 public class FormatPriceTest {
     @Test
     void happyPath() {

@@ -2,11 +2,9 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseProvider;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -56,18 +54,6 @@ public class TestSellMultipleItems {
 
     @Test
     void newPurchaseUsesNewBasket() {
-        Basket dummyBasket = new Basket() {
-            @Override
-            public void add(int price) {
-                // Intentionally do nothing
-            }
-
-            @Override
-            public int getTotal() {
-                // irrelevant value
-                return -1;
-            }
-        };
         PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
@@ -76,7 +62,7 @@ public class TestSellMultipleItems {
 
             @Override
             public int getTotal() {
-                return dummyBasket.getTotal();
+                return -1;
             }
         });
 

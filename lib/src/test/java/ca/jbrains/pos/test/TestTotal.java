@@ -1,12 +1,9 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.PurchaseProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Locale;
 
 public class TestTotal {
     @Test
