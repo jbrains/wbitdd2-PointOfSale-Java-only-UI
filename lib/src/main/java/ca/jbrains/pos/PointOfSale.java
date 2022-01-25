@@ -19,7 +19,16 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyBasket()))
+                .map(line -> handleLine(line, createAnyCatalog(), new PurchaseProvider() {
+                    @Override
+                    public void startPurchase() {
+                    }
+
+                    @Override
+                    public int getTotal() {
+                        return createAnyBasket().getTotal();
+                    }
+                }))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -46,17 +55,7 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Catalog catalog, Basket basket) {
-        PurchaseProvider purchaseProvider = new PurchaseProvider() {
-            @Override
-            public void startPurchase() {
-            }
-
-            @Override
-            public int getTotal() {
-                return basket.getTotal();
-            }
-        };
+    public static String handleLine(String line, Catalog catalog, PurchaseProvider purchaseProvider) {
         if ("total".equals(line)) {
             return handleTotal(purchaseProvider);
         }

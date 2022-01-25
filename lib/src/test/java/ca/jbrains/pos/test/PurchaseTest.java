@@ -1,10 +1,9 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.domain.Basket;
 import ca.jbrains.pos.domain.Catalog;
-import io.vavr.control.Option;
+import ca.jbrains.pos.domain.PurchaseProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,16 @@ public class PurchaseTest {
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 7.95", "Total: CAD 7.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, basket)).collect(Collectors.toList()));
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseProvider() {
+                    @Override
+                    public void startPurchase() {
+                    }
+
+                    @Override
+                    public int getTotal() {
+                        return basket.getTotal();
+                    }
+                })).collect(Collectors.toList()));
     }
 
     @Test
@@ -31,6 +39,15 @@ public class PurchaseTest {
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
                 List.of("CAD 9.95", "Total: CAD 9.95"),
-                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, basket)).collect(Collectors.toList()));
+                List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseProvider() {
+                    @Override
+                    public void startPurchase() {
+                    }
+
+                    @Override
+                    public int getTotal() {
+                        return basket.getTotal();
+                    }
+                })).collect(Collectors.toList()));
     }
 }
