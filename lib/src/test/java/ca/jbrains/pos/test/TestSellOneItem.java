@@ -15,23 +15,23 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = PointOfSale.handleBarcode(new Barcode("99999"), priceNotFoundCatalog, null,
-            null);
+        String response = PointOfSale.handleBarcode(new Barcode("99999"), priceNotFoundCatalog,
+                null);
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = PointOfSale.handleBarcode(Barcode.makeBarcode("1111").get(), priceNotFoundCatalog, null,
-            null);
+        String response = PointOfSale.handleBarcode(Barcode.makeBarcode("1111").get(), priceNotFoundCatalog,
+                null);
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog, new DoNothingBasket(),
+        String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
                 new PurchaseProvider() {
                     @Override
                     public void startPurchase() {
@@ -51,7 +51,7 @@ public class TestSellOneItem {
     void addItemToBasketWhenProductIsFound() {
         RecordingBasket basket = new RecordingBasket();
 
-        PointOfSale.handleBarcode(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog, basket,
+        PointOfSale.handleBarcode(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog,
                 new PurchaseProvider() {
                     @Override
                     public void startPurchase() {
