@@ -12,17 +12,17 @@ public class TestSellMultipleItems {
     void handleTotalStartsNewPurchase() {
         PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
-            public void startPurchase() {
+            public void startNextPurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
             }
 
             @Override
-            public int getTotal() {
+            public int getTotalOfCurrentPurchase() {
                 return -1;
             }
 
             @Override
-            public void addPriceOfScannedItem(int price) {
+            public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
         });

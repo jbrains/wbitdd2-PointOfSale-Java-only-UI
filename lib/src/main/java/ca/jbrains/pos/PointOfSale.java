@@ -31,17 +31,17 @@ public class PointOfSale {
     private static PurchaseProvider createAnyPurchaseProvider() {
         return new PurchaseProvider() {
             @Override
-            public void startPurchase() {
+            public void startNextPurchase() {
                 throw new RuntimeException("Not our job");
             }
 
             @Override
-            public int getTotal() {
+            public int getTotalOfCurrentPurchase() {
                 throw new RuntimeException("Not our job");
             }
 
             @Override
-            public void addPriceOfScannedItem(int price) {
+            public void addPriceOfScannedItemToCurrentPurchase(int price) {
                 throw new RuntimeException("Not our job");
             }
         };
@@ -83,7 +83,7 @@ public class PointOfSale {
     }
 
     private static String handleProductFound(int price, PurchaseProvider purchaseProvider) {
-        purchaseProvider.addPriceOfScannedItem(price);
+        purchaseProvider.addPriceOfScannedItemToCurrentPurchase(price);
         return formatPrice(price);
     }
 
@@ -94,8 +94,8 @@ public class PointOfSale {
     public static String handleTotal(PurchaseProvider purchaseProvider) {
         // SMELL Temporal coupling between these two statements.
         // DEFECT These statements are probably backwards.
-        purchaseProvider.startPurchase();
-        int total = purchaseProvider.getTotal();
+        purchaseProvider.startNextPurchase();
+        int total = purchaseProvider.getTotalOfCurrentPurchase();
         return String.format("Total: %s", formatPrice(total));
     }
 }

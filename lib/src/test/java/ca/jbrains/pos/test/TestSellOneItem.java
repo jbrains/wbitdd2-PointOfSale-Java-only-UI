@@ -33,17 +33,17 @@ public class TestSellOneItem {
         String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
                 new PurchaseProvider() {
                     @Override
-                    public void startPurchase() {
+                    public void startNextPurchase() {
 
                     }
 
                     @Override
-                    public int getTotal() {
+                    public int getTotalOfCurrentPurchase() {
                         return 0;
                     }
 
                     @Override
-                    public void addPriceOfScannedItem(int price) {
+                    public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
                     }
                 });
@@ -63,16 +63,16 @@ public class TestSellOneItem {
         private Option<Integer> price;
 
         @Override
-        public void startPurchase() {
+        public void startNextPurchase() {
         }
 
         @Override
-        public int getTotal() {
+        public int getTotalOfCurrentPurchase() {
             return -1;
         }
 
         @Override
-        public void addPriceOfScannedItem(int price) {
+        public void addPriceOfScannedItemToCurrentPurchase(int price) {
             this.price = Option.some(price);
         }
     }

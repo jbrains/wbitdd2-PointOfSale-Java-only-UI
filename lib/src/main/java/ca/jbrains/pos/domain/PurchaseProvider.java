@@ -1,9 +1,9 @@
 package ca.jbrains.pos.domain;
 
 public interface PurchaseProvider {
-    void startPurchase();
+    void startNextPurchase();
 
-    int getTotal();
+    int getTotalOfCurrentPurchase();
 
-    void addPriceOfScannedItem(int price);
+    void addPriceOfScannedItemToCurrentPurchase(int price);
 }

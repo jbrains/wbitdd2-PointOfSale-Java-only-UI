@@ -10,15 +10,15 @@ public class TestTotal {
     void noItems() {
         Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
-            public void startPurchase() {
+            public void startNextPurchase() {
             }
 
             @Override
-            public void addPriceOfScannedItem(int price) {
+            public void addPriceOfScannedItemToCurrentPurchase(int price) {
             }
 
             @Override
-            public int getTotal() {
+            public int getTotalOfCurrentPurchase() {
                 return 0;
             }
         }));
@@ -28,14 +28,14 @@ public class TestTotal {
     void oneItem() {
         Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
-            public void startPurchase() {
+            public void startNextPurchase() {
             }
 
             @Override
-            public void addPriceOfScannedItem(int price) {
+            public void addPriceOfScannedItemToCurrentPurchase(int price) {
             }
 
-            public int getTotal() {
+            public int getTotalOfCurrentPurchase() {
                 return 102;
             }
         }));

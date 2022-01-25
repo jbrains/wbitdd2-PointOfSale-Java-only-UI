@@ -19,15 +19,15 @@ public class PurchaseTest {
                 List.of("CAD 7.95", "Total: CAD 7.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseProvider() {
                     @Override
-                    public void startPurchase() {
+                    public void startNextPurchase() {
                     }
 
                     @Override
-                    public void addPriceOfScannedItem(int price) {
+                    public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
                     @Override
-                    public int getTotal() {
+                    public int getTotalOfCurrentPurchase() {
                         return 795;
                     }
                 })).collect(Collectors.toList()));
@@ -42,15 +42,15 @@ public class PurchaseTest {
                 List.of("CAD 9.95", "Total: CAD 9.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseProvider() {
                     @Override
-                    public void startPurchase() {
+                    public void startNextPurchase() {
                     }
 
                     @Override
-                    public void addPriceOfScannedItem(int price) {
+                    public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
                     @Override
-                    public int getTotal() {
+                    public int getTotalOfCurrentPurchase() {
                         return 995;
                     }
                 })).collect(Collectors.toList()));
