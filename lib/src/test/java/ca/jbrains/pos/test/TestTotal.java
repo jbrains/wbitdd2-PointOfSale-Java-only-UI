@@ -25,14 +25,17 @@ public class TestTotal {
 
     @Test
     void oneItem() {
-        NotEmptyBasket basket = new NotEmptyBasket(102);
         Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
 
+            @Override
+            public void addPriceOfScannedItem(int price) {
+            }
+
             public int getTotal() {
-                return basket.getTotal();
+                return 102;
             }
         }));
     }

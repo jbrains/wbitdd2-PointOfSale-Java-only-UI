@@ -37,7 +37,6 @@ public class PurchaseTest {
     @Test
     void aDifferentItem() {
         Catalog catalog = new PriceFoundCatalog(995);
-        Basket basket = new NotEmptyBasket(995);
 
         // SMELL Duplicates logic in PointOfSale.runApplication(): stream lines, handle each line, consume the result
         Assertions.assertEquals(
@@ -48,8 +47,12 @@ public class PurchaseTest {
                     }
 
                     @Override
+                    public void addPriceOfScannedItem(int price) {
+                    }
+
+                    @Override
                     public int getTotal() {
-                        return basket.getTotal();
+                        return 995;
                     }
                 })).collect(Collectors.toList()));
     }
