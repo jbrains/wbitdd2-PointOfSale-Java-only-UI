@@ -39,11 +39,11 @@ public class TestSellMultipleItems {
 
             }
         };
-      PointOfSale.handleBarcode(new Barcode("12345"), catalog, purchaseProvider);
+        PointOfSale.handleBarcode(new Barcode("12345"), catalog, purchaseProvider);
         PointOfSale.handleTotal(purchaseProvider);
 
-      PointOfSale.handleBarcode(new Barcode("67890"), catalog, purchaseProvider);
-      purchaseProvider = new PurchaseProvider() {
+        PointOfSale.handleBarcode(new Barcode("67890"), catalog, purchaseProvider);
+        purchaseProvider = new PurchaseProvider() {
             @Override
             public void startPurchase() {
             }
@@ -52,11 +52,11 @@ public class TestSellMultipleItems {
                 return -1;
             }
 
-          @Override
-          public void addPriceOfScannedItem(int price) {
+            @Override
+            public void addPriceOfScannedItem(int price) {
 
-          }
-      };
+            }
+        };
         PointOfSale.handleTotal(purchaseProvider);
 
         Assertions.fail("PurchaseProvider needs to verify the items that were added");
