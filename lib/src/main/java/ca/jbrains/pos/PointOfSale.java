@@ -7,10 +7,16 @@ import io.vavr.control.Either;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class PointOfSale {
+
+    static {
+        Locale.setDefault(new Locale("en", "US"));
+    }
+
     public static void main(String[] args) {
         runApplication(new InputStreamReader(System.in), System.out::println);
     }
