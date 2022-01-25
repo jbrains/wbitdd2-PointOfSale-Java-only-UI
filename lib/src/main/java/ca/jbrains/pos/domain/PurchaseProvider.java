@@ -4,4 +4,8 @@ public interface PurchaseProvider {
     void startPurchase();
 
     int getTotal();
+
+    default void addPriceOfScannedItem(int price) {
+
+    }
 }

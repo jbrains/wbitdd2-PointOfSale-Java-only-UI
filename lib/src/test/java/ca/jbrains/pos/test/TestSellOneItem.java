@@ -62,6 +62,11 @@ public class TestSellOneItem {
                     public int getTotal() {
                         return basket.getTotal();
                     }
+
+                    @Override
+                    public void addPriceOfScannedItem(int price) {
+                        basket.recentPrice = Option.some(price);
+                    }
                 });
         Assertions.assertEquals(Option.some(100), basket.recentPrice);
     }

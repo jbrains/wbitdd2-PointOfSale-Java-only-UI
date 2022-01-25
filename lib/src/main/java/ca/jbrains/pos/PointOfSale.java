@@ -83,7 +83,7 @@ public class PointOfSale {
     }
 
     private static String addToBasketAndFormatPrice(Basket basket, int price, PurchaseProvider purchaseProvider) {
-        basket.add(price);
+        purchaseProvider.addPriceOfScannedItem(price);
         return formatPrice(price);
     }
 
