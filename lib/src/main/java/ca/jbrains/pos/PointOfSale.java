@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class PointOfSale {
-
     static {
         // SMELL Duplicates assumptions in the "format price" tests
         Locale.setDefault(new Locale("en", "US"));
