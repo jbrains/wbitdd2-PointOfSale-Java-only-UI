@@ -84,15 +84,15 @@ public class PointOfSale {
 
     private static String handleProductFound(int price, PurchaseAccumulator purchaseAccumulator) {
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
-        return formatPrice(price);
+        return formatMonetaryAmount(price);
     }
 
-    public static String formatPrice(int priceInCanadianCents) {
-        return String.format("CAD %.2f", priceInCanadianCents / 100.0d);
+    public static String formatMonetaryAmount(int canadianCents) {
+        return String.format("CAD %.2f", canadianCents / 100.0d);
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
-        return String.format("Total: %s", formatPrice(purchaseAccumulator.completePurchase().total()));
+        return String.format("Total: %s", formatMonetaryAmount(purchaseAccumulator.completePurchase().total()));
     }
 
 }
