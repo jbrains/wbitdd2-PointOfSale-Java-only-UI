@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// REFACTOR: Replace with focused tests for parsing commands in handleLine
 public class PurchaseTest {
     @Test
     void oneItem() {

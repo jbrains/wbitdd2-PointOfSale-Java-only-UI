@@ -37,6 +37,7 @@ public class TestTotal {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
             }
 
+            @Override
             public int getTotalOfCurrentPurchase() {
                 return 0;
             }
