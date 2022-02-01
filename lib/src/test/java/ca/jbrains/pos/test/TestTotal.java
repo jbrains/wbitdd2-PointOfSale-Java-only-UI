@@ -11,7 +11,7 @@ public class TestTotal {
         Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public int completePurchase() {
-                throw new UnsupportedOperationException();
+                return 0;
             }
 
             @Override
@@ -30,7 +30,7 @@ public class TestTotal {
         Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public int completePurchase() {
-                throw new UnsupportedOperationException();
+                return 102;
             }
 
             @Override
@@ -38,7 +38,7 @@ public class TestTotal {
             }
 
             public int getTotalOfCurrentPurchase() {
-                return 102;
+                return 0;
             }
         }));
     }

@@ -20,7 +20,7 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public int completePurchase() {
-                        throw new UnsupportedOperationException();
+                        return 795;
                     }
 
                     @Override
@@ -29,7 +29,7 @@ public class PurchaseTest {
 
                     @Override
                     public int getTotalOfCurrentPurchase() {
-                        return 795;
+                        return 0;
                     }
                 })).collect(Collectors.toList()));
     }
@@ -44,7 +44,7 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public int completePurchase() {
-                        throw new UnsupportedOperationException();
+                        return 995;
                     }
 
                     @Override
@@ -53,7 +53,7 @@ public class PurchaseTest {
 
                     @Override
                     public int getTotalOfCurrentPurchase() {
-                        return 995;
+                        return 0;
                     }
                 })).collect(Collectors.toList()));
     }
