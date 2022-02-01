@@ -31,6 +31,10 @@ public class PointOfSale {
     private static PurchaseAccumulator createAnyPurchaseAccumulator() {
         return new PurchaseAccumulator() {
             @Override
+            public Purchase newCompletePurchase() {
+                return new Purchase(completePurchase());
+            }
+
             public int completePurchase() {
                 throw new RuntimeException("Not our job");
             }

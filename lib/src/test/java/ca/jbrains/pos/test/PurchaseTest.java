@@ -1,6 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Assertions;
@@ -20,6 +21,10 @@ public class PurchaseTest {
                 List.of("CAD 7.95", "Total: CAD 7.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
+                    public Purchase newCompletePurchase() {
+                        return new Purchase(completePurchase());
+                    }
+
                     public int completePurchase() {
                         return 795;
                     }
@@ -44,6 +49,10 @@ public class PurchaseTest {
                 List.of("CAD 9.95", "Total: CAD 9.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
+                    public Purchase newCompletePurchase() {
+                        return new Purchase(completePurchase());
+                    }
+
                     public int completePurchase() {
                         return 995;
                     }

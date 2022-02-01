@@ -2,6 +2,7 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
@@ -33,6 +34,10 @@ public class TestSellOneItem {
         String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
                 new PurchaseAccumulator() {
                     @Override
+                    public Purchase newCompletePurchase() {
+                        return new Purchase(completePurchase());
+                    }
+
                     public int completePurchase() {
                         throw new UnsupportedOperationException();
                     }
@@ -62,7 +67,6 @@ public class TestSellOneItem {
     private static class RecordingPurchaseAccumulator implements PurchaseAccumulator {
         private Option<Integer> price;
 
-        @Override
         public int completePurchase() {
             return -1;
         }
@@ -75,6 +79,11 @@ public class TestSellOneItem {
         @Override
         public void addPriceOfScannedItemToCurrentPurchase(int price) {
             this.price = Option.some(price);
+        }
+
+        @Override
+        public Purchase newCompletePurchase() {
+            return new Purchase(completePurchase());
         }
     }
 }
