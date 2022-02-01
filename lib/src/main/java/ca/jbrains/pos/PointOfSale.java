@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -100,16 +99,16 @@ public class PointOfSale {
 
     public static final class HandleBarcode {
         private final Catalog catalog;
-        private final PurchaseAccumulator purchaseAccumulator;
+        private final HandleProductFound handleProductFound;
+        private final HandleProductNotFound handleProductNotFound;
 
         public HandleBarcode(Catalog catalog, PurchaseAccumulator purchaseAccumulator) {
             this.catalog = catalog;
-            this.purchaseAccumulator = purchaseAccumulator;
+            handleProductFound = new HandleProductFound(purchaseAccumulator);
+            handleProductNotFound = new HandleProductNotFound();
         }
 
         public String handleBarcode(Barcode barcode) {
-            final HandleProductFound handleProductFound = new HandleProductFound(purchaseAccumulator);
-            final HandleProductNotFound handleProductNotFound = new HandleProductNotFound();
             return catalog.findPrice(barcode).fold(
                     handleProductNotFound::handleProductNotFound,
                     handleProductFound::handleProductFound
