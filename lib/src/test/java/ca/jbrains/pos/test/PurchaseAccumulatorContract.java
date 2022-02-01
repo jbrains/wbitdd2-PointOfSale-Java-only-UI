@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 public abstract class PurchaseAccumulatorContract {
     @Test
     void isolatePurchasesForDifferentShoppers() {
+        // REFACTOR Replace "workflow" setup with "we join the program in progress" setup.
+        // SMELL "Forced Workflow" problem.
         PurchaseAccumulator purchaseAccumulator = purchaseAccumulatorWithEmptyCurrentPurchase();
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(1);
         Purchase firstPurchase = purchaseAccumulator.completePurchase();
