@@ -15,8 +15,6 @@ java {
     toolchain {
         // The minimum language version needed to use records
         languageVersion.set(JavaLanguageVersion.of(16))
-        // An arbitrary preference for Zulu
-        vendor = JvmVendorSpec.AZUL
     }
 }
 
