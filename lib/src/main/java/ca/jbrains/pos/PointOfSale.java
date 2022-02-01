@@ -70,18 +70,20 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
+    // SMELL jbrains: "bit strange but we leave it for now"
     public static class HandleBarcode {
-        private final PurchaseAccumulator purchaseAccumulator;
         private final Catalog catalog;
+        private final HandleProductFound handleProductFound;
+        private final HandleProductNotFound handleProductNotFound;
 
         public HandleBarcode(PurchaseAccumulator purchaseAccumulator, Catalog catalog) {
-            this.purchaseAccumulator = purchaseAccumulator;
             this.catalog = catalog;
+            // SMELL accept them as parameter instead?
+            this.handleProductFound = new HandleProductFound(purchaseAccumulator);
+            this.handleProductNotFound = new HandleProductNotFound();
         }
 
         public String handleBarcode(Barcode barcode) {
-            final HandleProductFound handleProductFound = new HandleProductFound(this.purchaseAccumulator);
-            final HandleProductNotFound handleProductNotFound = new HandleProductNotFound();
             return this.catalog.findPrice(barcode).fold(
                     handleProductNotFound::handleProductNotFound,
                     handleProductFound::handleProductFound
