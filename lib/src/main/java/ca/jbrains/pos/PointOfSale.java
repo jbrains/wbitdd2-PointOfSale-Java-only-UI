@@ -57,12 +57,14 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator) {
+        HandleBarcode handleBarcode = new HandleBarcode(catalog, purchaseAccumulator);
+
         if ("total".equals(line)) {
             return handleTotal(purchaseAccumulator);
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> new HandleBarcode(catalog, purchaseAccumulator).handleBarcode(barcode))
+                .map(barcode -> handleBarcode.handleBarcode(barcode))
                 .getOrElse("Scanning error: empty barcode");
     }
 
