@@ -72,9 +72,10 @@ public class PointOfSale {
 
     public static String handleBarcode(Barcode barcode, Catalog catalog,
                                        PurchaseAccumulator purchaseAccumulator) {
+        final HandleProductFound handleProductFound = new HandleProductFound(purchaseAccumulator);
         return catalog.findPrice(barcode).fold(
                 PointOfSale::formatProductNotFoundMessage,
-                matchingPrice -> HandleProductFound.handleProductFound(matchingPrice, purchaseAccumulator)
+                handleProductFound::handleProductFound
         );
     }
 
@@ -83,8 +84,14 @@ public class PointOfSale {
     }
 
     public static class HandleProductFound {
-        private static String handleProductFound(int price, PurchaseAccumulator purchaseAccumulator) {
-            purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
+        private PurchaseAccumulator purchaseAccumulator;
+
+        public HandleProductFound(PurchaseAccumulator purchaseAccumulator) {
+            this.purchaseAccumulator = purchaseAccumulator;
+        }
+
+        public String handleProductFound(int price) {
+            this.purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
             return formatMonetaryAmount(price);
         }
     }
