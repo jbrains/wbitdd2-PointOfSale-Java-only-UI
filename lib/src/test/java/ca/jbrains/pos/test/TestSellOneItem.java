@@ -33,8 +33,8 @@ public class TestSellOneItem {
         String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
                 new PurchaseAccumulator() {
                     @Override
-                    public void completePurchase() {
-
+                    public int completePurchase() {
+                        throw new UnsupportedOperationException();
                     }
 
                     @Override
@@ -63,7 +63,8 @@ public class TestSellOneItem {
         private Option<Integer> price;
 
         @Override
-        public void completePurchase() {
+        public int completePurchase() {
+            return -1;
         }
 
         @Override

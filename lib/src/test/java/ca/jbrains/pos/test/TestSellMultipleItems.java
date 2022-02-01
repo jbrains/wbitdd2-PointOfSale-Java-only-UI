@@ -12,8 +12,9 @@ public class TestSellMultipleItems {
     void handleTotalStartsNewPurchase() {
         PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
-            public void completePurchase() {
+            public int completePurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
+                return -1;
             }
 
             @Override
