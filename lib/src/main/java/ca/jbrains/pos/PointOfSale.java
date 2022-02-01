@@ -87,7 +87,7 @@ public class PointOfSale {
     }
 
     public static class HandleProductFound {
-        private PurchaseAccumulator purchaseAccumulator;
+        private final PurchaseAccumulator purchaseAccumulator;
 
         public HandleProductFound(PurchaseAccumulator purchaseAccumulator) {
             this.purchaseAccumulator = purchaseAccumulator;
