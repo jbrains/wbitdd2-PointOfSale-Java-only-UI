@@ -38,11 +38,6 @@ public class TestSellOneItem {
             }
 
             @Override
-            public int getTotalOfCurrentPurchase() {
-                return 0;
-            }
-
-            @Override
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
@@ -62,11 +57,6 @@ public class TestSellOneItem {
 
     private static class RecordingPurchaseAccumulator implements PurchaseAccumulator {
         private Option<Integer> price;
-
-        @Override
-        public int getTotalOfCurrentPurchase() {
-            return -1;
-        }
 
         @Override
         public void addPriceOfScannedItemToCurrentPurchase(int price) {

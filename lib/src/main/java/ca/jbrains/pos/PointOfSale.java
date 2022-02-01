@@ -36,11 +36,6 @@ public class PointOfSale {
             }
 
             @Override
-            public int getTotalOfCurrentPurchase() {
-                throw new RuntimeException("Not our job");
-            }
-
-            @Override
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
                 throw new RuntimeException("Not our job");
             }

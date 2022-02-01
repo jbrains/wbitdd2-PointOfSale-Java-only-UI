@@ -29,10 +29,6 @@ public class PurchaseTest {
                     public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
-                    @Override
-                    public int getTotalOfCurrentPurchase() {
-                        return 0;
-                    }
                 })).collect(Collectors.toList()));
     }
 
@@ -53,10 +49,6 @@ public class PurchaseTest {
                     public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
-                    @Override
-                    public int getTotalOfCurrentPurchase() {
-                        return 0;
-                    }
                 })).collect(Collectors.toList()));
     }
 }

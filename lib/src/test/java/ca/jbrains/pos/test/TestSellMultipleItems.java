@@ -19,11 +19,6 @@ public class TestSellMultipleItems {
             }
 
             @Override
-            public int getTotalOfCurrentPurchase() {
-                return -1;
-            }
-
-            @Override
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }

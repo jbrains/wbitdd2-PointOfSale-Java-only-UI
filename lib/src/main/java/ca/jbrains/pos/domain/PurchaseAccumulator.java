@@ -6,7 +6,5 @@ import ca.jbrains.pos.Purchase;
 public interface PurchaseAccumulator {
     Purchase completePurchase();
 
-    int getTotalOfCurrentPurchase();
-
     void addPriceOfScannedItemToCurrentPurchase(int price);
 }
