@@ -73,14 +73,17 @@ public class PointOfSale {
     public static String handleBarcode(Barcode barcode, Catalog catalog,
                                        PurchaseAccumulator purchaseAccumulator) {
         final HandleProductFound handleProductFound = new HandleProductFound(purchaseAccumulator);
+        final HandleProductNotFound handleProductNotFound = new HandleProductNotFound();
         return catalog.findPrice(barcode).fold(
-                PointOfSale::handleProductNotFound,
+                handleProductNotFound::handleProductNotFound,
                 handleProductFound::handleProductFound
         );
     }
 
-    private static String handleProductNotFound(Barcode barcode) {
-        return String.format("Product not found: %s", barcode.text());
+    static class HandleProductNotFound {
+        private String handleProductNotFound(Barcode barcode) {
+            return String.format("Product not found: %s", barcode.text());
+        }
     }
 
     public static class HandleProductFound {
