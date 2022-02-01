@@ -62,7 +62,7 @@ public class PointOfSale {
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode(barcode, catalog, purchaseAccumulator))
+                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog).handleBarcode(barcode))
                 .getOrElse("Scanning error: empty barcode");
     }
 
@@ -70,14 +70,23 @@ public class PointOfSale {
         return new BufferedReader(reader).lines();
     }
 
-    public static String handleBarcode(Barcode barcode, Catalog catalog,
-                                       PurchaseAccumulator purchaseAccumulator) {
-        final HandleProductFound handleProductFound = new HandleProductFound(purchaseAccumulator);
-        final HandleProductNotFound handleProductNotFound = new HandleProductNotFound();
-        return catalog.findPrice(barcode).fold(
-                handleProductNotFound::handleProductNotFound,
-                handleProductFound::handleProductFound
-        );
+    public static class HandleBarcode {
+        private final PurchaseAccumulator purchaseAccumulator;
+        private final Catalog catalog;
+
+        public HandleBarcode(PurchaseAccumulator purchaseAccumulator, Catalog catalog) {
+            this.purchaseAccumulator = purchaseAccumulator;
+            this.catalog = catalog;
+        }
+
+        public String handleBarcode(Barcode barcode) {
+            final HandleProductFound handleProductFound = new HandleProductFound(this.purchaseAccumulator);
+            final HandleProductNotFound handleProductNotFound = new HandleProductNotFound();
+            return this.catalog.findPrice(barcode).fold(
+                    handleProductNotFound::handleProductNotFound,
+                    handleProductFound::handleProductFound
+            );
+        }
     }
 
     static class HandleProductNotFound {

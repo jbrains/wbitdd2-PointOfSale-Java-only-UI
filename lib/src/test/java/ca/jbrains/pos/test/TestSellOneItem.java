@@ -15,39 +15,39 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = PointOfSale.handleBarcode(new Barcode("99999"), priceNotFoundCatalog,
-                null);
+        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(new Barcode("99999")
+        );
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = PointOfSale.handleBarcode(Barcode.makeBarcode("1111").get(), priceNotFoundCatalog,
-                null);
+        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(Barcode.makeBarcode("1111").get()
+        );
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
 
     @Test
     void priceFound() {
-        String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
-                new PurchaseAccumulator() {
-                    @Override
-                    public Purchase completePurchase() {
-                        throw new UnsupportedOperationException();
-                    }
+        String response = new PointOfSale.HandleBarcode(new PurchaseAccumulator() {
+            @Override
+            public Purchase completePurchase() {
+                throw new UnsupportedOperationException();
+            }
 
-                    @Override
-                    public int getTotalOfCurrentPurchase() {
-                        return 0;
-                    }
+            @Override
+            public int getTotalOfCurrentPurchase() {
+                return 0;
+            }
 
-                    @Override
-                    public void addPriceOfScannedItemToCurrentPurchase(int price) {
+            @Override
+            public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
-                    }
-                });
+            }
+        }, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("99999").get()
+        );
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -55,8 +55,8 @@ public class TestSellOneItem {
     @Test
     void rememberTheScannedItemWhenProductIsFound() {
         RecordingPurchaseAccumulator purchaseProvider = new RecordingPurchaseAccumulator();
-        PointOfSale.handleBarcode(Barcode.makeBarcode("::any barcode::").get(), priceFoundCatalog,
-                purchaseProvider);
+        new PointOfSale.HandleBarcode(purchaseProvider, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("::any barcode::").get()
+        );
         Assertions.assertEquals(Option.some(100), purchaseProvider.price);
     }
 
