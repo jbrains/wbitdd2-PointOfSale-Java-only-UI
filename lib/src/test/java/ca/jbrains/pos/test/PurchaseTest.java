@@ -21,12 +21,8 @@ public class PurchaseTest {
                 List.of("CAD 7.95", "Total: CAD 7.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
-                    public Purchase newCompletePurchase() {
-                        return new Purchase(completePurchase());
-                    }
-
-                    public int completePurchase() {
-                        return 795;
+                    public Purchase completePurchase() {
+                        return new Purchase(795);
                     }
 
                     @Override
@@ -49,12 +45,8 @@ public class PurchaseTest {
                 List.of("CAD 9.95", "Total: CAD 9.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
-                    public Purchase newCompletePurchase() {
-                        return new Purchase(completePurchase());
-                    }
-
-                    public int completePurchase() {
-                        return 995;
+                    public Purchase completePurchase() {
+                        return new Purchase(995);
                     }
 
                     @Override

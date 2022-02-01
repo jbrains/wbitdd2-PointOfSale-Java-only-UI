@@ -13,7 +13,7 @@ public abstract class PurchaseAccumulatorContract {
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(1);
         Assertions.assertEquals(1, purchaseAccumulator.getTotalOfCurrentPurchase());
 
-        Purchase firstPurchase = purchaseAccumulator.newCompletePurchase();
+        Purchase firstPurchase = purchaseAccumulator.completePurchase();
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(2);
         Assertions.assertEquals(1, firstPurchase.total());
         Assertions.assertEquals(2, purchaseAccumulator.getTotalOfCurrentPurchase());

@@ -31,11 +31,7 @@ public class PointOfSale {
     private static PurchaseAccumulator createAnyPurchaseAccumulator() {
         return new PurchaseAccumulator() {
             @Override
-            public Purchase newCompletePurchase() {
-                return new Purchase(completePurchase());
-            }
-
-            public int completePurchase() {
+            public Purchase completePurchase() {
                 throw new RuntimeException("Not our job");
             }
 
@@ -96,7 +92,7 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
-        return String.format("Total: %s", formatPrice(purchaseAccumulator.newCompletePurchase().total()));
+        return String.format("Total: %s", formatPrice(purchaseAccumulator.completePurchase().total()));
     }
 
 }

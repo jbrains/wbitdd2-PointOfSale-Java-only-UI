@@ -11,12 +11,8 @@ public class TestTotal {
     void noItems() {
         Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
-            public Purchase newCompletePurchase() {
-                return new Purchase(completePurchase());
-            }
-
-            public int completePurchase() {
-                return 0;
+            public Purchase completePurchase() {
+                return new Purchase(0);
             }
 
             @Override
@@ -34,12 +30,8 @@ public class TestTotal {
     void oneItem() {
         Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
-            public Purchase newCompletePurchase() {
-                return new Purchase(completePurchase());
-            }
-
-            public int completePurchase() {
-                return 102;
+            public Purchase completePurchase() {
+                return new Purchase(102);
             }
 
             @Override

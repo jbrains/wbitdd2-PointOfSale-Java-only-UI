@@ -34,11 +34,7 @@ public class TestSellOneItem {
         String response = PointOfSale.handleBarcode(Barcode.makeBarcode("99999").get(), priceFoundCatalog,
                 new PurchaseAccumulator() {
                     @Override
-                    public Purchase newCompletePurchase() {
-                        return new Purchase(completePurchase());
-                    }
-
-                    public int completePurchase() {
+                    public Purchase completePurchase() {
                         throw new UnsupportedOperationException();
                     }
 
@@ -67,10 +63,6 @@ public class TestSellOneItem {
     private static class RecordingPurchaseAccumulator implements PurchaseAccumulator {
         private Option<Integer> price;
 
-        public int completePurchase() {
-            return -1;
-        }
-
         @Override
         public int getTotalOfCurrentPurchase() {
             return -1;
@@ -82,8 +74,8 @@ public class TestSellOneItem {
         }
 
         @Override
-        public Purchase newCompletePurchase() {
-            return new Purchase(completePurchase());
+        public Purchase completePurchase() {
+            return new Purchase(-1);
         }
     }
 }
