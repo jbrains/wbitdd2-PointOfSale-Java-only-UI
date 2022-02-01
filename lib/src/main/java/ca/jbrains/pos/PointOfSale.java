@@ -73,7 +73,7 @@ public class PointOfSale {
     public static String handleBarcode(Barcode barcode, Catalog catalog,
                                        PurchaseAccumulator purchaseAccumulator) {
         return catalog.findPrice(barcode).fold(
-                missingBarcode -> formatProductNotFoundMessage(missingBarcode),
+                PointOfSale::formatProductNotFoundMessage,
                 matchingPrice -> handleProductFound(matchingPrice, purchaseAccumulator)
         );
     }
