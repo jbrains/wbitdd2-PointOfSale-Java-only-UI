@@ -74,7 +74,7 @@ public class PointOfSale {
                                        PurchaseAccumulator purchaseAccumulator) {
         return catalog.findPrice(barcode).fold(
                 PointOfSale::formatProductNotFoundMessage,
-                matchingPrice -> handleProductFound(matchingPrice, purchaseAccumulator)
+                matchingPrice -> HandleProductFound.handleProductFound(matchingPrice, purchaseAccumulator)
         );
     }
 
@@ -82,9 +82,11 @@ public class PointOfSale {
         return String.format("Product not found: %s", barcode.text());
     }
 
-    private static String handleProductFound(int price, PurchaseAccumulator purchaseAccumulator) {
-        purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
-        return formatMonetaryAmount(price);
+    public static class HandleProductFound {
+        private static String handleProductFound(int price, PurchaseAccumulator purchaseAccumulator) {
+            purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
+            return formatMonetaryAmount(price);
+        }
     }
 
     public static String formatMonetaryAmount(int canadianCents) {
