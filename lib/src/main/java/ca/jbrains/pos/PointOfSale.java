@@ -31,7 +31,7 @@ public class PointOfSale {
     private static PurchaseAccumulator createAnyPurchaseAccumulator() {
         return new PurchaseAccumulator() {
             @Override
-            public void startNextPurchase() {
+            public void completePurchase() {
                 throw new RuntimeException("Not our job");
             }
 
@@ -94,7 +94,7 @@ public class PointOfSale {
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
         // SMELL Temporal coupling between these two statements.
         // DEFECT These statements are probably backwards.
-        purchaseAccumulator.startNextPurchase();
+        purchaseAccumulator.completePurchase();
         int total = purchaseAccumulator.getTotalOfCurrentPurchase();
         return String.format("Total: %s", formatPrice(total));
     }
