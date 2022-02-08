@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DispatchPrintReceiptCommandTest {
+public class DispatchCommandsTest {
     private boolean printReceiptInvoked = false;
 
     @Test
-    void happyPath() {
+    void printReceiptCommand() {
         PrintReceiptAction action = new PrintReceiptAction() {
             @Override
             public String printReceipt() {
-                DispatchPrintReceiptCommandTest.this.printReceiptInvoked = true;
+                DispatchCommandsTest.this.printReceiptInvoked = true;
                 return null;
             }
         };
