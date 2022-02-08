@@ -52,7 +52,7 @@ public class PointOfSale {
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog).handleBarcode(barcode))
+                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog).handleBarcode(barcode, new FormatMonetaryAmount(new Locale("en", "US"))))
                 .getOrElse("Scanning error: empty barcode");
     }
 
@@ -73,10 +73,10 @@ public class PointOfSale {
             this.handleProductNotFound = new HandleProductNotFound();
         }
 
-        public String handleBarcode(Barcode barcode) {
+        public String handleBarcode(Barcode barcode, FormatMonetaryAmount formatMonetaryAmount) {
             return this.catalog.findPrice(barcode).fold(
                     handleProductNotFound::handleProductNotFound,
-                    handleProductFound::handleProductFound
+                    price -> handleProductFound.handleProductFound(price, formatMonetaryAmount)
             );
         }
     }
@@ -94,9 +94,9 @@ public class PointOfSale {
             this.purchaseAccumulator = purchaseAccumulator;
         }
 
-        public String handleProductFound(int price) {
+        public String handleProductFound(int price, FormatMonetaryAmount formatMonetaryAmount) {
             this.purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
-            return new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(price);
+            return formatMonetaryAmount.formatMonetaryAmount(price);
         }
     }
 

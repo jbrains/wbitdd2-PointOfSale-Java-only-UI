@@ -1,6 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Barcode;
+import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.Catalog;
@@ -9,13 +10,15 @@ import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
+
 public class TestSellOneItem {
     private final Catalog priceNotFoundCatalog = new PriceNotFoundCatalog();
     private final Catalog priceFoundCatalog = new PriceFoundCatalog(100);
 
     @Test
     void priceNotFound() {
-        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(new Barcode("99999")
+        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(new Barcode("99999"), new FormatMonetaryAmount(new Locale("en", "US"))
         );
 
         Assertions.assertEquals("Product not found: 99999", response);
@@ -23,7 +26,7 @@ public class TestSellOneItem {
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(Barcode.makeBarcode("1111").get()
+        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(Barcode.makeBarcode("1111").get(), new FormatMonetaryAmount(new Locale("en", "US"))
         );
 
         Assertions.assertEquals("Product not found: 1111", response);
@@ -41,7 +44,7 @@ public class TestSellOneItem {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
-        }, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("99999").get()
+        }, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("99999").get(), new FormatMonetaryAmount(new Locale("en", "US"))
         );
 
         Assertions.assertEquals("CAD 1.00", response);
@@ -50,7 +53,7 @@ public class TestSellOneItem {
     @Test
     void rememberTheScannedItemWhenProductIsFound() {
         RecordingPurchaseAccumulator purchaseProvider = new RecordingPurchaseAccumulator();
-        new PointOfSale.HandleBarcode(purchaseProvider, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("::any barcode::").get()
+        new PointOfSale.HandleBarcode(purchaseProvider, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("::any barcode::").get(), new FormatMonetaryAmount(new Locale("en", "US"))
         );
         Assertions.assertEquals(Option.some(100), purchaseProvider.price);
     }
