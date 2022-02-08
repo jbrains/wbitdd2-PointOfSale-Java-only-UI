@@ -103,5 +103,4 @@ public class PointOfSale {
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
         return String.format("Total: %s", new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(purchaseAccumulator.completePurchase().total()));
     }
-
 }
