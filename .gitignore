@@ -1,5 +1,9 @@
 # IntelliJ IDEA
 .idea
+*.iml
+
+# IntelliJ IDEA build output directory
+out
 
 # Ignore Gradle project-specific cache directory
 .gradle
