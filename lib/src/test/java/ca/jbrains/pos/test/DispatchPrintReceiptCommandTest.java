@@ -13,8 +13,9 @@ public class DispatchPrintReceiptCommandTest {
     void happyPath() {
         PrintReceiptAction action = new PrintReceiptAction() {
             @Override
-            public void printReceipt() {
+            public String printReceipt() {
                 DispatchPrintReceiptCommandTest.this.printReceiptInvoked = true;
+                return null;
             }
         };
         PointOfSale.handleLine("receipt", null, null,null, action);

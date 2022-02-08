@@ -54,6 +54,8 @@ public class PointOfSale {
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount, PrintReceiptAction printReceiptAction) {
         if ("total".equals(line)) {
             return handleTotal(purchaseAccumulator, formatMonetaryAmount);
+        } else if ("receipt".equals(line)) {
+            return printReceiptAction.printReceipt();
         }
 
         return Barcode.makeBarcode(line)
