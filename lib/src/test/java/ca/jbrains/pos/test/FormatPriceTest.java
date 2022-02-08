@@ -1,6 +1,6 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.FormatMonetaryAmount;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,16 +9,16 @@ import java.util.Locale;
 public class FormatPriceTest {
     @Test
     void happyPath() {
-        Assertions.assertEquals("CAD 1.00", PointOfSale.formatMonetaryAmount(100, new Locale("en", "US")));
+        Assertions.assertEquals("CAD 1.00", new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(100));
     }
 
     @Test
     void formatUsingComma() {
-        Assertions.assertEquals("CAD 1,00", PointOfSale.formatMonetaryAmount(100, new Locale("de", "DE")));
+        Assertions.assertEquals("CAD 1,00", new FormatMonetaryAmount(new Locale("de", "DE")).formatMonetaryAmount(100));
     }
 
     @Test
     void anotherPrice() {
-        Assertions.assertEquals("CAD 1.01", PointOfSale.formatMonetaryAmount(101, new Locale("en", "US")));
+        Assertions.assertEquals("CAD 1.01", new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(101));
     }
 }

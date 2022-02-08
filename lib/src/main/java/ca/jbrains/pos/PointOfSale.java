@@ -96,16 +96,12 @@ public class PointOfSale {
 
         public String handleProductFound(int price) {
             this.purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
-            return formatMonetaryAmount(price, new Locale("en", "US"));
+            return new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(price);
         }
     }
 
-    public static String formatMonetaryAmount(int canadianCents, Locale locale) {
-        return String.format(locale, "CAD %.2f", canadianCents / 100.0d);
-    }
-
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
-        return String.format("Total: %s", formatMonetaryAmount(purchaseAccumulator.completePurchase().total(), new Locale("en", "US")));
+        return String.format("Total: %s", new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(purchaseAccumulator.completePurchase().total()));
     }
 
 }
