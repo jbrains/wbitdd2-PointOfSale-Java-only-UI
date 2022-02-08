@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.Catalog;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 // REFACTOR: Replace with focused tests for parsing commands in handleLine
@@ -29,7 +31,7 @@ public class PurchaseTest {
                     public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
-                })).collect(Collectors.toList()));
+                }, new FormatMonetaryAmount(new Locale("en", "US")), null)).collect(Collectors.toList()));
     }
 
     @Test
@@ -49,6 +51,6 @@ public class PurchaseTest {
                     public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
-                })).collect(Collectors.toList()));
+                }, new FormatMonetaryAmount(new Locale("en", "US")), null)).collect(Collectors.toList()));
     }
 }

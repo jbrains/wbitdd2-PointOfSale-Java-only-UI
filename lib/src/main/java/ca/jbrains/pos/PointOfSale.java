@@ -19,8 +19,12 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyPurchaseAccumulator()))
+                .map(line -> handleLine(line, createAnyCatalog(), createAnyPurchaseAccumulator(), createStandardFormatMonetaryAmount(), null))
                 .forEachOrdered(consoleDisplay);
+    }
+
+    private static FormatMonetaryAmount createStandardFormatMonetaryAmount() {
+        return new FormatMonetaryAmount(new Locale("en", "US"));
     }
 
     private static PurchaseAccumulator createAnyPurchaseAccumulator() {
@@ -46,9 +50,8 @@ public class PointOfSale {
         };
     }
 
-    public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator) {
+    public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount, PrintReceiptAction printReceiptAction) {
         // refactor eventually wrap in a TextView class
-        FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(new Locale("en", "US"));
         if ("total".equals(line)) {
             return handleTotal(purchaseAccumulator, formatMonetaryAmount);
         }
