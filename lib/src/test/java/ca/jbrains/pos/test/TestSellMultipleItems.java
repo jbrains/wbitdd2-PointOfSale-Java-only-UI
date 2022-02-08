@@ -1,10 +1,13 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Locale;
 
 public class TestSellMultipleItems {
     private boolean startPurchaseInvoked = false;
@@ -22,7 +25,7 @@ public class TestSellMultipleItems {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
-        });
+        }, new FormatMonetaryAmount(new Locale("en", "US")));
 
         Assertions.assertEquals(true, startPurchaseInvoked);
     }

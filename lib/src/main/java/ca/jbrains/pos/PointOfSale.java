@@ -47,12 +47,13 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator) {
+        FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(new Locale("en", "US"));
         if ("total".equals(line)) {
-            return handleTotal(purchaseAccumulator);
+            return handleTotal(purchaseAccumulator, formatMonetaryAmount);
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(barcode))
+                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount).handleBarcode(barcode))
                 .getOrElse("Scanning error: empty barcode");
     }
 
@@ -102,7 +103,7 @@ public class PointOfSale {
         }
     }
 
-    public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
-        return String.format("Total: %s", new FormatMonetaryAmount(new Locale("en", "US")).formatMonetaryAmount(purchaseAccumulator.completePurchase().total()));
+    public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
+        return String.format("Total: %s", formatMonetaryAmount.formatMonetaryAmount(purchaseAccumulator.completePurchase().total()));
     }
 }
