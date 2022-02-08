@@ -12,11 +12,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class PointOfSale {
-    static {
-        // SMELL Duplicates assumptions in the "format price" tests
-        Locale.setDefault(new Locale("en", "US"));
-    }
-
     public static void main(String[] args) {
         runApplication(new InputStreamReader(System.in), System.out::println);
     }
@@ -106,7 +101,7 @@ public class PointOfSale {
     }
 
     public static String formatMonetaryAmount(int canadianCents) {
-        return String.format("CAD %.2f", canadianCents / 100.0d);
+        return String.format(new Locale("en", "US"), "CAD %.2f", canadianCents / 100.0d);
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator) {
