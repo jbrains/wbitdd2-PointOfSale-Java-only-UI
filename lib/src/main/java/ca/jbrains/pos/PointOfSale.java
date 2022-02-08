@@ -23,6 +23,7 @@ public class PointOfSale {
                 .forEachOrdered(consoleDisplay);
     }
 
+    // refactor eventually wrap in a TextView class
     private static FormatMonetaryAmount createStandardFormatMonetaryAmount() {
         return new FormatMonetaryAmount(new Locale("en", "US"));
     }
@@ -51,7 +52,6 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount, PrintReceiptAction printReceiptAction) {
-        // refactor eventually wrap in a TextView class
         if ("total".equals(line)) {
             return handleTotal(purchaseAccumulator, formatMonetaryAmount);
         }
