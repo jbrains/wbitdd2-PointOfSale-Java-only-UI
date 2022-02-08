@@ -47,6 +47,7 @@ public class PointOfSale {
     }
 
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator) {
+        // refactor eventually wrap in a TextView class
         FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(new Locale("en", "US"));
         if ("total".equals(line)) {
             return handleTotal(purchaseAccumulator, formatMonetaryAmount);
