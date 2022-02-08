@@ -18,16 +18,14 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(new Barcode("99999"), new FormatMonetaryAmount(new Locale("en", "US"))
-        );
+        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(new Barcode("99999"));
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog).handleBarcode(Barcode.makeBarcode("1111").get(), new FormatMonetaryAmount(new Locale("en", "US"))
-        );
+        String response = new PointOfSale.HandleBarcode(null, priceNotFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("1111").get());
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
@@ -44,8 +42,7 @@ public class TestSellOneItem {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
-        }, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("99999").get(), new FormatMonetaryAmount(new Locale("en", "US"))
-        );
+        }, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("99999").get());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -53,8 +50,7 @@ public class TestSellOneItem {
     @Test
     void rememberTheScannedItemWhenProductIsFound() {
         RecordingPurchaseAccumulator purchaseProvider = new RecordingPurchaseAccumulator();
-        new PointOfSale.HandleBarcode(purchaseProvider, priceFoundCatalog).handleBarcode(Barcode.makeBarcode("::any barcode::").get(), new FormatMonetaryAmount(new Locale("en", "US"))
-        );
+        new PointOfSale.HandleBarcode(purchaseProvider, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("::any barcode::").get());
         Assertions.assertEquals(Option.some(100), purchaseProvider.price);
     }
 

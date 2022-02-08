@@ -52,7 +52,7 @@ public class PointOfSale {
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog).handleBarcode(barcode, new FormatMonetaryAmount(new Locale("en", "US"))))
+                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(barcode))
                 .getOrElse("Scanning error: empty barcode");
     }
 
@@ -64,19 +64,21 @@ public class PointOfSale {
     public static class HandleBarcode {
         private final Catalog catalog;
         private final HandleProductFound handleProductFound;
+        private final FormatMonetaryAmount formatMonetaryAmount;
         private final HandleProductNotFound handleProductNotFound;
 
-        public HandleBarcode(PurchaseAccumulator purchaseAccumulator, Catalog catalog) {
+        public HandleBarcode(PurchaseAccumulator purchaseAccumulator, Catalog catalog, FormatMonetaryAmount formatMonetaryAmount) {
             this.catalog = catalog;
             // SMELL accept them as parameter instead?
             this.handleProductFound = new HandleProductFound(purchaseAccumulator);
+            this.formatMonetaryAmount = formatMonetaryAmount;
             this.handleProductNotFound = new HandleProductNotFound();
         }
 
-        public String handleBarcode(Barcode barcode, FormatMonetaryAmount formatMonetaryAmount) {
+        public String handleBarcode(Barcode barcode) {
             return this.catalog.findPrice(barcode).fold(
                     handleProductNotFound::handleProductNotFound,
-                    price -> handleProductFound.handleProductFound(price, formatMonetaryAmount)
+                    price -> handleProductFound.handleProductFound(price, this.formatMonetaryAmount)
             );
         }
     }
