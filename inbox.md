@@ -1,9 +1,12 @@
 # Inbox
 
-- Sell Multiple Items: special response message when no purchase is happening; avoid the $0 purchase
-- The tests have become difficult to trust: let's organize them better so that we can trust them more.
+- Print Receipt
+  - implement the action
 - Separate formatting the responses from the rest of the code
-- add Mockito
+- Extract `handleLine()` to its own class.
+- Sell Multiple Items: special response message when no purchase is happening; avoid the $0 purchase
 - Handle the Primitive Obsession with Price as integer
 - Review what is in The Hole
-- 
+- Add dispatch command tests for the older commands: "total" and barcode.
+- Extract Controllers from `PointOfSale`.
+- Isolate UI behavior from `handleBarcode()`.
