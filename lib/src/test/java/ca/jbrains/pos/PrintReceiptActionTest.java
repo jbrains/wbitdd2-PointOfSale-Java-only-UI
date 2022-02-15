@@ -4,7 +4,6 @@ import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PrintReceiptActionTest {
 
     @Test
-    void happyPathAfterOnly1Purchase() {
+    void completedPurchaseWithExactlyOneItem() {
         final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
