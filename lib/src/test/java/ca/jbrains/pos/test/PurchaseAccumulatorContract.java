@@ -1,10 +1,12 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public abstract class PurchaseAccumulatorContract {
     @Test
@@ -28,6 +30,20 @@ public abstract class PurchaseAccumulatorContract {
         Purchase secondPurchase = purchaseAccumulator.completePurchase();
 
         assertEquals(firstPurchase, secondPurchase);
+    }
+
+    @Test
+    void afterStartingASecondPurchase() {
+        var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
+        Purchase firstPurchase = purchaseAccumulator.completePurchase();
+        // intentionally do not scan any new items
+        Purchase firstPurchaseAgain = purchaseAccumulator.completePurchase();
+        purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(1);
+
+        Purchase secondPurchase = purchaseAccumulator.completePurchase();
+
+        assertEquals(firstPurchase, firstPurchaseAgain);
+        assertNotEquals(firstPurchase, secondPurchase);
     }
 
     protected abstract PurchaseAccumulator purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
