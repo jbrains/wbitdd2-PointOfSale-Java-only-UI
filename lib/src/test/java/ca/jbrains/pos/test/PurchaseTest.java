@@ -8,6 +8,7 @@ import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public Purchase completePurchase() {
-                        return new Purchase(795);
+                        return new Purchase(795, Collections.emptyList());
                     }
 
                     @Override
@@ -44,7 +45,7 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public Purchase completePurchase() {
-                        return new Purchase(995);
+                        return new Purchase(995, Collections.emptyList());
                     }
 
                     @Override

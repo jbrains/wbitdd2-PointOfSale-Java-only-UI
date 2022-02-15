@@ -10,6 +10,7 @@ import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.Locale;
 
 public class TestSellOneItem {
@@ -64,7 +65,7 @@ public class TestSellOneItem {
 
         @Override
         public Purchase completePurchase() {
-            return new Purchase(-1);
+            return new Purchase(-1, Collections.emptyList());
         }
     }
 }

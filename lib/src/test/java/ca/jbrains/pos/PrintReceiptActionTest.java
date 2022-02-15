@@ -1,21 +1,24 @@
 package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.PurchaseAccumulator;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class PrintReceiptActionTest {
+
     @Test
     void happyPathAfterOnly1Purchase() {
         final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
+
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
             public Purchase completePurchase() {
-                return new Purchase(790);
+                return new Purchase(790, Collections.emptyList());
             }
 
             @Override

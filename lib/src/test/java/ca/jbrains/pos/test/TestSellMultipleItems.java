@@ -7,6 +7,7 @@ import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.Locale;
 
 public class TestSellMultipleItems {
@@ -18,7 +19,7 @@ public class TestSellMultipleItems {
             @Override
             public Purchase completePurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
-                return new Purchase(-1);
+                return new Purchase(-1, Collections.emptyList());
             }
 
             @Override
