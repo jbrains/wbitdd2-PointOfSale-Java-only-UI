@@ -2,22 +2,35 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class PurchaseAccumulatorContract {
     @Test
     void isolatePurchasesForDifferentShoppers() {
         // REFACTOR Replace "workflow" setup with "we join the program in progress" setup.
         // SMELL "Forced Workflow" problem.
-        PurchaseAccumulator purchaseAccumulator = purchaseAccumulatorWithEmptyCurrentPurchase();
-        purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(1);
+        var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
         Purchase firstPurchase = purchaseAccumulator.completePurchase();
 
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(2);
 
-        Assertions.assertEquals(1, firstPurchase.total());
+        assertEquals(1, firstPurchase.total());
     }
+
+    @Test
+    void completePurchaseIsIdempotentUntilWeScanTheNextItem() {
+        var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
+        Purchase firstPurchase = purchaseAccumulator.completePurchase();
+
+        // intentionally do not scan any new items
+        Purchase secondPurchase = purchaseAccumulator.completePurchase();
+
+        assertEquals(firstPurchase, secondPurchase);
+    }
+
+    protected abstract PurchaseAccumulator purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
 
     protected abstract PurchaseAccumulator purchaseAccumulatorWithEmptyCurrentPurchase();
 }
