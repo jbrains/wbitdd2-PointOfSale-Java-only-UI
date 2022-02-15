@@ -8,14 +8,14 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrintReceiptActionTest {
-    @Disabled("Refactoring")
     @Test
     void happyPathAfterOnly1Purchase() {
         FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
+        final FormatTotal formatTotal = new FormatTotal(formatMonetaryAmount);
         assertEquals("Total : 7.90 CAD", new PrintReceiptAction() {
             @Override
             public String printReceipt() {
-                return formatMonetaryAmount.formatMonetaryAmount(790);
+                return formatTotal.formatTotal(790);
             }
         }.printReceipt());
     }

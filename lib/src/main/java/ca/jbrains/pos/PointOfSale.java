@@ -110,6 +110,7 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
-        return String.format("Total: %s", formatMonetaryAmount.formatMonetaryAmount(purchaseAccumulator.completePurchase().total()));
+        return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.completePurchase().total());
     }
+
 }
