@@ -1,5 +1,9 @@
-package ca.jbrains.pos;
+package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.FormatMonetaryAmount;
+import ca.jbrains.pos.FormatTotal;
+import ca.jbrains.pos.PrintReceiptAction;
+import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Test;
