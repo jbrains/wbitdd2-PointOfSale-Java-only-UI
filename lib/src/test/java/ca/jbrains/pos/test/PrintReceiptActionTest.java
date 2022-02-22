@@ -12,13 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrintReceiptActionTest {
     @Test
-    void completedPurchaseWithExactlyOneItem() {
+    void completedPurchase() {
         final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
             public Purchase completePurchase() {
-                List<CatalogEntry> items = List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790));
-                return new Purchase(790, items);
+                return new Purchase(0, List.of());
             }
 
             @Override
@@ -26,12 +25,13 @@ public class PrintReceiptActionTest {
 
             }
         };
-        assertEquals("::receipt::", new StandardPrintReceiptAction(purchaseAccumulator, new FormatReceipt(formatTotal) {
+        FormatReceipt formatReceipt = new FormatReceipt(formatTotal) {
             @Override
             public String formatReceipt(Purchase purchase) {
                 return "::receipt::";
             }
-        }).printReceipt());
+        };
+        assertEquals("::receipt::", new StandardPrintReceiptAction(purchaseAccumulator, formatReceipt).printReceipt());
     }
 
     static class FormatReceiptTest {
