@@ -4,7 +4,15 @@ import ca.jbrains.pos.FormatTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
-public record FormatReceipt(FormatTotal formatTotal) {
+import java.util.Objects;
+
+public class FormatReceipt {
+    private final FormatTotal formatTotal;
+
+    public FormatReceipt(FormatTotal formatTotal) {
+        this.formatTotal = formatTotal;
+    }
+
     public String formatReceipt(Purchase purchase) {
         if (purchase.items().isEmpty()) {
             return formatTotal.formatTotal(0);
@@ -16,5 +24,9 @@ public record FormatReceipt(FormatTotal formatTotal) {
 
     private String formatItem(CatalogEntry firstItem) {
         return firstItem.barcode().text() + "          " + formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+    }
+
+    public FormatTotal formatTotal() {
+        return formatTotal;
     }
 }

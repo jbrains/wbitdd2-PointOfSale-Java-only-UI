@@ -26,9 +26,12 @@ public class PrintReceiptActionTest {
 
             }
         };
-        assertEquals("12345          CAD 7.90" +
-                System.lineSeparator() +
-                "Total: CAD 7.90", new StandardPrintReceiptAction(purchaseAccumulator, new FormatReceipt(formatTotal)).printReceipt());
+        assertEquals("::receipt::", new StandardPrintReceiptAction(purchaseAccumulator, new FormatReceipt(formatTotal) {
+            @Override
+            public String formatReceipt(Purchase purchase) {
+                return "::receipt::";
+            }
+        }).printReceipt());
     }
 
     static class FormatReceiptTest {
