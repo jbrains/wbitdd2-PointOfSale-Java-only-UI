@@ -39,14 +39,11 @@ public class PrintReceiptActionTest {
 
         @Test
         void oneItem() {
-            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            List<CatalogEntry> items = List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790));
-            final FormatReceipt formatReceipt = new FormatReceipt(formatTotal);
-            final Purchase purchase = new Purchase(790, items);
-            final String actual = formatReceipt.formatReceipt(purchase);
+            final FormatReceipt formatReceipt = new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH)));
+            final Purchase purchase = new Purchase(790, List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790)));
             assertEquals("12345          CAD 7.90" +
                     System.lineSeparator() +
-                    "Total: CAD 7.90", actual);
+                    "Total: CAD 7.90", formatReceipt.formatReceipt(purchase));
         }
     }
 
