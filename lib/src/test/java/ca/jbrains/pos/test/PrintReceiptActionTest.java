@@ -36,11 +36,23 @@ public class PrintReceiptActionTest {
         void noItems() {
             assertEquals("", new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH))).formatReceipt(new Purchase(0, List.of())));
         }
+
+        @Test
+        void oneItem() {
+            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
+            List<CatalogEntry> items = List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790));
+            final FormatReceipt formatReceipt = new FormatReceipt(formatTotal);
+            final Purchase purchase = new Purchase(790, items);
+            final String actual = formatReceipt.formatReceipt(purchase);
+            assertEquals("12345          CAD 7.90" +
+                    System.lineSeparator() +
+                    "Total: CAD 7.90", actual);
+        }
     }
 
     public static class StandardPrintReceiptAction extends PrintReceiptAction {
         private final PurchaseAccumulator purchaseAccumulator;
-        FormatReceipt formatReceipt;
+        private final FormatReceipt formatReceipt;
 
         public StandardPrintReceiptAction(PurchaseAccumulator purchaseAccumulator, FormatReceipt formatReceipt) {
             this.purchaseAccumulator = purchaseAccumulator;
