@@ -1,9 +1,6 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.FormatMonetaryAmount;
-import ca.jbrains.pos.FormatTotal;
-import ca.jbrains.pos.PrintReceiptAction;
-import ca.jbrains.pos.Purchase;
+import ca.jbrains.pos.*;
 import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Test;
@@ -20,7 +17,7 @@ public class PrintReceiptActionTest {
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
             public Purchase completePurchase() {
-                List<CatalogEntry> items = List.of(new CatalogEntry(null, 790));
+                List<CatalogEntry> items = List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790));
                 return new Purchase(790, items);
             }
 
@@ -35,8 +32,10 @@ public class PrintReceiptActionTest {
             @Override
             public String printReceipt() {
                 Purchase purchase = purchaseAccumulator.completePurchase();
-                return "12345          " +
-                        formatTotal.formatMonetaryAmount().formatMonetaryAmount(purchase.items().get(0).price()) +
+                CatalogEntry firstItem = purchase.items().get(0);
+                return firstItem.barcode().text() +
+                        "          " +
+                        formatTotal.formatMonetaryAmount().formatMonetaryAmount(firstItem.price()) +
                         System.lineSeparator() +
                         formatTotal.formatTotal(purchase.total());
             }
