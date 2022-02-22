@@ -44,11 +44,11 @@ public class PrintReceiptActionTest {
         public String printReceipt() {
             Purchase purchase = purchaseAccumulator.completePurchase();
             CatalogEntry firstItem = purchase.items().get(0);
-            return firstItem.barcode().text() +
-                    "          " +
-                    formatTotal.formatMonetaryAmount().formatMonetaryAmount(firstItem.price()) +
-                    System.lineSeparator() +
-                    formatTotal.formatTotal(purchase.total());
+            return formatItem(firstItem) + System.lineSeparator() + formatTotal.formatTotal(purchase.total());
+        }
+
+        private String formatItem(CatalogEntry firstItem) {
+            return firstItem.barcode().text() + "          " + formatTotal.formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
         }
     }
 }
