@@ -28,17 +28,27 @@ public class PrintReceiptActionTest {
         };
         assertEquals("12345          CAD 7.90" +
                 System.lineSeparator() +
-                "Total: CAD 7.90", new PrintReceiptAction() {
-            @Override
-            public String printReceipt() {
-                Purchase purchase = purchaseAccumulator.completePurchase();
-                CatalogEntry firstItem = purchase.items().get(0);
-                return firstItem.barcode().text() +
-                        "          " +
-                        formatTotal.formatMonetaryAmount().formatMonetaryAmount(firstItem.price()) +
-                        System.lineSeparator() +
-                        formatTotal.formatTotal(purchase.total());
-            }
-        }.printReceipt());
+                "Total: CAD 7.90", new StandardPrintReceiptAction(purchaseAccumulator, formatTotal).printReceipt());
+    }
+
+    private static class StandardPrintReceiptAction extends PrintReceiptAction {
+        private final PurchaseAccumulator purchaseAccumulator;
+        private final FormatTotal formatTotal;
+
+        public StandardPrintReceiptAction(PurchaseAccumulator purchaseAccumulator, FormatTotal formatTotal) {
+            this.purchaseAccumulator = purchaseAccumulator;
+            this.formatTotal = formatTotal;
+        }
+
+        @Override
+        public String printReceipt() {
+            Purchase purchase = purchaseAccumulator.completePurchase();
+            CatalogEntry firstItem = purchase.items().get(0);
+            return firstItem.barcode().text() +
+                    "          " +
+                    formatTotal.formatMonetaryAmount().formatMonetaryAmount(firstItem.price()) +
+                    System.lineSeparator() +
+                    formatTotal.formatTotal(purchase.total());
+        }
     }
 }
