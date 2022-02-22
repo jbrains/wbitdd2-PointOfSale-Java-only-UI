@@ -1,12 +1,19 @@
 # Inbox
 
 - Print Receipt
-  - implement the action
-    - Purchase with 0 items
-    - Purchase with several items
-    - No completed purchase yet
-    - Confirm that we can only print the most-recently-completed purchase
-    - Add feature for "Print Receipt of Old Purchase"?
+  - reject the request to print a receipt when there is a purchase in progress
+    - test: given completed purchase, scan item 1, try print receipt -> rejected
+    - test: given no completed purchase, try print receipt -> rejected
+    - test: given no completed purchase, scan item 1, try print receipt -> rejected
+    - test: given no completed purchase, complete purchase, try print receipt -> accepted
+    - test: given completed purchase, don't scan items, try print receipt -> accepted
+    - test: given completed purchase, scan items, complete purchase, try print receipt -> accepted
+  - Finish "Format Receipt"
+    - purchase with several items
+      - fixed-with format: use barcodes and prices of varying widths
+    - unify `Format *` classes into a Tree structure
+      - use the "layout" technique for the tests
+  - Add feature for "Print Receipt of Old Purchase"?
 - Separate formatting the responses from the rest of the code
 - Extract `handleLine()` to its own class.
 - Handle the Primitive Obsession with Price as integer
