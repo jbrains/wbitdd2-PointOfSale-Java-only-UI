@@ -7,11 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-class PrintReceiptActionTest {
-
+public class PrintReceiptActionTest {
     @Test
     void completedPurchaseWithExactlyOneItem() {
         final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
@@ -40,6 +38,4 @@ class PrintReceiptActionTest {
             }
         }.printReceipt());
     }
-
-
 }
