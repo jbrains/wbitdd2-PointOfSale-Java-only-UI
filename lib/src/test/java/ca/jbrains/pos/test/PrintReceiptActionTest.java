@@ -28,27 +28,30 @@ public class PrintReceiptActionTest {
         };
         assertEquals("12345          CAD 7.90" +
                 System.lineSeparator() +
-                "Total: CAD 7.90", new StandardPrintReceiptAction(purchaseAccumulator, formatTotal).printReceipt());
+                "Total: CAD 7.90", new StandardPrintReceiptAction(purchaseAccumulator, new FormatReceipt(formatTotal)).printReceipt());
     }
 
     private static class StandardPrintReceiptAction extends PrintReceiptAction {
         private final PurchaseAccumulator purchaseAccumulator;
-        private final FormatTotal formatTotal;
+        private FormatReceipt formatReceipt;
 
-        public StandardPrintReceiptAction(PurchaseAccumulator purchaseAccumulator, FormatTotal formatTotal) {
+        public StandardPrintReceiptAction(PurchaseAccumulator purchaseAccumulator, FormatReceipt formatReceipt) {
             this.purchaseAccumulator = purchaseAccumulator;
-            this.formatTotal = formatTotal;
+            this.formatReceipt = formatReceipt;
         }
 
         @Override
         public String printReceipt() {
-            Purchase purchase = purchaseAccumulator.completePurchase();
+            return formatReceipt(purchaseAccumulator.completePurchase());
+        }
+
+        private String formatReceipt(Purchase purchase) {
             CatalogEntry firstItem = purchase.items().get(0);
-            return formatItem(firstItem) + System.lineSeparator() + formatTotal.formatTotal(purchase.total());
+            return formatItem(firstItem) + System.lineSeparator() + formatReceipt.formatTotal().formatTotal(purchase.total());
         }
 
         private String formatItem(CatalogEntry firstItem) {
-            return firstItem.barcode().text() + "          " + formatTotal.formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+            return firstItem.barcode().text() + "          " + formatReceipt.formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
         }
     }
 }
