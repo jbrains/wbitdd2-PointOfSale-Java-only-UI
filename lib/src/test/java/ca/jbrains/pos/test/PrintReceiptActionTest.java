@@ -31,9 +31,16 @@ public class PrintReceiptActionTest {
                 "Total: CAD 7.90", new StandardPrintReceiptAction(purchaseAccumulator, new FormatReceipt(formatTotal)).printReceipt());
     }
 
-    private static class StandardPrintReceiptAction extends PrintReceiptAction {
+    static class FormatReceiptTest {
+        @Test
+        void noItems() {
+            assertEquals("", new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH))).formatReceipt(new Purchase(0, List.of())));
+        }
+    }
+
+    public static class StandardPrintReceiptAction extends PrintReceiptAction {
         private final PurchaseAccumulator purchaseAccumulator;
-        private FormatReceipt formatReceipt;
+        FormatReceipt formatReceipt;
 
         public StandardPrintReceiptAction(PurchaseAccumulator purchaseAccumulator, FormatReceipt formatReceipt) {
             this.purchaseAccumulator = purchaseAccumulator;
@@ -42,16 +49,7 @@ public class PrintReceiptActionTest {
 
         @Override
         public String printReceipt() {
-            return formatReceipt(purchaseAccumulator.completePurchase());
-        }
-
-        private String formatReceipt(Purchase purchase) {
-            CatalogEntry firstItem = purchase.items().get(0);
-            return formatItem(firstItem) + System.lineSeparator() + formatReceipt.formatTotal().formatTotal(purchase.total());
-        }
-
-        private String formatItem(CatalogEntry firstItem) {
-            return firstItem.barcode().text() + "          " + formatReceipt.formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+            return formatReceipt.formatReceipt(purchaseAccumulator.completePurchase());
         }
     }
 }
