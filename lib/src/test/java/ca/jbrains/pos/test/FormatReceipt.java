@@ -5,7 +5,11 @@ import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
 public record FormatReceipt(FormatTotal formatTotal) {
-     public String formatReceipt(Purchase purchase) {
+    public String formatReceipt(Purchase purchase) {
+        if (purchase.items().isEmpty()) {
+            return formatTotal.formatTotal(0);
+        }
+
         CatalogEntry firstItem = purchase.items().get(0);
         return this.formatItem(firstItem) + System.lineSeparator() + formatTotal().formatTotal(purchase.total());
     }

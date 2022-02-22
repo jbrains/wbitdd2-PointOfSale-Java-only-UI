@@ -34,7 +34,7 @@ public class PrintReceiptActionTest {
     static class FormatReceiptTest {
         @Test
         void noItems() {
-            assertEquals("", new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH))).formatReceipt(new Purchase(0, List.of())));
+            assertEquals("Total: CAD 0.00", new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH))).formatReceipt(new Purchase(0, List.of())));
         }
 
         @Test
