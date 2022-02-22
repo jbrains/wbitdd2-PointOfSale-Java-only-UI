@@ -11,11 +11,11 @@ import java.util.Locale;
 
 public class PrintReceiptScenarioTest {
     @Test
-    void printReceiptDirectlyAfterCompletingPurchase () {
-        PurchaseAccumulator accumulator = new PurchaseAccumulator() {
+    void requestPrintReceiptWhileAPurchaseIsInProgress() {
+        PurchaseAccumulator completedPurchase = new PurchaseAccumulator() {
             @Override
             public Purchase completePurchase() {
-                return new Purchase(0, List.of());
+                return new Purchase(1, List.of(new CatalogEntry(new Barcode("1"), 1)));
             }
 
             @Override
@@ -23,10 +23,23 @@ public class PrintReceiptScenarioTest {
 
             }
         };
-        FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
-        PointOfSale.handleTotal(accumulator, formatMonetaryAmount);
-        var result = new PrintReceiptActionTest.StandardPrintReceiptAction(accumulator, new FormatReceipt(new FormatTotal(formatMonetaryAmount))).printReceipt();
 
-        Assertions.assertEquals("", result);
+        PurchaseAccumulator purchaseInProgress = new PurchaseAccumulator() {
+            @Override
+            public Purchase completePurchase() {
+                return new Purchase(2, List.of(new CatalogEntry(new Barcode("2"), 2)));
+            }
+
+            @Override
+            public void addPriceOfScannedItemToCurrentPurchase(int price) {
+
+            }
+        };
+
+        FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
+        PointOfSale.handleTotal(completedPurchase, formatMonetaryAmount);
+        var result = new PrintReceiptActionTest.StandardPrintReceiptAction(purchaseInProgress, new FormatReceipt(new FormatTotal(formatMonetaryAmount))).printReceipt();
+
+        Assertions.assertEquals("We cannot print a receipt; there is a purchase in progress.", result);
     }
 }
