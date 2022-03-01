@@ -32,6 +32,11 @@ public class PurchaseTest {
                     public void addPriceOfScannedItemToCurrentPurchase(int price) {
                     }
 
+                    @Override
+                    public boolean isPurchaseInProgress() {
+                        return false;
+                    }
+
                 }, new FormatMonetaryAmount(new Locale("en", "US")), null)).collect(Collectors.toList()));
     }
 
@@ -50,6 +55,11 @@ public class PurchaseTest {
 
                     @Override
                     public void addPriceOfScannedItemToCurrentPurchase(int price) {
+                    }
+
+                    @Override
+                    public boolean isPurchaseInProgress() {
+                        return false;
                     }
 
                 }, new FormatMonetaryAmount(new Locale("en", "US")), null)).collect(Collectors.toList()));

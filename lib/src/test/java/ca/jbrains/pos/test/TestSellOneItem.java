@@ -43,6 +43,11 @@ public class TestSellOneItem {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
+
+            @Override
+            public boolean isPurchaseInProgress() {
+                throw new UnsupportedOperationException();
+            }
         }, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("99999").get());
 
         Assertions.assertEquals("CAD 1.00", response);
@@ -61,6 +66,11 @@ public class TestSellOneItem {
         @Override
         public void addPriceOfScannedItemToCurrentPurchase(int price) {
             this.price = Option.some(price);
+        }
+
+        @Override
+        public boolean isPurchaseInProgress() {
+            return price.isDefined();
         }
 
         @Override
