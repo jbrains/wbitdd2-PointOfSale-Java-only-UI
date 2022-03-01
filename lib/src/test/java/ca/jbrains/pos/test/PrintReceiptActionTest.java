@@ -82,14 +82,13 @@ public class PrintReceiptActionTest {
 
         @Override
         public String printReceipt() {
-            if (purchaseAccumulator.isPurchaseInProgress()) {
+            if (purchaseAccumulator.isPurchaseInProgress())
                 return "We cannot print a receipt; there is a purchase in progress.";
-            } else {
-                Purchase completedPurchase = purchaseAccumulator.completePurchase();
-                return completedPurchase == null
-                        ? "There is no completed purchase, therefore I can't print a receipt"
-                        : formatReceipt.formatReceipt(completedPurchase);
-            }
+
+            Purchase completedPurchase = purchaseAccumulator.completePurchase();
+            if (completedPurchase == null) return "There is no completed purchase, therefore I can't print a receipt";
+
+            return formatReceipt.formatReceipt(completedPurchase);
         }
     }
 
