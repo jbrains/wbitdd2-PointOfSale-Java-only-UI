@@ -51,4 +51,28 @@ public class TestTotal {
 
         }, new FormatMonetaryAmount(new Locale("en", "US"))));
     }
+
+    @Test
+    void unableToCompletePurchase() {
+        Assertions.assertEquals(
+                "There is no purchase in progress; please scan an item.",
+                PointOfSale.handleTotal(new UnableToCompletePurchaseAccumulator(), null));
+    }
+
+    private static class UnableToCompletePurchaseAccumulator implements PurchaseAccumulator {
+        @Override
+        public Option<Purchase> completePurchase() {
+            return Option.none();
+        }
+
+        @Override
+        public void addPriceOfScannedItemToCurrentPurchase(int price) {
+
+        }
+
+        @Override
+        public boolean isPurchaseInProgress() {
+            return false;
+        }
+    }
 }
