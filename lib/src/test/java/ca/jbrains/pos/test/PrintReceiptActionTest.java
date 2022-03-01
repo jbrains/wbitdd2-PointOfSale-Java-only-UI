@@ -12,6 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrintReceiptActionTest {
     @Test
+    void requestPrintReceiptWhileAPurchaseIsInProgress() {
+        var result = new StandardPrintReceiptAction(
+                new PurchaseInProgressAccumulator(), null
+        ).printReceipt();
+
+        assertEquals("We cannot print a receipt; there is a purchase in progress.", result);
+    }
+
+    @Test
     void completedPurchase() {
         final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
@@ -37,6 +46,11 @@ public class PrintReceiptActionTest {
             }
         };
         assertEquals("::receipt::", new StandardPrintReceiptAction(purchaseAccumulator, formatReceipt).printReceipt());
+    }
+
+    @Test
+    void noCompletedPurchaseAndNoPurchaseInProgress() {
+        assertEquals("There is no completed purchase, therefore I can't print a receipt", new StandardPrintReceiptAction(new NoHistoryPurchaseAccumulator(), null).printReceipt());
     }
 
     static class FormatReceiptTest {
@@ -71,6 +85,23 @@ public class PrintReceiptActionTest {
             } else {
                 return formatReceipt.formatReceipt(purchaseAccumulator.completePurchase());
             }
+        }
+    }
+
+    private static class NoHistoryPurchaseAccumulator implements PurchaseAccumulator {
+        @Override
+        public Purchase completePurchase() {
+            return null;
+        }
+
+        @Override
+        public void addPriceOfScannedItemToCurrentPurchase(int price) {
+
+        }
+
+        @Override
+        public boolean isPurchaseInProgress() {
+            return false;
         }
     }
 }
