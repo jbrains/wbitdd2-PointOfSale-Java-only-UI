@@ -19,13 +19,8 @@ public class TestSellMultipleItems {
         PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
-                return Option.of(legacyCompletePurchase());
-            }
-
-            @Override
-            public Purchase legacyCompletePurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
-                return new Purchase(-1, Collections.emptyList());
+                return Option.some(new Purchase(-1, Collections.emptyList()));
             }
 
             @Override

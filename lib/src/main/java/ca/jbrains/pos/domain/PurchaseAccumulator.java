@@ -5,9 +5,6 @@ import io.vavr.control.Option;
 
 // REFACTOR: Separate current Purchase from PurchaseHistory
 public interface PurchaseAccumulator {
-    default Purchase legacyCompletePurchase() {
-        return completePurchase().get();
-    }
 
     Option<Purchase> completePurchase();
 

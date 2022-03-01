@@ -27,12 +27,7 @@ public class PrintReceiptActionTest {
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
-                return Option.of(legacyCompletePurchase());
-            }
-
-            @Override
-            public Purchase legacyCompletePurchase() {
-                return new Purchase(0, List.of());
+                return Option.some(new Purchase(0, List.of()));
             }
 
             @Override
@@ -91,19 +86,14 @@ public class PrintReceiptActionTest {
             if (purchaseAccumulator.isPurchaseInProgress())
                 return "We cannot print a receipt; there is a purchase in progress.";
 
-            Purchase completedPurchase = purchaseAccumulator.legacyCompletePurchase();
-            if (completedPurchase == null) return "There is no completed purchase, therefore I can't print a receipt";
+            Option<Purchase> completedPurchase = purchaseAccumulator.completePurchase();
+            if (completedPurchase.isEmpty()) return "There is no completed purchase, therefore I can't print a receipt";
 
-            return formatReceipt.formatReceipt(completedPurchase);
+            return formatReceipt.formatReceipt(completedPurchase.get());
         }
     }
 
     private static class NoHistoryPurchaseAccumulator implements PurchaseAccumulator {
-        @Override
-        public Purchase legacyCompletePurchase() {
-            return null;
-        }
-
         @Override
         public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
@@ -116,7 +106,7 @@ public class PrintReceiptActionTest {
 
         @Override
         public Option<Purchase> completePurchase() {
-            return Option.of(legacyCompletePurchase());
+            return Option.none();
         }
     }
 }

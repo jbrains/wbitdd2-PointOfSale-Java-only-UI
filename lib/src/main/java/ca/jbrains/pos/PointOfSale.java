@@ -33,11 +33,6 @@ public class PointOfSale {
         return new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
-                return Option.of(legacyCompletePurchase());
-            }
-
-            @Override
-            public Purchase legacyCompletePurchase() {
                 throw notOurJob();
             }
 
@@ -126,7 +121,7 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
-        return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.legacyCompletePurchase().total());
+        return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.completePurchase().get().total());
     }
 
 }

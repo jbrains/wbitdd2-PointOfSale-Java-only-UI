@@ -17,12 +17,7 @@ public class TestTotal {
         Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
-                return Option.of(legacyCompletePurchase());
-            }
-
-            @Override
-            public Purchase legacyCompletePurchase() {
-                return new Purchase(0, Collections.emptyList());
+                return Option.some(new Purchase(0, Collections.emptyList()));
             }
 
             @Override
@@ -42,12 +37,7 @@ public class TestTotal {
         Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
-                return Option.of(legacyCompletePurchase());
-            }
-
-            @Override
-            public Purchase legacyCompletePurchase() {
-                return new Purchase(102, Collections.emptyList());
+                return Option.some(new Purchase(102, Collections.emptyList()));
             }
 
             @Override

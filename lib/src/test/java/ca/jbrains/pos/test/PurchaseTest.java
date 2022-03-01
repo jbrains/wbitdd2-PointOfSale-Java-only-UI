@@ -26,12 +26,7 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public Option<Purchase> completePurchase() {
-                        return Option.of(legacyCompletePurchase());
-                    }
-
-                    @Override
-                    public Purchase legacyCompletePurchase() {
-                        return new Purchase(795, Collections.emptyList());
+                        return Option.some(new Purchase(795, Collections.emptyList()));
                     }
 
                     @Override
@@ -56,12 +51,7 @@ public class PurchaseTest {
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
                     public Option<Purchase> completePurchase() {
-                        return Option.of(legacyCompletePurchase());
-                    }
-
-                    @Override
-                    public Purchase legacyCompletePurchase() {
-                        return new Purchase(995, Collections.emptyList());
+                        return Option.some(new Purchase(995, Collections.emptyList()));
                     }
 
                     @Override

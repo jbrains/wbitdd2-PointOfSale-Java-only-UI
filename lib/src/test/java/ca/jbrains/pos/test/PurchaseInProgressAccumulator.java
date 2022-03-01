@@ -9,11 +9,6 @@ import io.vavr.control.Option;
 import java.util.List;
 
 public class PurchaseInProgressAccumulator implements PurchaseAccumulator {
-    @Override
-    public Purchase legacyCompletePurchase() {
-        // CONTRACT: If we completed the purchase, it would contain these items.
-        return new Purchase(2, List.of(new CatalogEntry(new Barcode("2"), 2)));
-    }
 
     @Override
     public void addPriceOfScannedItemToCurrentPurchase(int price) {
@@ -28,6 +23,7 @@ public class PurchaseInProgressAccumulator implements PurchaseAccumulator {
 
     @Override
     public Option<Purchase> completePurchase() {
-        return Option.of(legacyCompletePurchase());
+        // CONTRACT: If we completed the purchase, it would contain these items.
+        return Option.some(new Purchase(2, List.of(new CatalogEntry(new Barcode("2"), 2))));
     }
 }
