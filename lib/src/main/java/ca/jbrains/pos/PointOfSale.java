@@ -3,6 +3,7 @@ package ca.jbrains.pos;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -31,7 +32,12 @@ public class PointOfSale {
     private static PurchaseAccumulator createAnyPurchaseAccumulator() {
         return new PurchaseAccumulator() {
             @Override
-            public Purchase completePurchase() {
+            public Option<Purchase> completePurchase() {
+                return Option.of(legacyCompletePurchase());
+            }
+
+            @Override
+            public Purchase legacyCompletePurchase() {
                 throw notOurJob();
             }
 
@@ -120,7 +126,7 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
-        return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.completePurchase().total());
+        return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.legacyCompletePurchase().total());
     }
 
 }

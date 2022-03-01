@@ -5,6 +5,7 @@ import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
+import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,12 @@ public class PurchaseTest {
                 List.of("CAD 7.95", "Total: CAD 7.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
-                    public Purchase completePurchase() {
+                    public Option<Purchase> completePurchase() {
+                        return Option.of(legacyCompletePurchase());
+                    }
+
+                    @Override
+                    public Purchase legacyCompletePurchase() {
                         return new Purchase(795, Collections.emptyList());
                     }
 
@@ -49,7 +55,12 @@ public class PurchaseTest {
                 List.of("CAD 9.95", "Total: CAD 9.95"),
                 List.of("12345", "total").stream().map(line -> PointOfSale.handleLine(line, catalog, new PurchaseAccumulator() {
                     @Override
-                    public Purchase completePurchase() {
+                    public Option<Purchase> completePurchase() {
+                        return Option.of(legacyCompletePurchase());
+                    }
+
+                    @Override
+                    public Purchase legacyCompletePurchase() {
                         return new Purchase(995, Collections.emptyList());
                     }
 

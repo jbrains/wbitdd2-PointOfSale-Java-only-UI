@@ -35,7 +35,12 @@ public class TestSellOneItem {
     void priceFound() {
         String response = new PointOfSale.HandleBarcode(new PurchaseAccumulator() {
             @Override
-            public Purchase completePurchase() {
+            public Option<Purchase> completePurchase() {
+                return Option.of(legacyCompletePurchase());
+            }
+
+            @Override
+            public Purchase legacyCompletePurchase() {
                 throw new UnsupportedOperationException();
             }
 
@@ -74,8 +79,13 @@ public class TestSellOneItem {
         }
 
         @Override
-        public Purchase completePurchase() {
+        public Purchase legacyCompletePurchase() {
             return new Purchase(-1, Collections.emptyList());
+        }
+
+        @Override
+        public Option<Purchase> completePurchase() {
+            return Option.of(legacyCompletePurchase());
         }
     }
 }

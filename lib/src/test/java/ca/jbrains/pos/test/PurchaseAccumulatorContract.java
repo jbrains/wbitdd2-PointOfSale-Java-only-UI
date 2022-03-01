@@ -13,7 +13,7 @@ public abstract class PurchaseAccumulatorContract {
         // REFACTOR Replace "workflow" setup with "we join the program in progress" setup.
         // SMELL "Forced Workflow" problem.
         var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
-        Purchase firstPurchase = purchaseAccumulator.completePurchase();
+        Purchase firstPurchase = purchaseAccumulator.legacyCompletePurchase();
 
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(2);
 
@@ -23,10 +23,10 @@ public abstract class PurchaseAccumulatorContract {
     @Test
     void completePurchaseIsIdempotentUntilWeScanTheNextItem() {
         var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
-        Purchase firstPurchase = purchaseAccumulator.completePurchase();
+        Purchase firstPurchase = purchaseAccumulator.legacyCompletePurchase();
 
         // intentionally do not scan any new items
-        Purchase secondPurchase = purchaseAccumulator.completePurchase();
+        Purchase secondPurchase = purchaseAccumulator.legacyCompletePurchase();
 
         assertEquals(firstPurchase, secondPurchase);
     }
@@ -34,12 +34,12 @@ public abstract class PurchaseAccumulatorContract {
     @Test
     void afterStartingASecondPurchase() {
         var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
-        Purchase firstPurchase = purchaseAccumulator.completePurchase();
+        Purchase firstPurchase = purchaseAccumulator.legacyCompletePurchase();
         // intentionally do not scan any new items
-        Purchase firstPurchaseAgain = purchaseAccumulator.completePurchase();
+        Purchase firstPurchaseAgain = purchaseAccumulator.legacyCompletePurchase();
         purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(1);
 
-        Purchase secondPurchase = purchaseAccumulator.completePurchase();
+        Purchase secondPurchase = purchaseAccumulator.legacyCompletePurchase();
 
         assertEquals(firstPurchase, firstPurchaseAgain);
         assertNotEquals(firstPurchase, secondPurchase);

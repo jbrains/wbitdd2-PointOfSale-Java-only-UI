@@ -4,6 +4,7 @@ import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
+import io.vavr.control.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,12 @@ public class TestSellMultipleItems {
     void handleTotalStartsNewPurchase() {
         PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
-            public Purchase completePurchase() {
+            public Option<Purchase> completePurchase() {
+                return Option.of(legacyCompletePurchase());
+            }
+
+            @Override
+            public Purchase legacyCompletePurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
                 return new Purchase(-1, Collections.emptyList());
             }

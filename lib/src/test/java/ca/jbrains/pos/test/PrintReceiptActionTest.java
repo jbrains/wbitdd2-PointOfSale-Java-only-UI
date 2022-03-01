@@ -3,6 +3,7 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.*;
 import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
+import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +26,12 @@ public class PrintReceiptActionTest {
         final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
-            public Purchase completePurchase() {
+            public Option<Purchase> completePurchase() {
+                return Option.of(legacyCompletePurchase());
+            }
+
+            @Override
+            public Purchase legacyCompletePurchase() {
                 return new Purchase(0, List.of());
             }
 
@@ -82,20 +88,19 @@ public class PrintReceiptActionTest {
 
         @Override
         public String printReceipt() {
-            if (purchaseAccumulator.isPurchaseInProgress()) {
+            if (purchaseAccumulator.isPurchaseInProgress())
                 return "We cannot print a receipt; there is a purchase in progress.";
-            } else {
-                Purchase completedPurchase = purchaseAccumulator.completePurchase();
-                return completedPurchase == null
-                        ? "There is no completed purchase, therefore I can't print a receipt"
-                        : formatReceipt.formatReceipt(completedPurchase);
-            }
+
+            Purchase completedPurchase = purchaseAccumulator.legacyCompletePurchase();
+            if (completedPurchase == null) return "There is no completed purchase, therefore I can't print a receipt";
+
+            return formatReceipt.formatReceipt(completedPurchase);
         }
     }
 
     private static class NoHistoryPurchaseAccumulator implements PurchaseAccumulator {
         @Override
-        public Purchase completePurchase() {
+        public Purchase legacyCompletePurchase() {
             return null;
         }
 
@@ -107,6 +112,11 @@ public class PrintReceiptActionTest {
         @Override
         public boolean isPurchaseInProgress() {
             return false;
+        }
+
+        @Override
+        public Option<Purchase> completePurchase() {
+            return Option.of(legacyCompletePurchase());
         }
     }
 }
