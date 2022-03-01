@@ -7,4 +7,6 @@ public interface PurchaseAccumulator {
     Purchase completePurchase();
 
     void addPriceOfScannedItemToCurrentPurchase(int price);
+
+    boolean isPurchaseInProgress();
 }

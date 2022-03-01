@@ -24,6 +24,11 @@ public class PrintReceiptActionTest {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
+
+            @Override
+            public boolean isPurchaseInProgress() {
+                return false;
+            }
         };
         FormatReceipt formatReceipt = new FormatReceipt(formatTotal) {
             @Override
@@ -61,7 +66,11 @@ public class PrintReceiptActionTest {
 
         @Override
         public String printReceipt() {
-            return formatReceipt.formatReceipt(purchaseAccumulator.completePurchase());
+            if (purchaseAccumulator.isPurchaseInProgress()) {
+                return "We cannot print a receipt; there is a purchase in progress.";
+            } else {
+                return formatReceipt.formatReceipt(purchaseAccumulator.completePurchase());
+            }
         }
     }
 }

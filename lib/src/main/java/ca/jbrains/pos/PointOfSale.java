@@ -32,21 +32,30 @@ public class PointOfSale {
         return new PurchaseAccumulator() {
             @Override
             public Purchase completePurchase() {
-                throw new RuntimeException("Not our job");
+                throw notOurJob();
             }
 
             @Override
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
-                throw new RuntimeException("Not our job");
+                throw notOurJob();
+            }
+
+            @Override
+            public boolean isPurchaseInProgress() {
+                throw notOurJob();
             }
         };
+    }
+
+    private static RuntimeException notOurJob() {
+        return new RuntimeException("Not our job");
     }
 
     private static Catalog createAnyCatalog() {
         return new Catalog() {
             @Override
             public Either<Barcode, Integer> findPrice(Barcode barcode) {
-                throw new RuntimeException("Not our job");
+                throw notOurJob();
             }
         };
     }

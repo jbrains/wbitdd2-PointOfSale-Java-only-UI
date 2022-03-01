@@ -23,6 +23,11 @@ public class TestTotal {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
             }
 
+            @Override
+            public boolean isPurchaseInProgress() {
+                return false;
+            }
+
         }, new FormatMonetaryAmount(new Locale("en", "US"))));
     }
 
@@ -36,6 +41,11 @@ public class TestTotal {
 
             @Override
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
+            }
+
+            @Override
+            public boolean isPurchaseInProgress() {
+                return false;
             }
 
         }, new FormatMonetaryAmount(new Locale("en", "US"))));

@@ -26,6 +26,11 @@ public class TestSellMultipleItems {
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
 
             }
+
+            @Override
+            public boolean isPurchaseInProgress() {
+                return false;
+            }
         }, new FormatMonetaryAmount(new Locale("en", "US")));
 
         Assertions.assertEquals(true, startPurchaseInvoked);
