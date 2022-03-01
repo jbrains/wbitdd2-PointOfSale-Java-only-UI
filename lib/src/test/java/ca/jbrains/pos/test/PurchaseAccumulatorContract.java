@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.EmptyPurchaseHistoryException;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public abstract class PurchaseAccumulatorContract {
     @Test
-    void isolatePurchasesForDifferentShoppers() {
+    void isolatePurchasesForDifferentShoppers() throws EmptyPurchaseHistoryException {
         // REFACTOR Replace "workflow" setup with "we join the program in progress" setup.
         // SMELL "Forced Workflow" problem.
         var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
@@ -21,7 +22,7 @@ public abstract class PurchaseAccumulatorContract {
     }
 
     @Test
-    void completePurchaseIsIdempotentUntilWeScanTheNextItem() {
+    void completePurchaseIsIdempotentUntilWeScanTheNextItem() throws EmptyPurchaseHistoryException {
         var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
         Purchase firstPurchase = purchaseAccumulator.completePurchase();
 
@@ -32,7 +33,7 @@ public abstract class PurchaseAccumulatorContract {
     }
 
     @Test
-    void afterStartingASecondPurchase() {
+    void afterStartingASecondPurchase() throws EmptyPurchaseHistoryException {
         var purchaseAccumulator = purchaseAccumulatorWithAnArbitraryPurchaseInProgress();
         Purchase firstPurchase = purchaseAccumulator.completePurchase();
         // intentionally do not scan any new items

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PrintReceiptActionTest {
     @Test
@@ -85,17 +86,18 @@ public class PrintReceiptActionTest {
             if (purchaseAccumulator.isPurchaseInProgress())
                 return "We cannot print a receipt; there is a purchase in progress.";
 
-            Purchase completedPurchase = purchaseAccumulator.completePurchase();
-            if (completedPurchase == null) return "There is no completed purchase, therefore I can't print a receipt";
-
-            return formatReceipt.formatReceipt(completedPurchase);
+            try {
+                return formatReceipt.formatReceipt(purchaseAccumulator.completePurchase());
+            } catch (EmptyPurchaseHistoryException handled) {
+                return "There is no completed purchase, therefore I can't print a receipt";
+            }
         }
     }
 
     private static class NoHistoryPurchaseAccumulator implements PurchaseAccumulator {
         @Override
-        public Purchase completePurchase() {
-            return null;
+        public Purchase completePurchase() throws EmptyPurchaseHistoryException {
+            throw new EmptyPurchaseHistoryException();
         }
 
         @Override

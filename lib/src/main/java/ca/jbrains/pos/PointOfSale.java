@@ -120,7 +120,10 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
-        return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.completePurchase().total());
+        try {
+            return new FormatTotal(formatMonetaryAmount).formatTotal(purchaseAccumulator.completePurchase().total());
+        } catch (EmptyPurchaseHistoryException giveUp) {
+            throw new RuntimeException(giveUp);
+        }
     }
-
 }
