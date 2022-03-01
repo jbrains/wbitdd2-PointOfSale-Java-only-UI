@@ -12,13 +12,9 @@ import java.util.Locale;
 public class PrintReceiptScenarioTest {
     @Test
     void requestPrintReceiptWhileAPurchaseIsInProgress() {
-        PurchaseAccumulator completedPurchase = new CompletedPurchaseAccumulator();
-
-        PurchaseAccumulator purchaseInProgress = new PurchaseInProgressAccumulator();
-
         FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
-        PointOfSale.handleTotal(completedPurchase, formatMonetaryAmount);
-        var result = new PrintReceiptActionTest.StandardPrintReceiptAction(purchaseInProgress, new FormatReceipt(new FormatTotal(formatMonetaryAmount))).printReceipt();
+        PointOfSale.handleTotal(new CompletedPurchaseAccumulator(), formatMonetaryAmount);
+        var result = new PrintReceiptActionTest.StandardPrintReceiptAction(new PurchaseInProgressAccumulator(), new FormatReceipt(new FormatTotal(formatMonetaryAmount))).printReceipt();
 
         Assertions.assertEquals("We cannot print a receipt; there is a purchase in progress.", result);
     }

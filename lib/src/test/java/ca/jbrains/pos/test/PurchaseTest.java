@@ -59,7 +59,7 @@ public class PurchaseTest {
 
                     @Override
                     public boolean isPurchaseInProgress() {
-                        return false;
+                        return true;
                     }
 
                 }, new FormatMonetaryAmount(new Locale("en", "US")), null)).collect(Collectors.toList()));
