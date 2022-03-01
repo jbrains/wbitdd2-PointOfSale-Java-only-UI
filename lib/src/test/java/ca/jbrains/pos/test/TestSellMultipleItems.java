@@ -29,7 +29,7 @@ public class TestSellMultipleItems {
 
             @Override
             public boolean isPurchaseInProgress() {
-                return false;
+                return TestSellMultipleItems.this.startPurchaseInvoked;
             }
         }, new FormatMonetaryAmount(new Locale("en", "US")));
 

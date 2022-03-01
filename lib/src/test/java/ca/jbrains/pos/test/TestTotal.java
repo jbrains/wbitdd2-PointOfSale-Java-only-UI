@@ -25,7 +25,7 @@ public class TestTotal {
 
             @Override
             public boolean isPurchaseInProgress() {
-                return false;
+                return true;
             }
 
         }, new FormatMonetaryAmount(new Locale("en", "US"))));
@@ -45,7 +45,7 @@ public class TestTotal {
 
             @Override
             public boolean isPurchaseInProgress() {
-                return false;
+                return true;
             }
 
         }, new FormatMonetaryAmount(new Locale("en", "US"))));
