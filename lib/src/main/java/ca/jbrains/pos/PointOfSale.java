@@ -51,6 +51,7 @@ public class PointOfSale {
         };
     }
 
+    // REFACTOR Parse command, then execute
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount, PrintReceiptAction printReceiptAction) {
         if ("total".equals(line)) {
             return handleTotal(purchaseAccumulator, formatMonetaryAmount);
