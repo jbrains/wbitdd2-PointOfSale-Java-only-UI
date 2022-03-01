@@ -1,13 +1,6 @@
 # Inbox
 
 - Print Receipt
-  - reject the request to print a receipt when there is a purchase in progress
-    - test: given completed purchase, scan item 1, try print receipt -> rejected
-    - test: given no completed purchase, try print receipt -> rejected
-    - test: given no completed purchase, scan item 1, try print receipt -> rejected
-    - test: given no completed purchase, complete purchase, try print receipt -> accepted
-    - test: given completed purchase, don't scan items, try print receipt -> accepted
-    - test: given completed purchase, scan items, complete purchase, try print receipt -> accepted
   - Finish "Format Receipt"
     - purchase with several items
       - fixed-with format: use barcodes and prices of varying widths
