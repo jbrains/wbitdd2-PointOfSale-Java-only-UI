@@ -53,7 +53,7 @@ public class PrintReceiptActionTest {
     void noCompletedPurchaseAndNoPurchaseInProgress() {
         assertEquals("There is no completed purchase, therefore I can't print a receipt",
                 new StandardPrintReceiptAction(
-                        new NoHistoryPurchaseAccumulator(), null).printReceipt());
+                        new NoHistoryPurchaseAccumulator(), new FormatReceipt(null)).printReceipt());
     }
 
     static class FormatReceiptTest {
@@ -87,9 +87,7 @@ public class PrintReceiptActionTest {
                 return "We cannot print a receipt; there is a purchase in progress.";
 
             Option<Purchase> completedPurchase = purchaseAccumulator.completePurchase();
-            if (completedPurchase.isEmpty()) return "There is no completed purchase, therefore I can't print a receipt";
-
-            return formatReceipt.formatReceipt(completedPurchase.get());
+            return completedPurchase.fold(() -> "There is no completed purchase, therefore I can't print a receipt", formatReceipt::formatReceipt);
         }
     }
 
