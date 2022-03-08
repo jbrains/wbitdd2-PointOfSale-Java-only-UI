@@ -17,12 +17,12 @@ public class FormatReceipt {
     }
 
     public String formatReceipt(Purchase purchase) {
-        Stream<String> bodyLines = purchase.items().stream().map(item -> formatItem.formatItem(item, 30));
+        Stream<String> bodyLines = purchase.items().stream().map(formatItem::formatItem);
         Stream<String> footerLines = Stream.of(formatTotal.formatTotal(purchase.total()));
         return Stream.concat(bodyLines, footerLines).collect(Collectors.joining(System.lineSeparator()));
     }
 
     public String formatItem(CatalogEntry item) {
-        return formatItem.formatItem(item, 30);
+        return formatItem.formatItem(item);
     }
 }

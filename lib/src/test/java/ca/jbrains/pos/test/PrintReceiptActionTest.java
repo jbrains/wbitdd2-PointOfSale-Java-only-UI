@@ -53,7 +53,7 @@ public class PrintReceiptActionTest {
         void setUp() {
             FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
             formatReceipt = new FormatReceipt(
-                    new FormatItem(new FormatBarcode(), formatMonetaryAmount),
+                    new FormatItem(new FormatBarcode(), formatMonetaryAmount, 30),
                     new FormatTotal(formatMonetaryAmount)
             );
         }
@@ -102,10 +102,15 @@ public class PrintReceiptActionTest {
         static class FormatItemTest {
             @Test
             void noSpacesBetweenBarcodeAndPrice() {
-                final FormatItem formatItem = new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH));
-                final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode("12345678901234567890").get(), 10_000);
-                String formattedItem = formatItem.formatItem(item, 30);
-                assertEquals("12345678901234567890CAD 100.00", formattedItem);
+                final String barcodeText = "12345678901234567890";
+                final String priceText = "CAD 100.00";
+
+                final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode(barcodeText).get(), 10_000);
+
+                final FormatItem formatItem = new FormatItem(
+                        new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH), 30);
+
+                assertEquals(String.format("%s%s", barcodeText, priceText), formatItem.formatItem(item));
             }
 
             @Test
@@ -115,10 +120,11 @@ public class PrintReceiptActionTest {
 
                 final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode(barcodeText).get(), 10_000);
 
-                String formattedItem = new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH))
-                        .formatItem(item, 30);
+                final FormatItem formatItem = new FormatItem(
+                        new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH), 30);
 
-                assertEquals(String.format("%s%s", barcodeText, priceText), formattedItem);
+                assertEquals(String.format("%s%s", barcodeText, priceText), formatItem
+                        .formatItem(item));
             }
         }
     }
