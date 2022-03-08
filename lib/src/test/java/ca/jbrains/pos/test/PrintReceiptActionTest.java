@@ -1,6 +1,10 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.*;
+import ca.jbrains.pos.Barcode;
+import ca.jbrains.pos.FormatMonetaryAmount;
+import ca.jbrains.pos.FormatTotal;
+import ca.jbrains.pos.PrintReceiptAction;
+import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
@@ -81,15 +85,14 @@ public class PrintReceiptActionTest {
                     Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
         }
 
-        static class FormatItemTest{
+        static class FormatItemTest {
             @Test
             void noSpacesBetweenBarcodeAndPrice() {
                 final FormatReceipt formatReceipt = new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH)));
-                final Purchase purchase = new Purchase(10_000, List.of(
-                        new CatalogEntry(Barcode.makeBarcode("12345678901234567890").get(), 10_000)));
-                assertEquals("""
-                    12345678901234567890CAD 100.00
-                    Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
+
+                final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode("12345678901234567890").get(), 10_000);
+                String formattedItem = formatReceipt.formatItem(item);
+                assertEquals("12345678901234567890CAD 100.00", formattedItem);
             }
         }
     }
