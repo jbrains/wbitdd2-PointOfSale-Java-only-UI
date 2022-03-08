@@ -80,6 +80,18 @@ public class PrintReceiptActionTest {
                     12                  CAD 100.00
                     Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
         }
+
+        static class FormatItemTest{
+            @Test
+            void noSpacesBetweenBarcodeAndPrice() {
+                final FormatReceipt formatReceipt = new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH)));
+                final Purchase purchase = new Purchase(10_000, List.of(
+                        new CatalogEntry(Barcode.makeBarcode("12345678901234567890").get(), 10_000)));
+                assertEquals("""
+                    12345678901234567890CAD 100.00
+                    Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
+            }
+        }
     }
 
     public static class StandardPrintReceiptAction extends PrintReceiptAction {
