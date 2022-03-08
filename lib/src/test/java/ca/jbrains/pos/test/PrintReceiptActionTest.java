@@ -91,8 +91,7 @@ public class PrintReceiptActionTest {
         static class FormatItemTest {
             @Test
             void noSpacesBetweenBarcodeAndPrice() {
-                final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-                final FormatReceipt formatReceipt = new FormatReceipt(formatTotal, formatTotal.formatMonetaryAmount());
+                final FormatReceipt formatReceipt = new FormatReceipt(null, new FormatMonetaryAmount(Locale.ENGLISH));
 
                 final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode("12345678901234567890").get(), 10_000);
                 String formattedItem = formatReceipt.formatItem(item);
