@@ -9,6 +9,7 @@ import ca.jbrains.pos.domain.CatalogEntry;
 public class FormatReceipt {
     private final FormatTotal formatTotal;
     private final FormatMonetaryAmount formatMonetaryAmount;
+    private final FormatBarcode formatBarcode = new FormatBarcode();
 
     public FormatReceipt(FormatTotal formatTotal, FormatMonetaryAmount formatMonetaryAmount) {
         this.formatTotal = formatTotal;
@@ -25,15 +26,10 @@ public class FormatReceipt {
     }
 
     public String formatItem(CatalogEntry item) {
-        String barcodeText = formatBarcode(item.barcode());
+        String barcodeText = formatBarcode.formatBarcode(item.barcode());
         String totalText = formatMonetaryAmount.formatMonetaryAmount(item.price());
         int spacesWanted = 30 - (barcodeText.length() + totalText.length());
         int spaces = Math.max(0, spacesWanted);
         return barcodeText + " ".repeat(spaces) + totalText;
     }
-
-    private String formatBarcode(Barcode barcode) {
-        return barcode.text();
-    }
-
 }
