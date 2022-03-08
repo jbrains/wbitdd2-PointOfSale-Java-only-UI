@@ -3,13 +3,13 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.domain.CatalogEntry;
 
-import java.util.Locale;
-
 public class FormatItem {
-    final FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
-    final FormatBarcode formatBarcode = new FormatBarcode();
+    final FormatMonetaryAmount formatMonetaryAmount;
+    final FormatBarcode formatBarcode;
 
-    public FormatItem() {
+    public FormatItem(FormatBarcode formatBarcode, FormatMonetaryAmount formatMonetaryAmount) {
+        this.formatBarcode = formatBarcode;
+        this.formatMonetaryAmount = formatMonetaryAmount;
     }
 
     public String formatItem(CatalogEntry item) {
