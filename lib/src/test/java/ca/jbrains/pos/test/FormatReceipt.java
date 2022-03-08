@@ -6,7 +6,7 @@ import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
 public class FormatReceipt {
-    public final FormatTotal formatTotal;
+    private final FormatTotal formatTotal;
     private final FormatMonetaryAmount formatMonetaryAmount;
 
     public FormatReceipt(FormatTotal formatTotal, FormatMonetaryAmount formatMonetaryAmount) {
