@@ -12,8 +12,6 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrintReceiptActionTest {
-    private Purchase completedPurchase;
-
     @Test
     void requestPrintReceiptWhileAPurchaseIsInProgress() {
         var result = new StandardPrintReceiptAction(
@@ -25,23 +23,9 @@ public class PrintReceiptActionTest {
 
     @Test
     void completedPurchase() {
-        completedPurchase = new Purchase(0, List.of());
+        final Purchase completedPurchase = new Purchase(0, List.of());
 
-        PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
-            @Override
-            public Option<Purchase> completePurchase() {
-                return Option.some(completedPurchase);
-            }
-
-            @Override
-            public void addPriceOfScannedItemToCurrentPurchase(int price) {
-            }
-
-            @Override
-            public boolean isPurchaseInProgress() {
-                return false;
-            }
-        };
+        PurchaseAccumulator purchaseAccumulator = new PurchaseJustCompletedAccumulator(completedPurchase);
 
         FormatReceipt formatReceipt = new FormatReceipt(null, null) {
             @Override
@@ -58,7 +42,7 @@ public class PrintReceiptActionTest {
     void noCompletedPurchaseAndNoPurchaseInProgress() {
         assertEquals("There is no completed purchase, therefore I can't print a receipt",
                 new StandardPrintReceiptAction(
-                        new NoHistoryPurchaseAccumulator(), new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), null)).printReceipt());
+                        new NoHistoryPurchaseAccumulator(), new CrashTestDummyFormatReceipt()).printReceipt());
     }
 
     static class FormatReceiptTest {
@@ -158,6 +142,39 @@ public class PrintReceiptActionTest {
         @Override
         public Option<Purchase> completePurchase() {
             return Option.none();
+        }
+    }
+
+    private static class CrashTestDummyFormatReceipt extends FormatReceipt {
+        public CrashTestDummyFormatReceipt() {
+            super(null, null);
+        }
+
+        @Override
+        public String formatReceipt(Purchase purchase) {
+            throw new UnsupportedOperationException("Don't invoke me.");
+        }
+    }
+
+    private class PurchaseJustCompletedAccumulator implements PurchaseAccumulator {
+        private Purchase completedPurchase;
+
+        private PurchaseJustCompletedAccumulator(Purchase completedPurchase) {
+            this.completedPurchase = completedPurchase;
+        }
+
+        @Override
+        public Option<Purchase> completePurchase() {
+            return Option.some(completedPurchase);
+        }
+
+        @Override
+        public void addPriceOfScannedItemToCurrentPurchase(int price) {
+        }
+
+        @Override
+        public boolean isPurchaseInProgress() {
+            return false;
         }
     }
 }
