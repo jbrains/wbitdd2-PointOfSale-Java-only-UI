@@ -4,7 +4,6 @@ import ca.jbrains.pos.FormatTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
