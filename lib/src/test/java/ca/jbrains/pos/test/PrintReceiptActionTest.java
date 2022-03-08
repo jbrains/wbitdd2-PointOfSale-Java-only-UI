@@ -1,10 +1,6 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.Barcode;
-import ca.jbrains.pos.FormatMonetaryAmount;
-import ca.jbrains.pos.FormatTotal;
-import ca.jbrains.pos.PrintReceiptAction;
-import ca.jbrains.pos.Purchase;
+import ca.jbrains.pos.*;
 import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
@@ -16,6 +12,8 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrintReceiptActionTest {
+    private Purchase completedPurchase;
+
     @Test
     void requestPrintReceiptWhileAPurchaseIsInProgress() {
         var result = new StandardPrintReceiptAction(
@@ -27,16 +25,16 @@ public class PrintReceiptActionTest {
 
     @Test
     void completedPurchase() {
-        final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
+        completedPurchase = new Purchase(0, List.of());
+
         PurchaseAccumulator purchaseAccumulator = new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
-                return Option.some(new Purchase(0, List.of()));
+                return Option.some(completedPurchase);
             }
 
             @Override
             public void addPriceOfScannedItemToCurrentPurchase(int price) {
-
             }
 
             @Override
@@ -44,12 +42,15 @@ public class PrintReceiptActionTest {
                 return false;
             }
         };
-        FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), formatTotal) {
+
+        FormatReceipt formatReceipt = new FormatReceipt(null, null) {
             @Override
             public String formatReceipt(Purchase purchase) {
+                assertEquals(completedPurchase, purchase);
                 return "::receipt::";
             }
         };
+
         assertEquals("::receipt::", new StandardPrintReceiptAction(purchaseAccumulator, formatReceipt).printReceipt());
     }
 
