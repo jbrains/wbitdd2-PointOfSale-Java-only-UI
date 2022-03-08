@@ -1,14 +1,17 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.FormatTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
 public class FormatReceipt {
     public final FormatTotal formatTotal;
+    private final FormatMonetaryAmount formatMonetaryAmount;
 
-    public FormatReceipt(FormatTotal formatTotal) {
+    public FormatReceipt(FormatTotal formatTotal, FormatMonetaryAmount formatMonetaryAmount) {
         this.formatTotal = formatTotal;
+        this.formatMonetaryAmount = formatMonetaryAmount;
     }
 
     public String formatReceipt(Purchase purchase) {
@@ -22,7 +25,7 @@ public class FormatReceipt {
 
     public String formatItem(CatalogEntry firstItem) {
         String barcodeText = firstItem.barcode().text();
-        String totalText = formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+        String totalText = formatMonetaryAmount.formatMonetaryAmount(firstItem.price());
         int spacesNeeded = 30 - (barcodeText.length() + totalText.length());
         return barcodeText + " ".repeat(spacesNeeded) + totalText;
     }
