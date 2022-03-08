@@ -44,7 +44,7 @@ public class PrintReceiptActionTest {
                 return false;
             }
         };
-        FormatReceipt formatReceipt = new FormatReceipt(formatTotal) {
+        FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(), formatTotal) {
             @Override
             public String formatReceipt(Purchase purchase) {
                 return "::receipt::";
@@ -57,7 +57,7 @@ public class PrintReceiptActionTest {
     void noCompletedPurchaseAndNoPurchaseInProgress() {
         assertEquals("There is no completed purchase, therefore I can't print a receipt",
                 new StandardPrintReceiptAction(
-                        new NoHistoryPurchaseAccumulator(), new FormatReceipt(null)).printReceipt());
+                        new NoHistoryPurchaseAccumulator(), new FormatReceipt(new FormatItem(), null)).printReceipt());
     }
 
     static class FormatReceiptTest {
@@ -65,13 +65,13 @@ public class PrintReceiptActionTest {
         void noItems() {
             final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
             assertEquals("Total: CAD 0.00",
-                    new FormatReceipt(formatTotal).formatReceipt(new Purchase(0, List.of())));
+                    new FormatReceipt(new FormatItem(), formatTotal).formatReceipt(new Purchase(0, List.of())));
         }
 
         @Test
         void oneItem() {
             final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            final FormatReceipt formatReceipt = new FormatReceipt(formatTotal);
+            final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(), formatTotal);
             final Purchase purchase = new Purchase(790, List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790)));
             assertEquals("""
                     12345                 CAD 7.90
@@ -81,7 +81,7 @@ public class PrintReceiptActionTest {
         @Test
         void anItemRequiringADifferentNumberOfSpacesBetweenBarcodeAndPrice() {
             final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            final FormatReceipt formatReceipt = new FormatReceipt(formatTotal);
+            final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(), formatTotal);
             final Purchase purchase = new Purchase(10_000, List.of(new CatalogEntry(Barcode.makeBarcode("12").get(), 10_000)));
             assertEquals("""
                     12                  CAD 100.00
@@ -91,7 +91,7 @@ public class PrintReceiptActionTest {
         static class FormatItemTest {
             @Test
             void noSpacesBetweenBarcodeAndPrice() {
-                final FormatReceipt formatReceipt = new FormatReceipt(null);
+                final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(), null);
 
                 final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode("12345678901234567890").get(), 10_000);
                 String formattedItem = formatReceipt.formatItem(item);
@@ -100,7 +100,7 @@ public class PrintReceiptActionTest {
 
             @Test
             void itemTextIsTooLong() {
-                final FormatReceipt formatReceipt = new FormatReceipt(null);
+                final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(), null);
 
                 final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode("12345678901234567890X").get(), 10_000);
                 String formattedItem = formatReceipt.formatItem(item);

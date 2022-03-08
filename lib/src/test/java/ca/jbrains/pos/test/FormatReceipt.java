@@ -1,15 +1,15 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.FormatMonetaryAmount;
 import ca.jbrains.pos.FormatTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
 public class FormatReceipt {
+    private final FormatItem formatItem;
     private final FormatTotal formatTotal;
-    private final FormatItem formatItem = new FormatItem();
 
-    public FormatReceipt(FormatTotal formatTotal) {
+    public FormatReceipt(FormatItem formatItem, FormatTotal formatTotal) {
+        this.formatItem = formatItem;
         this.formatTotal = formatTotal;
     }
 
