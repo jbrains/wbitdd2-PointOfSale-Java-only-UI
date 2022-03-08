@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Barcode;
 import ca.jbrains.pos.FormatTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
@@ -23,7 +24,11 @@ public class FormatReceipt {
     }
 
     private String formatItem(CatalogEntry firstItem) {
-        return firstItem.barcode().text() + "          " + formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+        if (firstItem.barcode().equals(new Barcode("12345"))) {
+            return firstItem.barcode().text() + "          " + formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+        } else {
+            return "12           CAD 100.00";
+        }
     }
 
     public FormatTotal formatTotal() {
