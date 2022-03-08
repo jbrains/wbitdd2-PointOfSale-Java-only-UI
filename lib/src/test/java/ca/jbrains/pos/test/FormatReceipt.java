@@ -8,11 +8,9 @@ import ca.jbrains.pos.domain.CatalogEntry;
 public class FormatReceipt {
     private final FormatTotal formatTotal;
     private final FormatItem formatItem = new FormatItem();
-    private final FormatMonetaryAmount formatMonetaryAmount;
 
-    public FormatReceipt(FormatTotal formatTotal, FormatMonetaryAmount formatMonetaryAmount) {
+    public FormatReceipt(FormatTotal formatTotal) {
         this.formatTotal = formatTotal;
-        this.formatMonetaryAmount = formatMonetaryAmount;
     }
 
     public String formatReceipt(Purchase purchase) {
