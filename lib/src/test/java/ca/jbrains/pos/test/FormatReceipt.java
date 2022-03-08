@@ -27,7 +27,7 @@ public class FormatReceipt {
         String barcodeText = firstItem.barcode().text();
         String totalText = formatMonetaryAmount.formatMonetaryAmount(firstItem.price());
         int spacesNeeded = 30 - (barcodeText.length() + totalText.length());
-        return barcodeText + " ".repeat(spacesNeeded) + totalText;
+        return barcodeText + " ".repeat(Math.max(0, spacesNeeded)) + totalText;
     }
 
     public FormatTotal formatTotal() {
