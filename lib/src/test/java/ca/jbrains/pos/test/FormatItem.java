@@ -12,10 +12,10 @@ public class FormatItem {
         this.formatMonetaryAmount = formatMonetaryAmount;
     }
 
-    public String formatItem(CatalogEntry item) {
+    public String formatItem(CatalogEntry item, int lineLengthLimit) {
         String barcodeText = formatBarcode.formatBarcode(item.barcode());
         String totalText = formatMonetaryAmount.formatMonetaryAmount(item.price());
-        int spacesWanted = 30 - (barcodeText.length() + totalText.length());
+        int spacesWanted = lineLengthLimit - (barcodeText.length() + totalText.length());
         int spaces = Math.max(0, spacesWanted);
         return barcodeText + " ".repeat(spaces) + totalText;
     }
