@@ -4,6 +4,7 @@ import ca.jbrains.pos.*;
 import ca.jbrains.pos.domain.CatalogEntry;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -46,18 +47,29 @@ public class PrintReceiptActionTest {
     }
 
     static class FormatReceiptTest {
+        private FormatReceipt formatReceipt;
+
+        @BeforeEach
+        void setUp() {
+            FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(Locale.ENGLISH);
+            formatReceipt = new FormatReceipt(
+                    new FormatItem(new FormatBarcode(), formatMonetaryAmount),
+                    new FormatTotal(formatMonetaryAmount)
+            );
+        }
+
         @Test
         void noItems() {
-            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            assertEquals("Total: CAD 0.00",
-                    new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), formatTotal).formatReceipt(new Purchase(0, List.of())));
+            final Purchase purchaseWithNoItems = new Purchase(0, List.of());
+
+            assertEquals("Total: CAD 0.00", formatReceipt.formatReceipt(purchaseWithNoItems));
         }
 
         @Test
         void oneItem() {
-            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), formatTotal);
-            final Purchase purchase = new Purchase(790, List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790)));
+            final Purchase purchase = new Purchase(790,
+                    List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790)));
+
             assertEquals("""
                     12345                 CAD 7.90
                     Total: CAD 7.90""", formatReceipt.formatReceipt(purchase));
@@ -65,9 +77,9 @@ public class PrintReceiptActionTest {
 
         @Test
         void anItemRequiringADifferentNumberOfSpacesBetweenBarcodeAndPrice() {
-            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), formatTotal);
-            final Purchase purchase = new Purchase(10_000, List.of(new CatalogEntry(Barcode.makeBarcode("12").get(), 10_000)));
+            final Purchase purchase = new Purchase(10_000,
+                    List.of(new CatalogEntry(Barcode.makeBarcode("12").get(), 10_000)));
+
             assertEquals("""
                     12                  CAD 100.00
                     Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
@@ -75,12 +87,11 @@ public class PrintReceiptActionTest {
 
         @Test
         void severalItems() {
-            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
-            final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), formatTotal);
             final Purchase purchase = new Purchase(33_000,
                     List.of(new CatalogEntry(Barcode.makeBarcode("12").get(), 10_000),
                             new CatalogEntry(Barcode.makeBarcode("13").get(), 11_000),
                             new CatalogEntry(Barcode.makeBarcode("14").get(), 12_000)));
+
             assertEquals("""
                     12                  CAD 100.00
                     13                  CAD 110.00
