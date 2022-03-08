@@ -88,6 +88,21 @@ public class PrintReceiptActionTest {
                     Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
         }
 
+        @Test
+        void severalItems() {
+            final FormatTotal formatTotal = new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH));
+            final FormatReceipt formatReceipt = new FormatReceipt(new FormatItem(new FormatBarcode(), new FormatMonetaryAmount(Locale.ENGLISH)), formatTotal);
+            final Purchase purchase = new Purchase(33_000,
+                    List.of(new CatalogEntry(Barcode.makeBarcode("12").get(), 10_000),
+                            new CatalogEntry(Barcode.makeBarcode("13").get(), 11_000),
+                            new CatalogEntry(Barcode.makeBarcode("14").get(), 12_000)));
+            assertEquals("""
+                    12                  CAD 100.00
+                    13                  CAD 110.00
+                    14                  CAD 120.00
+                    Total: CAD 330.00""", formatReceipt.formatReceipt(purchase));
+        }
+
         static class FormatItemTest {
             @Test
             void noSpacesBetweenBarcodeAndPrice() {

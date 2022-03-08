@@ -4,6 +4,10 @@ import ca.jbrains.pos.FormatTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.CatalogEntry;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class FormatReceipt {
     private final FormatItem formatItem;
     private final FormatTotal formatTotal;
@@ -14,12 +18,9 @@ public class FormatReceipt {
     }
 
     public String formatReceipt(Purchase purchase) {
-        if (purchase.items().isEmpty()) {
-            return formatTotal.formatTotal(0);
-        }
-
-        CatalogEntry firstItem = purchase.items().get(0);
-        return formatItem.formatItem(firstItem) + System.lineSeparator() + formatTotal.formatTotal(purchase.total());
+        Stream<String> bodyLines = purchase.items().stream().map(formatItem::formatItem);
+        Stream<String> footerLines = Stream.of(formatTotal.formatTotal(purchase.total()));
+        return Stream.concat(bodyLines, footerLines).collect(Collectors.joining(System.lineSeparator()));
     }
 
     public String formatItem(CatalogEntry item) {
