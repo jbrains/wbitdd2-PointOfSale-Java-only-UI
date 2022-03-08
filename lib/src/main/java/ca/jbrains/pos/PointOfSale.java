@@ -121,12 +121,8 @@ public class PointOfSale {
     }
 
     public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
-        Option<Purchase> maybePurchase = purchaseAccumulator.completePurchase();
-        if (maybePurchase.isDefined()) {
-            Purchase purchase = maybePurchase.get();
-            return new FormatTotal(formatMonetaryAmount).formatTotal(purchase.total());
-        } else {
-            return "There is no purchase in progress; please scan an item.";
-        }
+        return purchaseAccumulator.completePurchase().fold(
+                () -> "There is no purchase in progress; please scan an item.",
+                (purchase) -> new FormatTotal(formatMonetaryAmount).formatTotal(purchase.total()));
     }
 }
