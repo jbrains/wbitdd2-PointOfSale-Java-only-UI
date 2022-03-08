@@ -97,6 +97,15 @@ public class PrintReceiptActionTest {
                 String formattedItem = formatReceipt.formatItem(item);
                 assertEquals("12345678901234567890CAD 100.00", formattedItem);
             }
+
+            @Test
+            void itemTextIsTooLong() {
+                final FormatReceipt formatReceipt = new FormatReceipt(null, new FormatMonetaryAmount(Locale.ENGLISH));
+
+                final CatalogEntry item = new CatalogEntry(Barcode.makeBarcode("12345678901234567890X").get(), 10_000);
+                String formattedItem = formatReceipt.formatItem(item);
+                assertEquals("12345678901234567890XCAD 100.00", formattedItem);
+            }
         }
     }
 
