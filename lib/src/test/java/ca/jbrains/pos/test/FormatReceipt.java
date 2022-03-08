@@ -24,13 +24,10 @@ public class FormatReceipt {
     }
 
     private String formatItem(CatalogEntry firstItem) {
-        if (firstItem.barcode().equals(new Barcode("12345"))) {
-            return firstItem.barcode().text() + "          " + formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
-        } else {
-            return firstItem.barcode().text() +
-                    "           " +
-                    formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
-        }
+        String barcodeText = firstItem.barcode().text();
+        String totalText = formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
+        int spacesNeeded = 30 - (barcodeText.length() + totalText.length());
+        return barcodeText + " ".repeat(spacesNeeded) + totalText;
     }
 
     public FormatTotal formatTotal() {

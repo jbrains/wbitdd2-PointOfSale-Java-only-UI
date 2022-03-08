@@ -68,7 +68,7 @@ public class PrintReceiptActionTest {
             final FormatReceipt formatReceipt = new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH)));
             final Purchase purchase = new Purchase(790, List.of(new CatalogEntry(Barcode.makeBarcode("12345").get(), 790)));
             assertEquals("""
-                    12345          CAD 7.90
+                    12345                 CAD 7.90
                     Total: CAD 7.90""", formatReceipt.formatReceipt(purchase));
         }
 
@@ -77,7 +77,7 @@ public class PrintReceiptActionTest {
             final FormatReceipt formatReceipt = new FormatReceipt(new FormatTotal(new FormatMonetaryAmount(Locale.ENGLISH)));
             final Purchase purchase = new Purchase(10_000, List.of(new CatalogEntry(Barcode.makeBarcode("12").get(), 10_000)));
             assertEquals("""
-                    12           CAD 100.00
+                    12                  CAD 100.00
                     Total: CAD 100.00""", formatReceipt.formatReceipt(purchase));
         }
     }
