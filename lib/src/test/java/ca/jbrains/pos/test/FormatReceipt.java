@@ -27,7 +27,9 @@ public class FormatReceipt {
         if (firstItem.barcode().equals(new Barcode("12345"))) {
             return firstItem.barcode().text() + "          " + formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
         } else {
-            return "12           CAD 100.00";
+            return firstItem.barcode().text() +
+                    "           " +
+                    formatTotal().formatMonetaryAmount().formatMonetaryAmount(firstItem.price());
         }
     }
 
