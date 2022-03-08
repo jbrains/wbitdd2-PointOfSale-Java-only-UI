@@ -21,7 +21,7 @@ public class FormatReceipt {
         }
 
         CatalogEntry firstItem = purchase.items().get(0);
-        return this.formatItem(firstItem) + System.lineSeparator() + formatTotal().formatTotal(purchase.total());
+        return this.formatItem(firstItem) + System.lineSeparator() + formatTotal.formatTotal(purchase.total());
     }
 
     public String formatItem(CatalogEntry item) {
@@ -36,7 +36,4 @@ public class FormatReceipt {
         return barcode.text();
     }
 
-    public FormatTotal formatTotal() {
-        return formatTotal;
-    }
 }
