@@ -14,31 +14,14 @@ import static org.mockito.Mockito.*;
 
 
 public class TestSellMultipleItems {
-    private boolean startPurchaseInvoked = false;
-
     @Test
     void handleTotalStartsNewPurchase() {
         PurchaseAccumulator purchaseAccumulator = mock(PurchaseAccumulator.class);
+        when(purchaseAccumulator.completePurchase()).thenReturn(Option.some(new Purchase(-1, Collections.emptyList())));
 
-        PointOfSale.handleTotal(new PurchaseAccumulator() {
-            @Override
-            public Option<Purchase> completePurchase() {
-                TestSellMultipleItems.this.startPurchaseInvoked = true;
-                return Option.some(new Purchase(-1, Collections.emptyList()));
-            }
+        PointOfSale.handleTotal(purchaseAccumulator, new FormatMonetaryAmount(new Locale("en", "US")));
 
-            @Override
-            public void addPriceOfScannedItemToCurrentPurchase(int price) {
-
-            }
-
-            @Override
-            public boolean isPurchaseInProgress() {
-                return TestSellMultipleItems.this.startPurchaseInvoked;
-            }
-        }, new FormatMonetaryAmount(new Locale("en", "US")));
-
-        Assertions.assertEquals(true, startPurchaseInvoked);
+        verify(purchaseAccumulator).completePurchase();
     }
 
 }
