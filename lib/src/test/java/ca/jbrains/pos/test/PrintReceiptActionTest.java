@@ -43,9 +43,12 @@ public class PrintReceiptActionTest {
 
     @Test
     void noCompletedPurchaseAndNoPurchaseInProgress() {
+        final PurchaseAccumulator purchaseAccumulator = mock(PurchaseAccumulator.class);
+        when(purchaseAccumulator.completePurchase()).thenReturn(Option.none());
+
         assertEquals("There is no completed purchase, therefore I can't print a receipt",
                 new StandardPrintReceiptAction(
-                        new NoHistoryPurchaseAccumulator(), new CrashTestDummyFormatReceipt()).printReceipt());
+                        purchaseAccumulator, new CrashTestDummyFormatReceipt()).printReceipt());
     }
 
     static class FormatReceiptTest {
@@ -150,23 +153,6 @@ public class PrintReceiptActionTest {
         }
     }
 
-    private static class NoHistoryPurchaseAccumulator implements PurchaseAccumulator {
-        @Override
-        public void addPriceOfScannedItemToCurrentPurchase(int price) {
-
-        }
-
-        @Override
-        public boolean isPurchaseInProgress() {
-            return false;
-        }
-
-        @Override
-        public Option<Purchase> completePurchase() {
-            return Option.none();
-        }
-    }
-
     private static class CrashTestDummyFormatReceipt extends FormatReceipt {
         public CrashTestDummyFormatReceipt() {
             super(null, null);
@@ -175,28 +161,6 @@ public class PrintReceiptActionTest {
         @Override
         public String formatReceipt(Purchase purchase) {
             throw new UnsupportedOperationException("Don't invoke me.");
-        }
-    }
-
-    private class PurchaseJustCompletedAccumulator implements PurchaseAccumulator {
-        private Purchase completedPurchase;
-
-        private PurchaseJustCompletedAccumulator(Purchase completedPurchase) {
-            this.completedPurchase = completedPurchase;
-        }
-
-        @Override
-        public Option<Purchase> completePurchase() {
-            return Option.some(completedPurchase);
-        }
-
-        @Override
-        public void addPriceOfScannedItemToCurrentPurchase(int price) {
-        }
-
-        @Override
-        public boolean isPurchaseInProgress() {
-            return false;
         }
     }
 }
