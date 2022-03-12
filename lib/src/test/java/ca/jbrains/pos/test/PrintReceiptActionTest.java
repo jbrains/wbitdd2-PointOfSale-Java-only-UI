@@ -7,8 +7,10 @@ import io.vavr.control.Option;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,8 +27,8 @@ public class PrintReceiptActionTest {
     @Test
     void completedPurchase() {
         final Purchase completedPurchase = new Purchase(0, List.of());
-
-        PurchaseAccumulator purchaseAccumulator = new PurchaseJustCompletedAccumulator(completedPurchase);
+        PurchaseAccumulator purchaseAccumulator = mock(PurchaseAccumulator.class);
+        when(purchaseAccumulator.completePurchase()).thenReturn(Option.some(completedPurchase));
 
         FormatReceipt formatReceipt = new FormatReceipt(null, null) {
             @Override
