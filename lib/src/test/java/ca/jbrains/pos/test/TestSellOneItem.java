@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Locale;
+import static org.mockito.Mockito.*;
 
 public class TestSellOneItem {
     private final Catalog priceNotFoundCatalog = new PriceNotFoundCatalog();
@@ -33,49 +34,26 @@ public class TestSellOneItem {
 
     @Test
     void priceFound() {
-        String response = new PointOfSale.HandleBarcode(new PurchaseAccumulator() {
-            @Override
-            public Option<Purchase> completePurchase() {
-                throw new UnsupportedOperationException();
-            }
+        PurchaseAccumulator purchaseAccumulator = mock(PurchaseAccumulator.class);
 
-            @Override
-            public void addPriceOfScannedItemToCurrentPurchase(int price) {
-
-            }
-
-            @Override
-            public boolean isPurchaseInProgress() {
-                throw new UnsupportedOperationException();
-            }
-        }, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("99999").get());
+        String response = new PointOfSale.HandleBarcode(purchaseAccumulator, priceFoundCatalog,
+                new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("99999").get());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
 
     @Test
+    // Rename test to 'onValidBarcodePriceIsAddedToPurchase?
     void rememberTheScannedItemWhenProductIsFound() {
-        RecordingPurchaseAccumulator purchaseProvider = new RecordingPurchaseAccumulator();
-        new PointOfSale.HandleBarcode(purchaseProvider, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("::any barcode::").get());
-        Assertions.assertEquals(Option.some(100), purchaseProvider.price);
+        PurchaseAccumulator purchaseAccumulator = mock(PurchaseAccumulator.class);
+
+        // I tried replacing priceFoundCatalog with a test-double but couldn't get it to work
+        // Lack of experience with mockito on my side rather than the library I imagine
+        new PointOfSale.HandleBarcode(purchaseAccumulator, priceFoundCatalog,
+                new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(
+                        Barcode.makeBarcode("::any barcode::").get());
+
+        verify(purchaseAccumulator).addPriceOfScannedItemToCurrentPurchase(100);
     }
 
-    private static class RecordingPurchaseAccumulator implements PurchaseAccumulator {
-        private Option<Integer> price;
-
-        @Override
-        public void addPriceOfScannedItemToCurrentPurchase(int price) {
-            this.price = Option.some(price);
-        }
-
-        @Override
-        public boolean isPurchaseInProgress() {
-            return price.isDefined();
-        }
-
-        @Override
-        public Option<Purchase> completePurchase() {
-            return Option.some(new Purchase(-1, Collections.emptyList()));
-        }
-    }
 }
