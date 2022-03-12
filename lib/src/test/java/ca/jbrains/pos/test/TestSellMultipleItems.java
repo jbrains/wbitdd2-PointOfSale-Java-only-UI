@@ -10,12 +10,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Locale;
+import static org.mockito.Mockito.*;
+
 
 public class TestSellMultipleItems {
     private boolean startPurchaseInvoked = false;
 
     @Test
     void handleTotalStartsNewPurchase() {
+        PurchaseAccumulator purchaseAccumulator = mock(PurchaseAccumulator.class);
+
         PointOfSale.handleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
