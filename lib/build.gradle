@@ -8,8 +8,9 @@ repositories {
 
 dependencies {
     implementation 'io.vavr:vavr:1.0.0-alpha-4'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    dependencies { testImplementation "org.mockito:mockito-core:4.4.0" }
+    testImplementation 'org.mockito:mockito-core:4.4.0'
 }
 
 java {
