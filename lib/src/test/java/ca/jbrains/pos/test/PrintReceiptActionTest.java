@@ -129,7 +129,7 @@ public class PrintReceiptActionTest {
         }
     }
 
-    public static class StandardPrintReceiptAction extends PrintReceiptAction {
+    public static class StandardPrintReceiptAction implements PrintReceiptAction {
         private final PurchaseAccumulator purchaseAccumulator;
         private final FormatReceipt formatReceipt;
 

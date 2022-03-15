@@ -1,5 +1,5 @@
 package ca.jbrains.pos;
 
-public abstract class PrintReceiptAction {
-    public abstract String printReceipt();
+public interface PrintReceiptAction {
+    String printReceipt();
 }
