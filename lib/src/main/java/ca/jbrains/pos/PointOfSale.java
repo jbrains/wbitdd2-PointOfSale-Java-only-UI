@@ -69,15 +69,17 @@ public class PointOfSale {
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
-            Void commandArgument = null;
-            return totalButtonPressedController.handleRequest(commandArgument);
+            Option<Void> commandArgument = Option.some(null);
+            return commandArgument
+                    .map(totalButtonPressedController::handleRequest)
+                    .getOrElse("kjaskjkajskjaksjkajs");
         } else if ("receipt".equals(line)) {
             Void commandArgument = null;
             return printReceiptButtonPressedController.handleRequest(commandArgument);
         } else {
             Option<Barcode> commandArgument = Barcode.makeBarcode(line);
             return commandArgument
-                    .map(barcode -> barcodeScannedController.handleRequest(barcode))
+                    .map(barcodeScannedController::handleRequest)
                     .getOrElse("Scanning error: empty barcode");
         }
     }
