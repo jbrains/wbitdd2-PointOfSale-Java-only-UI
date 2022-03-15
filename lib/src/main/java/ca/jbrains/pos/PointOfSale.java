@@ -88,27 +88,27 @@ public class PointOfSale {
     // The result is only a ParsingFailure if none of the parsers work.
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
-            return parseTotalButtonPressedRequest()
-                        .map(request -> new Request(totalButtonPressedController, request));
+            return parseTotalButtonPressedRequest(totalButtonPressedController);
         } else if ("receipt".equals(line)) {
-            return parsePrintReceiptRequest()
-                        .map(request -> new Request(printReceiptButtonPressedController, request));
+            return parsePrintReceiptButtonPressedRequest(printReceiptButtonPressedController);
         } else {
-            return parseBarcodeScannedRequest(line)
-                        .map(request -> new Request(barcodeScannedController, request));
+            return parseBarcodeScannedRequest(line, barcodeScannedController);
         }
     }
 
-    private static Option<Barcode> parseBarcodeScannedRequest(String line) {
-        return Barcode.makeBarcode(line);
+    private static Option<Request> parseBarcodeScannedRequest(String line, Controller<Barcode> barcodeScannedController) {
+        return Barcode.makeBarcode(line)
+                .map(request -> new Request(barcodeScannedController, request));
     }
 
-    private static Option<Void> parsePrintReceiptRequest() {
-        return Option.some(null);
+    private static Option<Request> parsePrintReceiptButtonPressedRequest(Controller<Void> printReceiptButtonPressedController) {
+        return Option.<Void> some(null)
+                .map(request -> new Request(printReceiptButtonPressedController, request));
     }
 
-    private static Option<Void> parseTotalButtonPressedRequest() {
-        return parsePrintReceiptRequest();
+    private static Option<Request> parseTotalButtonPressedRequest(Controller<Void> totalButtonPressedController) {
+        return Option.<Void> some(null)
+                .map(request -> new Request(totalButtonPressedController, request));
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
