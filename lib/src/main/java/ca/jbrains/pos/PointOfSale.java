@@ -70,25 +70,26 @@ public class PointOfSale {
                                     Controller<Barcode> barcodeScannedController) {
         Option<Void> commandArgument;
         Controller<Void> controller;
+
         if ("total".equals(line)) {
             commandArgument = Option.some(null);
             controller = totalButtonPressedController;
-            return commandArgument
-                    .map(controller::handleRequest)
-                    .getOrElse("Scanning error: empty barcode");
+            return dispatchRequest(commandArgument, controller);
         } else if ("receipt".equals(line)) {
             commandArgument = Option.some(null);
             controller = printReceiptButtonPressedController;
-            return commandArgument
-                    .map(controller::handleRequest)
-                    .getOrElse("Scanning error: empty barcode");
+            return dispatchRequest(commandArgument, controller);
         } else {
             Option<Barcode> commandArgumentx = Barcode.makeBarcode(line);
             final Controller<Barcode> controllerx = barcodeScannedController;
-            return commandArgumentx
-                    .map(controllerx::handleRequest)
-                    .getOrElse("Scanning error: empty barcode");
+            return dispatchRequest(commandArgumentx, controllerx);
         }
+    }
+
+    private static <Request> String dispatchRequest(Option<Request> commandArgument, Controller<Request> controller) {
+        return commandArgument
+                .map(controller::handleRequest)
+                .getOrElse("Scanning error: empty barcode");
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
