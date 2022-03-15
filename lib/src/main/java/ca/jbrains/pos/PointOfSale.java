@@ -65,7 +65,7 @@ public class PointOfSale {
 
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
-                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, HandleBarcode handleBarcode) {
+                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, BarcodeController handleBarcode) {
         if ("total".equals(line)) {
             return handleTotal.handleTotal();
         } else if ("receipt".equals(line)) {
@@ -82,7 +82,7 @@ public class PointOfSale {
     }
 
     // SMELL jbrains: "bit strange but we leave it for now"
-    public static class HandleBarcode {
+    public static class HandleBarcode implements BarcodeController {
         private final Catalog catalog;
         private final HandleProductFound handleProductFound;
         private final FormatMonetaryAmount formatMonetaryAmount;
@@ -96,6 +96,7 @@ public class PointOfSale {
             this.handleProductNotFound = new HandleProductNotFound();
         }
 
+        @Override
         public String handleBarcode(Barcode barcode) {
             return this.catalog.findPrice(barcode).fold(
                     handleProductNotFound::handleProductNotFound,
@@ -104,7 +105,7 @@ public class PointOfSale {
         }
     }
 
-    static class HandleProductNotFound {
+    public static class HandleProductNotFound {
         private String handleProductNotFound(Barcode barcode) {
             return String.format("Product not found: %s", barcode.text());
         }
