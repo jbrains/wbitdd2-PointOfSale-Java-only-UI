@@ -75,19 +75,18 @@ public class PointOfSale {
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
 
+        Option<Request> maybeRequest;
         if ("total".equals(line)) {
-            final Option<Request> maybeRequest = parseTotalButtonPressedRequest()
+            maybeRequest = parseTotalButtonPressedRequest()
                     .map(request -> new Request(totalButtonPressedController, request));
-            return dispatchRequest(maybeRequest);
         } else if ("receipt".equals(line)) {
-            final Option<Request> maybeRequest = parsePrintReceiptRequest()
+            maybeRequest = parsePrintReceiptRequest()
                     .map(request -> new Request(printReceiptButtonPressedController, request));
-            return dispatchRequest(maybeRequest);
         } else {
-            final Option<Request> maybeRequest = parseBarcodeScannedRequest(line)
+            maybeRequest = parseBarcodeScannedRequest(line)
                     .map(request -> new Request(barcodeScannedController, request));
-            return dispatchRequest(maybeRequest);
         }
+        return dispatchRequest(maybeRequest);
     }
 
     private static Option<Barcode> parseBarcodeScannedRequest(String line) {
