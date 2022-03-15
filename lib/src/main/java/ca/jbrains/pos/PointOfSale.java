@@ -74,8 +74,10 @@ public class PointOfSale {
                     .map(totalButtonPressedController::handleRequest)
                     .getOrElse("kjaskjkajskjaksjkajs");
         } else if ("receipt".equals(line)) {
-            Void commandArgument = null;
-            return printReceiptButtonPressedController.handleRequest(commandArgument);
+            Option<Void> commandArgument = Option.some(null);
+            return commandArgument
+                    .map(printReceiptButtonPressedController::handleRequest)
+                    .getOrElse("kjaksjkajskjakjkas");
         } else {
             Option<Barcode> commandArgument = Barcode.makeBarcode(line);
             return commandArgument
