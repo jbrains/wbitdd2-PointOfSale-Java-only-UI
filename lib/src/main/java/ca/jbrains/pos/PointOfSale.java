@@ -64,7 +64,7 @@ public class PointOfSale {
     // REFACTOR Parse command, then execute
     public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount, PrintReceiptAction printReceiptAction) {
         if ("total".equals(line)) {
-            return handleTotal(purchaseAccumulator, formatMonetaryAmount);
+            return new HandleTotal(purchaseAccumulator, formatMonetaryAmount).handleTotal();
         } else if ("receipt".equals(line)) {
             return printReceiptAction.printReceipt();
         }
@@ -120,9 +120,4 @@ public class PointOfSale {
         }
     }
 
-    public static String handleTotal(PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount) {
-        return purchaseAccumulator.completePurchase().fold(
-                () -> "There is no purchase in progress; please scan an item.",
-                (purchase) -> new FormatTotal(formatMonetaryAmount).formatTotal(purchase.total()));
-    }
 }

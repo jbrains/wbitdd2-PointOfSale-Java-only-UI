@@ -1,7 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.FormatMonetaryAmount;
-import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.HandleTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
@@ -14,7 +14,7 @@ import java.util.Locale;
 public class TestTotal {
     @Test
     void noItems() {
-        Assertions.assertEquals("Total: CAD 0.00", PointOfSale.handleTotal(new PurchaseAccumulator() {
+        Assertions.assertEquals("Total: CAD 0.00", new HandleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
                 return Option.some(new Purchase(0, Collections.emptyList()));
@@ -29,12 +29,12 @@ public class TestTotal {
                 return true;
             }
 
-        }, new FormatMonetaryAmount(new Locale("en", "US"))));
+        }, new FormatMonetaryAmount(new Locale("en", "US"))).handleTotal());
     }
 
     @Test
     void oneItem() {
-        Assertions.assertEquals("Total: CAD 1.02", PointOfSale.handleTotal(new PurchaseAccumulator() {
+        Assertions.assertEquals("Total: CAD 1.02", new HandleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
                 return Option.some(new Purchase(102, Collections.emptyList()));
@@ -49,14 +49,14 @@ public class TestTotal {
                 return true;
             }
 
-        }, new FormatMonetaryAmount(new Locale("en", "US"))));
+        }, new FormatMonetaryAmount(new Locale("en", "US"))).handleTotal());
     }
 
     @Test
     void unableToCompletePurchase() {
         Assertions.assertEquals(
                 "There is no purchase in progress; please scan an item.",
-                PointOfSale.handleTotal(new UnableToCompletePurchaseAccumulator(), null));
+                new HandleTotal(new UnableToCompletePurchaseAccumulator(), null).handleTotal());
     }
 
     private static class UnableToCompletePurchaseAccumulator implements PurchaseAccumulator {

@@ -1,7 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.FormatMonetaryAmount;
-import ca.jbrains.pos.PointOfSale;
+import ca.jbrains.pos.HandleTotal;
 import ca.jbrains.pos.Purchase;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
@@ -16,7 +16,7 @@ public class TestSellMultipleItems {
 
     @Test
     void handleTotalStartsNewPurchase() {
-        PointOfSale.handleTotal(new PurchaseAccumulator() {
+        new HandleTotal(new PurchaseAccumulator() {
             @Override
             public Option<Purchase> completePurchase() {
                 TestSellMultipleItems.this.startPurchaseInvoked = true;
@@ -32,7 +32,7 @@ public class TestSellMultipleItems {
             public boolean isPurchaseInProgress() {
                 return TestSellMultipleItems.this.startPurchaseInvoked;
             }
-        }, new FormatMonetaryAmount(new Locale("en", "US")));
+        }, new FormatMonetaryAmount(new Locale("en", "US"))).handleTotal();
 
         Assertions.assertEquals(true, startPurchaseInvoked);
     }
