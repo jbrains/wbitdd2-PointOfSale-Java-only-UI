@@ -72,11 +72,11 @@ public class PointOfSale {
             return totalButtonPressedController.handleRequest(null);
         } else if ("receipt".equals(line)) {
             return printReceiptButtonPressedController.handleRequest(null);
+        } else {
+            return Barcode.makeBarcode(line)
+                    .map(barcode -> barcodeScannedController.handleRequest(barcode))
+                    .getOrElse("Scanning error: empty barcode");
         }
-
-        return Barcode.makeBarcode(line)
-                .map(barcode -> barcodeScannedController.handleRequest(barcode))
-                .getOrElse("Scanning error: empty barcode");
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
