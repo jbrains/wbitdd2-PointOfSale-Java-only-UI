@@ -76,7 +76,9 @@ public class PointOfSale {
                                     Controller<Barcode> barcodeScannedController) {
 
         Option<Request> maybeRequest = parseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController);
-        return dispatchRequest(maybeRequest);
+        return maybeRequest
+                .map(Request::handleRequest)
+                .getOrElse("Scanning error: empty barcode");
     }
 
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
@@ -104,12 +106,6 @@ public class PointOfSale {
 
     private static Option<Void> parseTotalButtonPressedRequest() {
         return parsePrintReceiptRequest();
-    }
-
-    private static String dispatchRequest(Option<PointOfSale.Request> maybeRequest) {
-        return maybeRequest
-                .map(PointOfSale.Request::handleRequest)
-                .getOrElse("Scanning error: empty barcode");
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
