@@ -75,9 +75,9 @@ public class PointOfSale {
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
 
-        return parseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController).toOption()
+        return parseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController)
                 .fold(
-                        () -> "Scanning error: empty barcode",
+                        ParsingFailure::format,
                         Request::handleRequest
                 );
     }
@@ -95,9 +95,17 @@ public class PointOfSale {
     }
 
     public record EmptyBarcodeParsingFailure() implements ParsingFailure {
+        @Override
+        public String format() {
+            return "Scanning error: empty barcode";
+        }
     }
 
     public record NotAMatch(String text, String pattern) implements ParsingFailure {
+        @Override
+        public String format() {
+            return String.format("The text '%s' doesn't match the expected pattern '%s'", text, pattern);
+        }
     }
 
     private static Either<ParsingFailure, Request> parseBarcodeScannedRequest(String line, Controller<Barcode> barcodeScannedController) {
