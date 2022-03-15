@@ -42,11 +42,11 @@ public class PurchaseTest {
                         }
 
                     };
-                    final FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(
-                            new Locale("en", "US"));
-                    return PointOfSale.handleLine(line, catalog,
-                            purchaseAccumulator, formatMonetaryAmount, null,
-                            new HandleTotal(purchaseAccumulator, formatMonetaryAmount));
+                    final FormatMonetaryAmount formatMonetaryAmount =
+                            new FormatMonetaryAmount(new Locale("en", "US"));
+                    return PointOfSale.handleLine(line,
+                            null,
+                            new HandleTotal(purchaseAccumulator, formatMonetaryAmount), new PointOfSale.HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount));
                 }).collect(Collectors.toList()));
     }
 
@@ -78,9 +78,9 @@ public class PurchaseTest {
 
                 final FormatMonetaryAmount formatMonetaryAmount = new FormatMonetaryAmount(
                         new Locale("en", "US"));
-                return PointOfSale.handleLine(line, catalog,
-                        purchaseAccumulator, formatMonetaryAmount, null,
-                        new HandleTotal(purchaseAccumulator, formatMonetaryAmount));
+                return PointOfSale.handleLine(line,
+                        null,
+                        new HandleTotal(purchaseAccumulator, formatMonetaryAmount), new PointOfSale.HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount));
               }).collect(Collectors.toList()));
     }
 }

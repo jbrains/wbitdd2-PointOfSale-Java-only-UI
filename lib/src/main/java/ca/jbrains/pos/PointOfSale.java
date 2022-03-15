@@ -20,9 +20,9 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyPurchaseAccumulator(), createStandardFormatMonetaryAmount(), null,
+                .map(line -> handleLine(line, null,
                     new HandleTotal(createAnyPurchaseAccumulator(),
-                        createStandardFormatMonetaryAmount())))
+                        createStandardFormatMonetaryAmount()), new HandleBarcode(createAnyPurchaseAccumulator(), createAnyCatalog(), createStandardFormatMonetaryAmount())))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -64,9 +64,8 @@ public class PointOfSale {
     }
 
     // REFACTOR Parse command, then execute
-    public static String handleLine(String line, Catalog catalog,
-        PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount,
-        PrintReceiptAction printReceiptAction, HandleTotal handleTotal) {
+    public static String handleLine(String line,
+                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, HandleBarcode handleBarcode) {
         if ("total".equals(line)) {
             return handleTotal.handleTotal();
         } else if ("receipt".equals(line)) {
@@ -74,7 +73,7 @@ public class PointOfSale {
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> new HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount).handleBarcode(barcode))
+                .map(barcode -> handleBarcode.handleBarcode(barcode))
                 .getOrElse("Scanning error: empty barcode");
     }
 

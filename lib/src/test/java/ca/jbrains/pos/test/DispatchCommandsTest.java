@@ -19,7 +19,7 @@ public class DispatchCommandsTest {
                 return null;
             }
         };
-        PointOfSale.handleLine("receipt", null, null,null, action, new HandleTotal(null, null));
+        PointOfSale.handleLine("receipt", action, new HandleTotal(null, null), new PointOfSale.HandleBarcode(null, null, null));
         assertEquals(true, printReceiptInvoked);
     }
 }
