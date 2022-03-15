@@ -63,6 +63,9 @@ public class PointOfSale {
         };
     }
 
+    public record Foo <Request> (Controller<Request> controller, Request request) {
+    }
+
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
                                     Controller<Void> printReceiptButtonPressedController,
