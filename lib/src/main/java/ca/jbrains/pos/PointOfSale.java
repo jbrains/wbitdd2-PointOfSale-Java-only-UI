@@ -88,9 +88,9 @@ public class PointOfSale {
     // The result is only a ParsingFailure if none of the parsers work.
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
-            return parseTotalButtonPressedRequest(totalButtonPressedController).toOption();
+            return parseTotalButtonPressedRequest(line, totalButtonPressedController).toOption();
         } else if ("receipt".equals(line)) {
-            return parsePrintReceiptButtonPressedRequest(printReceiptButtonPressedController).toOption();
+            return parsePrintReceiptButtonPressedRequest(line, printReceiptButtonPressedController).toOption();
         } else {
             return parseBarcodeScannedRequest(line, barcodeScannedController).toOption();
         }
@@ -104,11 +104,11 @@ public class PointOfSale {
                 .toEither(() -> new EmptyBarcodeParsingFailure());
     }
 
-    private static Either<ParsingFailure, Request> parsePrintReceiptButtonPressedRequest(Controller<Void> printReceiptButtonPressedController) {
+    private static Either<ParsingFailure, Request> parsePrintReceiptButtonPressedRequest(String ignored, Controller<Void> printReceiptButtonPressedController) {
         return Either.right(new Request(printReceiptButtonPressedController, null));
     }
 
-    private static Either<ParsingFailure, Request> parseTotalButtonPressedRequest(Controller<Void> totalButtonPressedController) {
+    private static Either<ParsingFailure, Request> parseTotalButtonPressedRequest(String ignored, Controller<Void> totalButtonPressedController) {
         return Either.right(new Request(totalButtonPressedController, null));
     }
 
