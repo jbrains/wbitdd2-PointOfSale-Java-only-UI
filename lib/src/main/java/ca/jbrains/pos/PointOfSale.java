@@ -68,21 +68,13 @@ public class PointOfSale {
                                     Controller<Void> printReceiptButtonPressedController,
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
-        Option<Void> commandArgument;
-        Controller<Void> controller;
 
         if ("total".equals(line)) {
-            commandArgument = Option.some(null);
-            controller = totalButtonPressedController;
-            return dispatchRequest(commandArgument, controller);
+            return dispatchRequest(Option.some(null), totalButtonPressedController);
         } else if ("receipt".equals(line)) {
-            commandArgument = Option.some(null);
-            controller = printReceiptButtonPressedController;
-            return dispatchRequest(commandArgument, controller);
+            return dispatchRequest(Option.some(null), printReceiptButtonPressedController);
         } else {
-            Option<Barcode> commandArgumentx = Barcode.makeBarcode(line);
-            final Controller<Barcode> controllerx = barcodeScannedController;
-            return dispatchRequest(commandArgumentx, controllerx);
+            return dispatchRequest(Barcode.makeBarcode(line), barcodeScannedController);
         }
     }
 
