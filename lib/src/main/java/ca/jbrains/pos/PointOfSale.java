@@ -65,9 +65,9 @@ public class PointOfSale {
 
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
-                                    Controller<Void> printReceiptController, HandleTotal handleTotal, Controller<Barcode> barcodeScannedController) {
+                                    Controller<Void> printReceiptController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
-            return handleTotal.handleTotal();
+            return totalButtonPressedController.handleRequest(null);
         } else if ("receipt".equals(line)) {
             return printReceiptController.handleRequest(null);
         }
