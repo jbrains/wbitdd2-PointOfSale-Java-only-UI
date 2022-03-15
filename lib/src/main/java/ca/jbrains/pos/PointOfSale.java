@@ -69,7 +69,7 @@ public class PointOfSale {
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
-            Void commandArgument = null;
+            Void commandArgument = Option.<Void>some(null).get();
             return totalButtonPressedController.handleRequest(commandArgument);
         } else if ("receipt".equals(line)) {
             Void commandArgument = null;
