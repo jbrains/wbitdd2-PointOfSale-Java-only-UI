@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
+import io.vavr.Function1;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -63,7 +64,10 @@ public class PointOfSale {
         };
     }
 
-    public record Foo <Request> (Controller<Request> controller, Request request) {
+    public record Foo<Request>(Controller<Request> controller, Request request) {
+        private <Request> String handleRequest() {
+            return controller.handleRequest(request);
+        }
     }
 
     // REFACTOR Parse command, then execute
@@ -95,7 +99,8 @@ public class PointOfSale {
 
     private static <Request> String dispatchRequest(Option<Request> commandArgument, Controller<Request> controller) {
         return commandArgument
-                .map(controller::handleRequest)
+                .map(request -> new Foo(controller, request))
+                .map(Foo::handleRequest)
                 .getOrElse("Scanning error: empty barcode");
     }
 
