@@ -63,6 +63,12 @@ public class PointOfSale {
         };
     }
 
+    public record Request<Payload>(Controller<Payload> controller, Payload payload) {
+        private String handleRequest() {
+            return controller.handleRequest(payload);
+        }
+    }
+
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
                                     Controller<Void> printReceiptButtonPressedController,
@@ -70,11 +76,14 @@ public class PointOfSale {
                                     Controller<Barcode> barcodeScannedController) {
 
         if ("total".equals(line)) {
-            return dispatchRequest(parseTotalButtonPressedRequest(), totalButtonPressedController);
+            return dispatchRequest(parseTotalButtonPressedRequest()
+                    .map(request -> new Request(totalButtonPressedController, request)));
         } else if ("receipt".equals(line)) {
-            return dispatchRequest(parsePrintReceiptRequest(), printReceiptButtonPressedController);
+            return dispatchRequest(parsePrintReceiptRequest()
+                    .map(request -> new Request(printReceiptButtonPressedController, request)));
         } else {
-            return dispatchRequest(parseBarcodeScannedRequest(line), barcodeScannedController);
+            return dispatchRequest(parseBarcodeScannedRequest(line)
+                    .map(request -> new Request(barcodeScannedController, request)));
         }
     }
 
@@ -90,9 +99,9 @@ public class PointOfSale {
         return parsePrintReceiptRequest();
     }
 
-    private static <Request> String dispatchRequest(Option<Request> commandArgument, Controller<Request> controller) {
-        return commandArgument
-                .map(controller::handleRequest)
+    private static String dispatchRequest(Option<PointOfSale.Request> maybeRequest) {
+        return maybeRequest
+                .map(PointOfSale.Request::handleRequest)
                 .getOrElse("Scanning error: empty barcode");
     }
 

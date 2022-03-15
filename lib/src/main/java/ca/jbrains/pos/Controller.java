@@ -1,5 +1,5 @@
 package ca.jbrains.pos;
 
-public interface Controller<Request> {
-    String handleRequest(Request request);
+public interface Controller<Payload> {
+    String handleRequest(Payload payload);
 }
