@@ -21,8 +21,8 @@ public class PointOfSale {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
                 .map(line -> handleLine(line, null,
-                    new HandleTotal(createAnyPurchaseAccumulator(),
-                        createStandardFormatMonetaryAmount()), new HandleBarcode(createAnyPurchaseAccumulator(), createAnyCatalog(), createStandardFormatMonetaryAmount())))
+                        new HandleTotal(createAnyPurchaseAccumulator(),
+                                createStandardFormatMonetaryAmount()), new HandleBarcode(createAnyPurchaseAccumulator(), createAnyCatalog(), createStandardFormatMonetaryAmount())))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -65,11 +65,13 @@ public class PointOfSale {
 
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
-                                    Controller<Void> printReceiptController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
+                                    Controller<Void> printReceiptButtonPressedController,
+                                    Controller<Void> totalButtonPressedController,
+                                    Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
             return totalButtonPressedController.handleRequest(null);
         } else if ("receipt".equals(line)) {
-            return printReceiptController.handleRequest(null);
+            return printReceiptButtonPressedController.handleRequest(null);
         }
 
         return Barcode.makeBarcode(line)
