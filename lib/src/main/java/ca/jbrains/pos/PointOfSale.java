@@ -72,12 +72,12 @@ public class PointOfSale {
             Option<Void> commandArgument = Option.some(null);
             return commandArgument
                     .map(totalButtonPressedController::handleRequest)
-                    .getOrElse("kjaskjkajskjaksjkajs");
+                    .getOrElse("Scanning error: empty barcode");
         } else if ("receipt".equals(line)) {
             Option<Void> commandArgument = Option.some(null);
             return commandArgument
                     .map(printReceiptButtonPressedController::handleRequest)
-                    .getOrElse("kjaksjkajskjakjkas");
+                    .getOrElse("Scanning error: empty barcode");
         } else {
             Option<Barcode> commandArgument = Barcode.makeBarcode(line);
             return commandArgument
