@@ -2,6 +2,7 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
+import io.vavr.Function1;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -87,16 +88,18 @@ public class PointOfSale {
     // Combine the parsers with "or".
     // The result is only a ParsingFailure if none of the parsers work.
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
-        if ("total".equals(line)) {
-            return parseTotalButtonPressedRequest(line, totalButtonPressedController).toOption();
-        } else if ("receipt".equals(line)) {
-            return parsePrintReceiptButtonPressedRequest(line, printReceiptButtonPressedController).toOption();
-        } else {
-            return parseBarcodeScannedRequest(line, barcodeScannedController).toOption();
-        }
+        return parseTotalButtonPressedRequest(line, totalButtonPressedController).orElse(
+                () -> parsePrintReceiptButtonPressedRequest(line, printReceiptButtonPressedController).orElse(
+                        () -> parseBarcodeScannedRequest(line, barcodeScannedController)
+                )
+        ).toOption();
     }
 
-    public record EmptyBarcodeParsingFailure() implements ParsingFailure {}
+    public record EmptyBarcodeParsingFailure() implements ParsingFailure {
+    }
+
+    public record NotAMatch(String text, String pattern) implements ParsingFailure {
+    }
 
     private static Either<ParsingFailure, Request> parseBarcodeScannedRequest(String line, Controller<Barcode> barcodeScannedController) {
         return Barcode.makeBarcode(line)
@@ -104,12 +107,16 @@ public class PointOfSale {
                 .toEither(() -> new EmptyBarcodeParsingFailure());
     }
 
-    private static Either<ParsingFailure, Request> parsePrintReceiptButtonPressedRequest(String ignored, Controller<Void> printReceiptButtonPressedController) {
-        return Either.right(new Request(printReceiptButtonPressedController, null));
+    private static Either<ParsingFailure, Request> parsePrintReceiptButtonPressedRequest(String line, Controller<Void> printReceiptButtonPressedController) {
+        return "receipt".equals(line)
+                ? Either.right(new Request(printReceiptButtonPressedController, null))
+                : Either.left(new NotAMatch(line, "receipt"));
     }
 
-    private static Either<ParsingFailure, Request> parseTotalButtonPressedRequest(String ignored, Controller<Void> totalButtonPressedController) {
-        return Either.right(new Request(totalButtonPressedController, null));
+    private static Either<ParsingFailure, Request> parseTotalButtonPressedRequest(String line, Controller<Void> totalButtonPressedController) {
+        return "total".equals(line)
+                ? Either.right(new Request(totalButtonPressedController, null))
+                : Either.left(new NotAMatch(line, "total"));
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
