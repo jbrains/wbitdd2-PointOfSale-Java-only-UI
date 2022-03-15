@@ -75,7 +75,7 @@ public class PointOfSale {
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
 
-        return legacyParseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController)
+        return parseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController).toOption()
                 .fold(
                         () -> "Scanning error: empty barcode",
                         Request::handleRequest
@@ -86,12 +86,12 @@ public class PointOfSale {
     // Each individual request parser tries to parse the line, then returns Either<ParsingFailure, Request>.
     // Combine the parsers with "or".
     // The result is only a ParsingFailure if none of the parsers work.
-    private static Option<Request> legacyParseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
+    private static Either<ParsingFailure, Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         return parseTotalButtonPressedRequest(line, totalButtonPressedController).orElse(
                 () -> parsePrintReceiptButtonPressedRequest(line, printReceiptButtonPressedController).orElse(
                         () -> parseBarcodeScannedRequest(line, barcodeScannedController)
                 )
-        ).toOption();
+        );
     }
 
     public record EmptyBarcodeParsingFailure() implements ParsingFailure {
