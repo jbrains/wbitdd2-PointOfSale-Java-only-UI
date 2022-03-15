@@ -2,7 +2,6 @@ package ca.jbrains.pos;
 
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
-import io.vavr.Function1;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -76,7 +75,7 @@ public class PointOfSale {
                                     Controller<Void> totalButtonPressedController,
                                     Controller<Barcode> barcodeScannedController) {
 
-        return parseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController)
+        return legacyParseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController)
                 .fold(
                         () -> "Scanning error: empty barcode",
                         Request::handleRequest
@@ -87,7 +86,7 @@ public class PointOfSale {
     // Each individual request parser tries to parse the line, then returns Either<ParsingFailure, Request>.
     // Combine the parsers with "or".
     // The result is only a ParsingFailure if none of the parsers work.
-    private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
+    private static Option<Request> legacyParseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         return parseTotalButtonPressedRequest(line, totalButtonPressedController).orElse(
                 () -> parsePrintReceiptButtonPressedRequest(line, printReceiptButtonPressedController).orElse(
                         () -> parseBarcodeScannedRequest(line, barcodeScannedController)
