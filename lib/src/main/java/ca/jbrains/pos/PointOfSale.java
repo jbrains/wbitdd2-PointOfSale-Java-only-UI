@@ -70,12 +70,24 @@ public class PointOfSale {
                                     Controller<Barcode> barcodeScannedController) {
 
         if ("total".equals(line)) {
-            return dispatchRequest(Option.some(null), totalButtonPressedController);
+            return dispatchRequest(parseTotalButtonPressedRequest(), totalButtonPressedController);
         } else if ("receipt".equals(line)) {
-            return dispatchRequest(Option.some(null), printReceiptButtonPressedController);
+            return dispatchRequest(parsePrintReceiptRequest(), printReceiptButtonPressedController);
         } else {
-            return dispatchRequest(Barcode.makeBarcode(line), barcodeScannedController);
+            return dispatchRequest(parseBarcodeScannedRequest(line), barcodeScannedController);
         }
+    }
+
+    private static Option<Barcode> parseBarcodeScannedRequest(String line) {
+        return Barcode.makeBarcode(line);
+    }
+
+    private static Option<Void> parsePrintReceiptRequest() {
+        return Option.some(null);
+    }
+
+    private static Option<Void> parseTotalButtonPressedRequest() {
+        return parsePrintReceiptRequest();
     }
 
     private static <Request> String dispatchRequest(Option<Request> commandArgument, Controller<Request> controller) {
