@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.HandleBarcode;
 import ca.jbrains.pos.HandleTotal;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.PrintReceiptAction;
@@ -19,7 +20,7 @@ public class DispatchCommandsTest {
                 return null;
             }
         };
-        PointOfSale.handleLine("receipt", action, new HandleTotal(null, null), new PointOfSale.HandleBarcode(null, null, null));
+        PointOfSale.handleLine("receipt", action, new HandleTotal(null, null), new HandleBarcode(null, null, null));
         assertEquals(true, printReceiptInvoked);
     }
 }

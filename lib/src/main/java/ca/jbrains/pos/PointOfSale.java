@@ -65,7 +65,7 @@ public class PointOfSale {
 
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
-                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, HandleBarcode handleBarcode) {
+                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, BarcodeController handleBarcode) {
         if ("total".equals(line)) {
             return handleTotal.handleTotal();
         } else if ("receipt".equals(line)) {
@@ -80,47 +80,4 @@ public class PointOfSale {
     public static Stream<String> streamLinesFrom(Reader reader) {
         return new BufferedReader(reader).lines();
     }
-
-    // SMELL jbrains: "bit strange but we leave it for now"
-    public static class HandleBarcode {
-        private final Catalog catalog;
-        private final HandleProductFound handleProductFound;
-        private final FormatMonetaryAmount formatMonetaryAmount;
-        private final HandleProductNotFound handleProductNotFound;
-
-        public HandleBarcode(PurchaseAccumulator purchaseAccumulator, Catalog catalog, FormatMonetaryAmount formatMonetaryAmount) {
-            this.catalog = catalog;
-            // SMELL accept them as parameter instead?
-            this.handleProductFound = new HandleProductFound(purchaseAccumulator);
-            this.formatMonetaryAmount = formatMonetaryAmount;
-            this.handleProductNotFound = new HandleProductNotFound();
-        }
-
-        public String handleBarcode(Barcode barcode) {
-            return this.catalog.findPrice(barcode).fold(
-                    handleProductNotFound::handleProductNotFound,
-                    price -> handleProductFound.handleProductFound(price, this.formatMonetaryAmount)
-            );
-        }
-    }
-
-    static class HandleProductNotFound {
-        private String handleProductNotFound(Barcode barcode) {
-            return String.format("Product not found: %s", barcode.text());
-        }
-    }
-
-    public static class HandleProductFound {
-        private final PurchaseAccumulator purchaseAccumulator;
-
-        public HandleProductFound(PurchaseAccumulator purchaseAccumulator) {
-            this.purchaseAccumulator = purchaseAccumulator;
-        }
-
-        public String handleProductFound(int price, FormatMonetaryAmount formatMonetaryAmount) {
-            this.purchaseAccumulator.addPriceOfScannedItemToCurrentPurchase(price);
-            return formatMonetaryAmount.formatMonetaryAmount(price);
-        }
-    }
-
 }

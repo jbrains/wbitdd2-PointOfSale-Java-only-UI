@@ -1,9 +1,6 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.FormatMonetaryAmount;
-import ca.jbrains.pos.HandleTotal;
-import ca.jbrains.pos.PointOfSale;
-import ca.jbrains.pos.Purchase;
+import ca.jbrains.pos.*;
 import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 import io.vavr.control.Option;
@@ -46,7 +43,7 @@ public class PurchaseTest {
                             new FormatMonetaryAmount(new Locale("en", "US"));
                     return PointOfSale.handleLine(line,
                             null,
-                            new HandleTotal(purchaseAccumulator, formatMonetaryAmount), new PointOfSale.HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount));
+                            new HandleTotal(purchaseAccumulator, formatMonetaryAmount), new HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount));
                 }).collect(Collectors.toList()));
     }
 
@@ -80,7 +77,7 @@ public class PurchaseTest {
                         new Locale("en", "US"));
                 return PointOfSale.handleLine(line,
                         null,
-                        new HandleTotal(purchaseAccumulator, formatMonetaryAmount), new PointOfSale.HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount));
+                        new HandleTotal(purchaseAccumulator, formatMonetaryAmount), new HandleBarcode(purchaseAccumulator, catalog, formatMonetaryAmount));
               }).collect(Collectors.toList()));
     }
 }
