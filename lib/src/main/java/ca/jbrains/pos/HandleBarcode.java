@@ -4,7 +4,7 @@ import ca.jbrains.pos.domain.Catalog;
 import ca.jbrains.pos.domain.PurchaseAccumulator;
 
 // SMELL jbrains: "bit strange but we leave it for now"
-public class HandleBarcode implements BarcodeController {
+public class HandleBarcode implements Controller<Barcode> {
     private final Catalog catalog;
     private final HandleProductFound handleProductFound;
     private final FormatMonetaryAmount formatMonetaryAmount;
@@ -19,8 +19,8 @@ public class HandleBarcode implements BarcodeController {
     }
 
     @Override
-    public String handleBarcode(Barcode barcode) {
-        return this.catalog.findPrice(barcode).fold(
+    public String handleRequest(Barcode payload) {
+        return this.catalog.findPrice(payload).fold(
                 handleProductNotFound::handleProductNotFound,
                 price -> handleProductFound.handleProductFound(price, this.formatMonetaryAmount)
         );

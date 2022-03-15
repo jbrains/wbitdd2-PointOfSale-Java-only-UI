@@ -16,14 +16,14 @@ public class TestSellOneItem {
 
     @Test
     void priceNotFound() {
-        String response = new HandleBarcode(null, priceNotFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(new Barcode("99999"));
+        String response = new HandleBarcode(null, priceNotFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleRequest(new Barcode("99999"));
 
         Assertions.assertEquals("Product not found: 99999", response);
     }
 
     @Test
     void givenBarcodeIs1111ShouldDisplayProductNotFoundMessage() {
-        String response = new HandleBarcode(null, priceNotFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("1111").get());
+        String response = new HandleBarcode(null, priceNotFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleRequest(Barcode.makeBarcode("1111").get());
 
         Assertions.assertEquals("Product not found: 1111", response);
     }
@@ -45,7 +45,7 @@ public class TestSellOneItem {
             public boolean isPurchaseInProgress() {
                 throw new UnsupportedOperationException();
             }
-        }, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("99999").get());
+        }, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleRequest(Barcode.makeBarcode("99999").get());
 
         Assertions.assertEquals("CAD 1.00", response);
     }
@@ -53,7 +53,7 @@ public class TestSellOneItem {
     @Test
     void rememberTheScannedItemWhenProductIsFound() {
         RecordingPurchaseAccumulator purchaseProvider = new RecordingPurchaseAccumulator();
-        new HandleBarcode(purchaseProvider, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleBarcode(Barcode.makeBarcode("::any barcode::").get());
+        new HandleBarcode(purchaseProvider, priceFoundCatalog, new FormatMonetaryAmount(new Locale("en", "US"))).handleRequest(Barcode.makeBarcode("::any barcode::").get());
         Assertions.assertEquals(Option.some(100), purchaseProvider.price);
     }
 
