@@ -82,6 +82,10 @@ public class PointOfSale {
                 );
     }
 
+    // REFACTOR Split into parsers using ideas from parser combinators.
+    // Each individual request parser tries to parse the line, then returns Either<ParsingFailure, Request>.
+    // Combine the parsers with "or".
+    // The result is only a ParsingFailure if none of the parsers work.
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
             return parseTotalButtonPressedRequest()
