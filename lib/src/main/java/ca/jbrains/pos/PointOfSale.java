@@ -76,8 +76,10 @@ public class PointOfSale {
                                     Controller<Barcode> barcodeScannedController) {
 
         return parseRequest(line, printReceiptButtonPressedController, totalButtonPressedController, barcodeScannedController)
-                .map(Request::handleRequest)
-                .getOrElse("Scanning error: empty barcode");
+                .fold(
+                        () -> "Scanning error: empty barcode",
+                        Request::handleRequest
+                );
     }
 
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
