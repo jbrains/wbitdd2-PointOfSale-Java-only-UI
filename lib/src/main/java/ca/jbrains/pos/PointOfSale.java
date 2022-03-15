@@ -76,14 +76,17 @@ public class PointOfSale {
                                     Controller<Barcode> barcodeScannedController) {
 
         if ("total".equals(line)) {
-            return dispatchRequest(parseTotalButtonPressedRequest()
-                    .map(request -> new Request(totalButtonPressedController, request)));
+            final Option<Request> maybeRequest = parseTotalButtonPressedRequest()
+                    .map(request -> new Request(totalButtonPressedController, request));
+            return dispatchRequest(maybeRequest);
         } else if ("receipt".equals(line)) {
-            return dispatchRequest(parsePrintReceiptRequest()
-                    .map(request -> new Request(printReceiptButtonPressedController, request)));
+            final Option<Request> maybeRequest = parsePrintReceiptRequest()
+                    .map(request -> new Request(printReceiptButtonPressedController, request));
+            return dispatchRequest(maybeRequest);
         } else {
-            return dispatchRequest(parseBarcodeScannedRequest(line)
-                    .map(request -> new Request(barcodeScannedController, request)));
+            final Option<Request> maybeRequest = parseBarcodeScannedRequest(line)
+                    .map(request -> new Request(barcodeScannedController, request));
+            return dispatchRequest(maybeRequest);
         }
     }
 
