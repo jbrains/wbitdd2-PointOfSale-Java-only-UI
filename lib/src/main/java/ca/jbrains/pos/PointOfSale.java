@@ -20,7 +20,9 @@ public class PointOfSale {
     private static void runApplication(Reader commandLinesReader, Consumer<String> consoleDisplay) {
         // SMELL Duplicates logic in PurchaseTest: stream lines, handle each line, consume the result
         streamLinesFrom(commandLinesReader)
-                .map(line -> handleLine(line, createAnyCatalog(), createAnyPurchaseAccumulator(), createStandardFormatMonetaryAmount(), null))
+                .map(line -> handleLine(line, createAnyCatalog(), createAnyPurchaseAccumulator(), createStandardFormatMonetaryAmount(), null,
+                    new HandleTotal(createAnyPurchaseAccumulator(),
+                        createStandardFormatMonetaryAmount())))
                 .forEachOrdered(consoleDisplay);
     }
 
@@ -62,9 +64,11 @@ public class PointOfSale {
     }
 
     // REFACTOR Parse command, then execute
-    public static String handleLine(String line, Catalog catalog, PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount, PrintReceiptAction printReceiptAction) {
+    public static String handleLine(String line, Catalog catalog,
+        PurchaseAccumulator purchaseAccumulator, FormatMonetaryAmount formatMonetaryAmount,
+        PrintReceiptAction printReceiptAction, HandleTotal handleTotal) {
         if ("total".equals(line)) {
-            return new HandleTotal(purchaseAccumulator, formatMonetaryAmount).handleTotal();
+            return handleTotal.handleTotal();
         } else if ("receipt".equals(line)) {
             return printReceiptAction.printReceipt();
         }

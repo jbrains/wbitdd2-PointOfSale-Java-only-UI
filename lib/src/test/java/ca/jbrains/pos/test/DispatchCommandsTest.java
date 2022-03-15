@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.HandleTotal;
 import ca.jbrains.pos.PointOfSale;
 import ca.jbrains.pos.PrintReceiptAction;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ public class DispatchCommandsTest {
                 return null;
             }
         };
-        PointOfSale.handleLine("receipt", null, null,null, action);
+        PointOfSale.handleLine("receipt", null, null,null, action, new HandleTotal(null, null));
         assertEquals(true, printReceiptInvoked);
     }
 }
