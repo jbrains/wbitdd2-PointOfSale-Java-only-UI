@@ -88,27 +88,28 @@ public class PointOfSale {
     // The result is only a ParsingFailure if none of the parsers work.
     private static Option<Request> parseRequest(String line, Controller<Void> printReceiptButtonPressedController, Controller<Void> totalButtonPressedController, Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
-            return parseTotalButtonPressedRequest(totalButtonPressedController);
+            return parseTotalButtonPressedRequest(totalButtonPressedController).toOption();
         } else if ("receipt".equals(line)) {
-            return parsePrintReceiptButtonPressedRequest(printReceiptButtonPressedController);
+            return parsePrintReceiptButtonPressedRequest(printReceiptButtonPressedController).toOption();
         } else {
-            return parseBarcodeScannedRequest(line, barcodeScannedController);
+            return parseBarcodeScannedRequest(line, barcodeScannedController).toOption();
         }
     }
 
-    private static Option<Request> parseBarcodeScannedRequest(String line, Controller<Barcode> barcodeScannedController) {
+    public record EmptyBarcodeParsingFailure() implements ParsingFailure {}
+
+    private static Either<ParsingFailure, Request> parseBarcodeScannedRequest(String line, Controller<Barcode> barcodeScannedController) {
         return Barcode.makeBarcode(line)
-                .map(request -> new Request(barcodeScannedController, request));
+                .map(request -> new Request(barcodeScannedController, request))
+                .toEither(() -> new EmptyBarcodeParsingFailure());
     }
 
-    private static Option<Request> parsePrintReceiptButtonPressedRequest(Controller<Void> printReceiptButtonPressedController) {
-        return Option.<Void> some(null)
-                .map(request -> new Request(printReceiptButtonPressedController, request));
+    private static Either<ParsingFailure, Request> parsePrintReceiptButtonPressedRequest(Controller<Void> printReceiptButtonPressedController) {
+        return Either.right(new Request(printReceiptButtonPressedController, null));
     }
 
-    private static Option<Request> parseTotalButtonPressedRequest(Controller<Void> totalButtonPressedController) {
-        return Option.<Void> some(null)
-                .map(request -> new Request(totalButtonPressedController, request));
+    private static Either<ParsingFailure, Request> parseTotalButtonPressedRequest(Controller<Void> totalButtonPressedController) {
+        return Either.right(new Request(totalButtonPressedController, null));
     }
 
     public static Stream<String> streamLinesFrom(Reader reader) {
