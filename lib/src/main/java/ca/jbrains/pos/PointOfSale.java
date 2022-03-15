@@ -65,7 +65,7 @@ public class PointOfSale {
 
     // REFACTOR Parse command, then execute
     public static String handleLine(String line,
-                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, BarcodeController handleBarcode) {
+                                    PrintReceiptAction printReceiptAction, HandleTotal handleTotal, Controller<Barcode> barcodeScannedController) {
         if ("total".equals(line)) {
             return handleTotal.handleTotal();
         } else if ("receipt".equals(line)) {
@@ -73,7 +73,7 @@ public class PointOfSale {
         }
 
         return Barcode.makeBarcode(line)
-                .map(barcode -> handleBarcode.handleBarcode(barcode))
+                .map(barcode -> barcodeScannedController.handleRequest(barcode))
                 .getOrElse("Scanning error: empty barcode");
     }
 
